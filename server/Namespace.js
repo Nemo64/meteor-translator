@@ -20,6 +20,15 @@ _.extend(Namespace, NamespaceAbstract); // cheap extend
 _.extend(Namespace.prototype, NamespaceAbstract.prototype);
 
 /**
+ * Tells if a reactive call could happen.
+ *
+ * @return {bool}
+ */
+NamespaceAbstract.prototype.isLoading = function () {
+  return false;
+};
+
+/**
  * Prepares the Namespace for a language.
  * It may download/interpret files for that.
  * 

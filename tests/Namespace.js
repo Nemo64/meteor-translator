@@ -12,51 +12,55 @@ Tinytest.add("Namespace - correct path", function (test) {
 testAsyncMulti("Namespace - check existence of an existing key", [
   function (test, expect) {
     var namespace = new Translator.Namespace(NAMESPACE);
-    Deps.autorun(expect(function (dep) {
+    var expect = expect(true);
+    Deps.autorun(function (dep) {
       var result = namespace.has("a_key", LANGUAGE_FOREIGN);
       if (! namespace.isLoading()) {
         test.isTrue(result);
-        dep.stop();
+        expect(true);
       }
-    }));
+    });
   }
 ]);
 
 testAsyncMulti("Namespace - check existence of a none existing key", [
   function (test, expect) {
     var namespace = new Translator.Namespace(NAMESPACE);
-    Deps.autorun(expect(function (dep) {
+    var expect = expect(true);
+    Deps.autorun(function (dep) {
       var result = namespace.has("a_key", LANGUAGE_FOREIGN);
       if (! namespace.isLoading()) {
         test.isFalse(result);
-        dep.stop();
+        expect(true);
       }
-    }));
+    });
   }
 ]);
 
 testAsyncMulti("Namespace - access existing key", [
   function (test, expect) {
     var namespace = new Translator.Namespace(NAMESPACE);
-    Deps.autorun(expect(function (dep) {
+    var expect = expect(true);
+    Deps.autorun(function (dep) {
       var result = namespace.has("a_key", LANGUAGE_FOREIGN);
       if (! namespace.isLoading()) {
         test.equal(result, "Hallo Test");
-        dep.stop();
+        expect(true);
       }
-    }));
+    });
   }
 ]);
 
 testAsyncMulti("Namespace - access none existing key", [
   function (test, expect) {
     var namespace = new Translator.Namespace(NAMESPACE);
-    Deps.autorun(expect(function (dep) {
+    var expect = expect(true);
+    Deps.autorun(function (dep) {
       var result = namespace.has("a_key", LANGUAGE_FOREIGN);
       if (! namespace.isLoading()) {
         test.equal(result, undefined);
-        dep.stop();
+        expect(true);
       }
-    }));
+    });
   }
 ]);
