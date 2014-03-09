@@ -7,7 +7,7 @@ a simple, lazy loading, client and server side translator for meteor
 # Basic usage
 
 ## The Translation File
-This package uses [yaml](http://www.yaml.org/) files as translation files! These get compiled to json on the server side and then transmitted depending on the language and namespace so there is no unneeded loading of languages that are never used.
+This package uses [yaml files](http://www.yaml.org/) as translation files! These get compiled to json on the server side and then transmitted depending on the language and namespace so there is no unneeded loading of languages that are never used.
 
 A typical translation file name would be `app.en_US.lang.yml`.
 - The `app` is the namespace
@@ -29,7 +29,7 @@ user_login:
 
 Easy right? But now how to get the translation
 
-## Getting my translation
+## Getting the translation
 
 ```Javascript
 FrontLang = new Translator(["en_US"]); // multiple languages are possible as fallback
@@ -61,4 +61,5 @@ And that concludes it for now ;) There are more features to come so be patient!
 
 ### TODO
 - This does not work on the server side yet because [i can't access the json from there](https://github.com/meteor/meteor/issues/1906)
-- Parameters are not yet available, the plan is `FrontLang.get("key", { username: "username" }`
+- Parameters are not yet available, the plan is `FrontLang.get("Hi %username%", { username: "username" }`
+- More test for the reactive loading of files
