@@ -80,16 +80,15 @@ Namespace.prototype._prepareLocales = function (locales) {
         } else {
           console.error("No more locales to load. All hope is lost");
         }
-        return;
       }
       
-      try {
+      else try {
         localeData.data = JSON.parse(data.content);
-        localeData.dep.changed();
       } catch (e) {
         self._loadError(locale, filename, e);
       }
       
+      localeData.dep.changed();
     });
   }
 };

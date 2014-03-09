@@ -26,7 +26,7 @@ Package.on_use(function(api) {
 });
 
 Package.on_test(function (api) {
-  api.use(["translator", "tinytest"], ["client", "server"]);
+  api.use(["translator", "tinytest", "test-helpers"], ["client", "server"]);
   api.add_files([
     "tests/namespace.de_DE.lang.yml",
     "tests/namespace.en_US.lang.yml"
