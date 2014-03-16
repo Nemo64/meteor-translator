@@ -16,6 +16,7 @@ Namespace = function (name) {
   NamespaceAbstract.apply(self, arguments);
   self._locales = {}; // see loop in prepare
   self._loading = 0; // for telling if a request is running
+  self._loadingDep = new Deps.Dependency();
 };
 
 _.extend(Namespace, NamespaceAbstract); // cheap extend
@@ -26,6 +27,7 @@ _.extend(Namespace.prototype, NamespaceAbstract.prototype);
  * @return {bool}
  */
 Namespace.prototype.isLoading = function () {
+  this._loadingDep.depend();
   return this._loading > 0;
 };
 
@@ -71,8 +73,10 @@ Namespace.prototype._prepareLocales = function (locales) {
     
     // start loading the file
     self._loading++;
+    self._loadingDep.changed();
     HTTP.get(filename, function (error, data) {
       self._loading--;
+      self._loadingDep.changed();
       localeData.loaded = true;
       
       if (error) {
