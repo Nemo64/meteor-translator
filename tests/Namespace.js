@@ -28,7 +28,7 @@ testAsyncMulti("Namespace - check existence of a none existing key", [
     var namespace = new Translator.Namespace(NAMESPACE);
     var expect = expect(false);
     Deps.autorun(function (dep) {
-      var result = namespace.has("a_key", LANGUAGE_FOREIGN);
+      var result = namespace.has("not_a_key", LANGUAGE_FOREIGN);
       if (! namespace.isLoading()) {
         expect(result);
       }
@@ -41,7 +41,7 @@ testAsyncMulti("Namespace - access existing key", [
     var namespace = new Translator.Namespace(NAMESPACE);
     var expect = expect("Hallo Test");
     Deps.autorun(function (dep) {
-      var result = namespace.has("a_key", LANGUAGE_FOREIGN);
+      var result = namespace.get("a_key", LANGUAGE_FOREIGN);
       if (! namespace.isLoading()) {
         expect(result);
       }
@@ -54,7 +54,7 @@ testAsyncMulti("Namespace - access none existing key", [
     var namespace = new Translator.Namespace(NAMESPACE);
     var expect = expect(undefined);
     Deps.autorun(function (dep) {
-      var result = namespace.has("a_key", LANGUAGE_FOREIGN);
+      var result = namespace.get("not_a_key", LANGUAGE_FOREIGN);
       if (! namespace.isLoading()) {
         expect(result);
       }
