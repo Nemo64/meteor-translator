@@ -24,7 +24,7 @@ _.extend(Namespace.prototype, NamespaceAbstract.prototype);
  *
  * @return {bool}
  */
-NamespaceAbstract.prototype.isLoading = function () {
+Namespace.prototype.isLoading = function () {
   return false;
 };
 
@@ -40,6 +40,7 @@ Namespace.prototype.prepare = function (language) {
   // other than the client implementation we prepare all locales
   _.each(language.getLocales(), function (locale) {
     var filename = self._filenameForLocale(locale);
+    
     try {
       var text = Assets.getText(filename);
       self._files[locale] = {
