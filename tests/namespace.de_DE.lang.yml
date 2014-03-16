@@ -1,1 +1,5 @@
 a_key: Hallo Test
+login:
+  label:
+    username: Benutzername
+    password: Passwort
