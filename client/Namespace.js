@@ -80,7 +80,7 @@ Namespace.prototype._prepareLocales = function (locales) {
         if (locales.length > 0) {
           self._prepareLocale(locales); // prepare the next locale
         } else {
-          console.error("No more locales to load. All hope is lost");
+          console.error("No more locales to load. All hope is lost for " + self);
         }
       }
       
