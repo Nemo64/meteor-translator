@@ -66,8 +66,10 @@ Namespace.prototype._prepareLocales = function (locales) {
   var localeData = self._locales[locale];
   if (! localeData.loaded) {
     
-    // start loading the file
     var filename = self._filenameForLocale(locale);
+    filename = "/" + filename; // absolute so routing doesn't get in the way
+    
+    // start loading the file
     self._loading++;
     HTTP.get(filename, function (error, data) {
       self._loading--;
@@ -111,19 +113,21 @@ Namespace.prototype.get = function (key, language) {
   
   // check all locales of the language
   var locales = language.getLocales();
-  var locale = _.find(locales, function (locale, index) {
+  var matchedLocale = _.find(locales, function (locale, index) {
     var localeData = self._locales[locale]; // must exist because we prepared the lang
     localeData.dep.depend(); // file could change if it is not loaded yet
     
     // because this implementation only loads the first locale the fallback is
     // never prepared. If it is needed to it now
     if (! localeData.loaded) {
-      self._prepareLocales(locales.slice(index)); // all locales left
+      self._prepareLocales(locales.slice(index)); // this and all after this
       return true; // this is our current best match (none :D)
     }
     
     return localeData.data.hasOwnProperty(key);
   });
   
-  return locale != null ? self._locales[locale].data[key] : undefined;
+  return matchedLocale != null
+    ? self._locales[matchedLocale].data[key]
+    : undefined;
 };

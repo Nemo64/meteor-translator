@@ -6,7 +6,7 @@ var LANGUAGE_DEFAULT = new Translator.LanguageArray();
 Tinytest.add("Namespace - correct path", function (test) {
   var namespace = new Translator.Namespace(NAMESPACE);
   var filename = namespace._filenameForLocale("de_DE");
-  var expect = "/" + NAMESPACE + ".de_DE.lang.yml.json";
+  var expect = NAMESPACE + ".de_DE.lang.yml.json";
   test.equal(filename, expect, "the language and format should be appended");
 });
 
