@@ -10,11 +10,14 @@ Package._transitional_registerBuildPlugin({
 });
 
 Package.on_use(function(api) {
-  api.use(["http", "underscore"]);
+  api.use(["http"], ["client"]);
+  api.use(["underscore"], ["client", "server"]);
+  api.use(["headers"], ["client"]);
 
   api.add_files([
     "lib/Locale.js",
     "lib/LanguageArray.js",
+    "lib/LanguageArrayAutodetect.js",
     "lib/NamespaceAbstract.js",
     "lib/Translator.js"
   ], ["client", "server"]);
