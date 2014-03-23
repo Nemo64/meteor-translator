@@ -26,7 +26,7 @@ var handler = function (compileStep, isLiterate) {
       parseValue(key, value, parsedDoc);
     });
     var jsonDoc = JSON.stringify(parsedDoc);
-    var filename = compileStep.rootOutputPath + "/" + compileStep.inputPath + ".json";
+    var filename = compileStep.inputPath + ".json";
     
     if (compileStep.arch == "browser") {
       // save the file asset
@@ -37,6 +37,8 @@ var handler = function (compileStep, isLiterate) {
     }
     
     if (compileStep.arch == "os") {
+      // XXX this entire part is a hack for accessing assets on the server
+      filename = compileStep.rootOutputPath + "/" + filename;
       // add it as a js file for the server
       compileStep.addJavaScript({
         path: compileStep.inputPath,
