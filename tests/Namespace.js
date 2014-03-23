@@ -61,3 +61,16 @@ testAsyncMulti("Namespace - access none existing key", [
     });
   }
 ]);
+
+testAsyncMulti("Namespace - does not exist", [
+  function (test, expect) {
+    var namespace = new Translator.Namespace("none existing namespace");
+    var expect = expect(undefined);
+    Deps.autorun(function (dep) {
+      var result = namespace.get("a_key", LANGUAGE_FOREIGN);
+      if (! namespace.isLoading()) {
+        expect(result);
+      }
+    });
+  }
+]);

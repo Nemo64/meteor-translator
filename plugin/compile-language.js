@@ -25,12 +25,27 @@ var handler = function (compileStep, isLiterate) {
     _.each(doc, function (value, key) {
       parseValue(key, value, parsedDoc);
     });
+    var jsonDoc = JSON.stringify(parsedDoc);
+    var filename = compileStep.rootOutputPath + "/" + compileStep.inputPath + ".json";
     
-    // save the file asset
-    compileStep.addAsset({
-      path: compileStep.inputPath + ".json",
-      data: new Buffer(JSON.stringify(parsedDoc))
-    });
+    if (compileStep.arch == "browser") {
+      // save the file asset
+      compileStep.addAsset({
+        path: filename,
+        data: new Buffer(jsonDoc)
+      });
+    }
+    
+    if (compileStep.arch == "os") {
+      // add it as a js file for the server
+      compileStep.addJavaScript({
+        path: compileStep.inputPath,
+        data: //"typeof _LANG == 'undefined' && (_LANG = {});\n"
+          "Translator._files[" + JSON.stringify(filename) + "] = " + jsonDoc,
+        sourcePath: compileStep.inputPath,
+        bare: false
+      });
+    }
     
   } catch (e) {
     compileStep.error({
