@@ -62,3 +62,4 @@ And that concludes it for now ;) There are more features to come so be patient!
 - a template helper which will be available as soon as meteors UI engine is done
 - autodetect of languages (not tested at branch `feature-autodetect`)
 - pluralisation
+- global language (so all translators use the same, except if specified otherwise)
