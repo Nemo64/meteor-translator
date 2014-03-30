@@ -1,0 +1,9 @@
+{
+  "name": "translator",
+  "description": "A feature rich translation package",
+  "homepage": "https://github.com/Nemo64/meteor-translator",
+  "author": "Marco Pfeiffer <cheat2000-git@yahoo.de>",
+  "version": "0.1.0",
+  "git": "https://github.com/Nemo64/meteor-translator.git",
+  "packages": {}
+}
