@@ -3,7 +3,7 @@
   "description": "A feature rich translation package to cover you with internationalisation",
   "homepage": "https://github.com/Nemo64/meteor-translator",
   "author": "Marco Pfeiffer <cheat2000-git@yahoo.de>",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "git": "https://github.com/Nemo64/meteor-translator.git",
   "packages": {}
 }
