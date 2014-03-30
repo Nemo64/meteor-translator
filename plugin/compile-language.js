@@ -1,5 +1,7 @@
 var yaml = Npm.require("js-yaml");
 
+var RX_VALID_KEY = /^\w+$/; // only 0-9, a-z and _
+
 /**
  * @param {string} baseKey
  * @param {mixed}  value
@@ -8,7 +10,15 @@ var yaml = Npm.require("js-yaml");
 var parseValue = function (baseKey, value, result) {
   if (_.isObject(value) && ! _.isArray(value)) {
     _.each(value, function (value, key) {
+      
+      if (! RX_VALID_KEY.test(key)) {
+        var msg = "Only wordchars and underscores are allowed ";
+        msg += "in translation keys. Got '" + baseKey + "'";
+        throw new Error(msg);
+      }
+      
       parseValue(baseKey + "." + key, value, result);
+      
     });
   } else {
     result[baseKey] = value;

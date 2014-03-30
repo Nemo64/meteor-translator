@@ -40,8 +40,18 @@ Tinytest.add("LanguageArray - with Locale instances", function (test) {
 
 Tinytest.add("LanguageArray - without parameter", function (test) {
   var language = new Translator.LanguageArray();
-  test.equal(language.getLocales(), DEFAULT_LOCALE);
-  test.equal(language.getLocale(), DEFAULT_LOCALE[0]);
+  test.equal(language.getLocales(), []);
+  test.equal(language.getLocale(), undefined);
+});
+
+
+
+
+
+Tinytest.add("LanguageArray - equals", function (test) {
+  var language = new Translator.LanguageArray(NORMAL_LOCALES_INSTANCE);
+  var other = new Translator.LanguageArray(NORMAL_LOCALES_INSTANCE);
+  test.isTrue(language.equals(other));
 });
 
 
