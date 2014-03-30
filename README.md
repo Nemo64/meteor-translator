@@ -16,7 +16,7 @@ Lets see how the file could look like:
 
 ```YAML
 user_login:
-  title: "Login area"
+  title: "login area"
   label:
     username: "username"
     password: "password"
@@ -25,41 +25,53 @@ user_login:
     submit: "login"
 ```
 
-Easy right? But now how to get the translation
-
 ## Getting the translation
 
 ```Javascript
-FrontLang = new Translator(["en_US"]); // multiple languages are possible as fallback
-FrontLang.use("path/to/namespace"); // the langauge file without the language eg "app", not "app.en_US.lang.yml"
+Translator.setLanguage(["en_US"]); // set the global language. Multiple languages are possible for fallbacks
+FrontLang = new Translator(); // create one for each purpose, in this case the frontend
+FrontLang.use("path/to/namespace"); // the langauge file without the language eg. "app", not "app.en_US.lang.yml"
 
 Template.login.title = function () {
-  return FrontLang.get("user_login.title");
+  return FrontLang.get("user_login.title"); // -> login area
 }
 ```
 
-And there you have you Translation! You should create multiple translators for different contexts like `MailLang` etc.
-In this case our translations will be used for the frontend so it's name is `FrontLang` (Frontend Language)
+And there you have your translation!
 
-The `FrontLang.use()` lets you say which translation namespaces to use.
-You can use multiple but every namespace is another request so do not use too many.
-It could also conflict if 2 namespaces have the same keys.
+### Namespaces `#use("namespace")`
+
+A Namespace is basically a single file which can be `use`d by the translator.
+`#use("languages/public")` will load and prepare `languages/public.en_US.lang.yml`.
+
+You can use multiple namespaces in one translator. But they could conflict if 2 namespaces have the same keys.
 You should try splitting your namespaces like this:
 - `public.en_US.lang.yml` for everything that everyone can access
 - `user.en_US.lang.yml` for content most users won't even see if they don't have an account
 - `mails.en_US.lang.yml` for mails that the user won't see anyways as the server should send them
 
-and so on... Let's say a user has now logged in. You can simply use `FrontLang.use("lang/user")` anytime to add namespaces.
+and so on... 
 
-You can also change the language during runtime (eg. if the user selects one).
+You shouldn't use too many namespaces because it would require more requests.
+Let's say a user has now logged in. You can simply use `FrontLang.use("user")` anytime to add a namespace which is only then loaded.
+
+### Langauges `#setLanguage(["en_US"])` / `#getLanguage()`
+
+This package uses a global language for every translator. You can change it at any time.
 ```Javascript
-FrontLang.setLanguage(["de_DE", "en_US"]); // reactively change the language
+Translator.setLanguage(["de_DE", "en_US"]); // reactively change the language to de with en fallback
 ```
-And that concludes it for now ;) There are more features to come so be patient!
 
-### TODO
-- Parameters are not yet available, the plan is `FrontLang.get("key", { username: "username" }) // "hey %username%" => "Hey You"`
-- a template helper which will be available as soon as meteors UI engine is done
-- autodetect of languages (not tested at branch `feature-autodetect`)
+It is also possible to overwrite the global language for one translator.
+```Javascript
+FrontLang.setLanguage(["de_DE", "en_US"]);
+// now only FrontLang will use those languages
+```
+
+# TODO
+- Parameters are not yet available, the plan is `FrontLang.get("key", { username: "You" }) // "hey %username%" => "hey You"`
+- a template helper
+- autodetect of languages (by far not final at branch `feature-autodetect`)
 - pluralisation
-- global language (so all translators use the same, except if specified otherwise)
+- territory fallback
+- providing of features from [CLDR](http://cldr.unicode.org/) like Number Formating and Dates
