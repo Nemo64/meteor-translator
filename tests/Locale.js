@@ -22,7 +22,7 @@ Tinytest.add("Locale - without value", function (test) {
 Tinytest.add("Locale - with string", function (test) {
   var locale = new Translator.Locale(LOCALE);
   test.equal(locale.getLanguage(), LOCALE_LANG);
-  test.equal(locale.getCountry(), LOCALE_COUN);
+  test.equal(locale.getTerritory(), LOCALE_COUN);
   test.equal(locale.toString(), LOCALE);
 });
 
@@ -33,7 +33,7 @@ Tinytest.add("Locale - with string", function (test) {
 Tinytest.add("Locale - with language and country", function (test) {
   var locale = new Translator.Locale(LOCALE_LANG, LOCALE_COUN);
   test.equal(locale.getLanguage(), LOCALE_LANG);
-  test.equal(locale.getCountry(), LOCALE_COUN);
+  test.equal(locale.getTerritory(), LOCALE_COUN);
   test.equal(locale.toString(), LOCALE);
 });
 
@@ -44,7 +44,7 @@ Tinytest.add("Locale - with language and country", function (test) {
 Tinytest.add("Locale - only with language", function (test) {
   var locale = new Translator.Locale(LOCALE_LANG);
   test.equal(locale.getLanguage(), LOCALE_LANG);
-  test.equal(locale.getCountry(), null);
+  test.equal(locale.getTerritory(), null);
   test.equal(locale.toString(), LOCALE_LANG);
 });
 
