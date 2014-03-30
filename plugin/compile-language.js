@@ -1,6 +1,13 @@
 var yaml = Npm.require("js-yaml");
 
 var RX_VALID_KEY = /^\w+$/; // only 0-9, a-z and _
+var validateKey = function (key) {
+  if (! RX_VALID_KEY.test(key)) {
+    var msg = "Only wordchars and underscores are allowed ";
+    msg += "in translation keys. Got '" + baseKey + "'";
+    throw new Error(msg);
+  }
+}
 
 /**
  * @param {string} baseKey
@@ -10,15 +17,8 @@ var RX_VALID_KEY = /^\w+$/; // only 0-9, a-z and _
 var parseValue = function (baseKey, value, result) {
   if (_.isObject(value) && ! _.isArray(value)) {
     _.each(value, function (value, key) {
-      
-      if (! RX_VALID_KEY.test(key)) {
-        var msg = "Only wordchars and underscores are allowed ";
-        msg += "in translation keys. Got '" + baseKey + "'";
-        throw new Error(msg);
-      }
-      
+      validateKey(key);
       parseValue(baseKey + "." + key, value, result);
-      
     });
   } else {
     result[baseKey] = value;
@@ -33,10 +33,13 @@ var handler = function (compileStep, isLiterate) {
     // parse the document
     var parsedDoc = {};
     _.each(doc, function (value, key) {
+      validateKey(key);
       parseValue(key, value, parsedDoc);
     });
     var jsonDoc = JSON.stringify(parsedDoc);
     var filename = compileStep.inputPath + ".json";
+    
+    
     
     if (compileStep.arch == "browser") {
       // save the file asset
@@ -52,8 +55,7 @@ var handler = function (compileStep, isLiterate) {
       // add it as a js file for the server
       compileStep.addJavaScript({
         path: compileStep.inputPath,
-        data: //"typeof _LANG == 'undefined' && (_LANG = {});\n"
-          "Translator._files[" + JSON.stringify(filename) + "] = " + jsonDoc,
+        data: "Translator._files[" + JSON.stringify(filename) + "] = " + jsonDoc,
         sourcePath: compileStep.inputPath,
         bare: false
       });
