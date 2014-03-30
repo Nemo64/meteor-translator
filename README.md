@@ -55,7 +55,7 @@ and so on...
 You shouldn't use too many namespaces because it would require more requests.
 Let's say a user has now logged in. You can simply use `FrontLang.use("user")` anytime to add a namespace which is only then loaded.
 
-### Langauges `#setLanguage(["en_US"])` / `#getLanguage()`
+### Languages `#setLanguage(["en_US"])` / `#getLanguage()`
 
 This package uses a global language for every translator. You can change it at any time.
 ```Javascript
