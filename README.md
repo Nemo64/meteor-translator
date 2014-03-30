@@ -1,8 +1,6 @@
 # meteor-translator
 
-a simple, lazy loading, client and server side translator for meteor
-
-**This project is not done yet. As soon as I think it's ready I'll make a atmosphere entry.**
+A simple, lazy loading, client and server side translator for meteor.
 
 # Basic usage
 
@@ -60,6 +58,8 @@ FrontLang.setLanguage(["de_DE", "en_US"]); // reactively change the language
 And that concludes it for now ;) There are more features to come so be patient!
 
 ### TODO
-- This does not work on the server side yet because [i can't access the json from there](https://github.com/meteor/meteor/issues/1906)
-- Parameters are not yet available, the plan is `FrontLang.get("Hi %username%", { username: "username" }`
-- More test for the reactive loading of files
+- Parameters are not yet available, the plan is `FrontLang.get("key", { username: "username" }) // "hey %username%" => "Hey You"`
+- a template helper which will be available as soon as meteors UI engine is done
+- autodetect of languages (not tested at branch `feature-autodetect`)
+- pluralisation
+- global language (so all translators use the same, except if specified otherwise)
