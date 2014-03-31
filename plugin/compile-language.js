@@ -1,12 +1,8 @@
 var yaml = Npm.require("js-yaml");
 
 var RX_VALID_KEY = /^\w+$/; // only 0-9, a-z and _
-var validateKey = function (key) {
-  if (! RX_VALID_KEY.test(key)) {
-    var msg = "Only wordchars and underscores are allowed ";
-    msg += "in translation keys. Got '" + baseKey + "'";
-    throw new Error(msg);
-  }
+var keyValid = function (key) {
+  return RX_VALID_KEY.test(key);
 }
 
 /**
@@ -17,14 +13,22 @@ var validateKey = function (key) {
 var parseValue = function (baseKey, value, result) {
   if (_.isObject(value) && ! _.isArray(value)) {
     _.each(value, function (value, key) {
-      validateKey(key);
-      parseValue(baseKey + "." + key, value, result);
+      var newKey = baseKey + "." + key;
+      
+      // if a key does not only contain wordchars
+      // it could be more logic involved so pass it though
+      if (keyValid(key)) {
+        parseValue(newKey, value, result);
+      } else {
+        result[newKey] = value;
+      }
     });
   } else {
     result[baseKey] = value;
   }
 }
 
+// compiler for .lang.yml files
 var handler = function (compileStep, isLiterate) {
   var source = compileStep.read().toString("utf8");
   try {
@@ -33,7 +37,11 @@ var handler = function (compileStep, isLiterate) {
     // parse the document
     var parsedDoc = {};
     _.each(doc, function (value, key) {
-      validateKey(key);
+      if (! keyValid(key)) {
+        var msg = "Only wordchars and underscores are allowed ";
+        msg += "in translation keys. Got '" + baseKey + "'";
+        throw new Error(msg);
+      }
       parseValue(key, value, parsedDoc);
     });
     var jsonDoc = JSON.stringify(parsedDoc);

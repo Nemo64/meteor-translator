@@ -16,6 +16,7 @@ Package.on_use(function(api) {
     "lib/Locale.js",
     "lib/LanguageArray.js",
     "lib/NamespaceAbstract.js",
+    "lib/FilterList.js",
     "lib/Translator.js",
     "lib/Translator/globalLang.js"
   ], ["client", "server"]);
@@ -35,6 +36,7 @@ Package.on_test(function (api) {
   api.add_files([
     "tests/Locale.js",
     "tests/LanguageArray.js",
-    "tests/Namespace.js"
+    "tests/Namespace.js",
+    "tests/FilterList.js"
   ], ["client", "server"]);
 });
