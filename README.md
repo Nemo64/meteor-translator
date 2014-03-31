@@ -2,9 +2,30 @@
 
 A simple, lazy loading, client and server side translator for meteor.
 
-# Basic usage
+# Quickstart (should be intuitive)
 
-## The Translation File
+`languages/public.en_US.lang.yml`:
+```YAML
+user_login:
+  header: login area
+  labels:
+    username: username
+    password: password
+    no_account: Create a new account!
+    submit: login
+```
+
+`client/user_login.js` or any other js file:
+```JavaScript
+Translator.setLanguage(["en_US"]); // global language
+
+FrontLang = new Translator(); // translator for frontend
+FrontLang.use("languages/public"); // without the "en_US.lang.yml"
+
+FrontLang.get("user_login.header"); // => login area
+```
+
+# The Translation File
 This package uses [yaml files](http://www.yaml.org/) as translation files! These get compiled to json on the server side and then transmitted depending on the language and namespace so there is no unneeded loading of languages that are never used.
 
 A typical translation file name would be `app.en_US.lang.yml`.
@@ -12,7 +33,7 @@ A typical translation file name would be `app.en_US.lang.yml`.
 - The `en_US` tells which locale it belongs to.
 - The `lang.yml` identifies it as a language file.
  
-Lets see how the file could look like:
+example:
 
 ```YAML
 user_login:
@@ -25,53 +46,61 @@ user_login:
     submit: "login"
 ```
 
-## Getting the translation
+## How to split the files
 
-```Javascript
-Translator.setLanguage(["en_US"]); // set the global language. Multiple languages are possible for fallbacks
-FrontLang = new Translator(); // create one for each purpose, in this case the frontend
-FrontLang.use("path/to/namespace"); // the langauge file without the language eg. "app", not "app.en_US.lang.yml"
-
-Template.login.title = function () {
-  return FrontLang.get("user_login.title"); // -> login area
-}
-```
-
-And there you have your translation!
-
-### Namespaces `#use("namespace")`
-
-A Namespace is basically a single file which can be `use`d by the translator.
-`#use("languages/public")` will load and prepare `languages/public.en_US.lang.yml`.
-
-You can use multiple namespaces in one translator. But they could conflict if 2 namespaces have the same keys.
-You should try splitting your namespaces like this:
+You shouldn't use too many files as each one is another request (for the frontend at least).
+I recommend that you use a schema comparable to this:
 - `public.en_US.lang.yml` for everything that everyone can access
 - `user.en_US.lang.yml` for content most users won't even see if they don't have an account
 - `mails.en_US.lang.yml` for mails that the user won't see anyways as the server should send them
 
-and so on... 
+Of course this is not a must. If you have only a few strings (kb) it can safely all be one file.
 
-You shouldn't use too many namespaces because it would require more requests.
-Let's say a user has now logged in. You can simply use `FrontLang.use("user")` anytime to add a namespace which is only then loaded.
+# Getting the translation
 
-### Languages `#setLanguage(["en_US"])` / `#getLanguage()`
+## Namespaces
+This package uses namespaces. Basically every file is a namespace. Out of them you create `Translator` instances.
+```JavaScript
+Translator.setLanguage(["en_US"]); // global language
 
-This package uses a global language for every translator. You can change it at any time.
-```Javascript
-Translator.setLanguage(["de_DE", "en_US"]); // reactively change the language to de with en fallback
+FrontLang = new Translator();
+FrontLang.use("languages/public");
+// now every key of languages/public.en_US.lang.yml
+// can be accessed with FrontLang.get("key");
+
+MyPackageLang = new Translator();
+MyPackageLang.use("packages/my-package/lang");
+// this can be used if you want to use this translator
+// for a meteor package. Other scenarios include mails etc.
 ```
 
-It is also possible to overwrite the global language for one translator.
-```Javascript
-FrontLang.setLanguage(["de_DE", "en_US"]);
-// now only FrontLang will use those languages
+## Choosing a Language
+### Global
+Most of the time your application uses (at least in the frontend) one language.
+That's why there is a global Language for everything!
+```JavaScript
+Translator.setLanguage(["en_US"]); // initial set
+// ... 
+// user selects new language
+Translator.setLanguage(["cs_CZ"]);
+// this reactively changes all translations
+```
+
+### Local
+But that might be to limiting (especially on the server side) so you can overwrite it for a translator.
+```JavaScript
+FrontLang = new Translator();
+FrontLang.use("languages/public");
+
+// per translator
+FrontLang.setLanguage(["de_DE"]);
+FrontLang.get("hello"); // => Hallo
 ```
 
 # TODO
 - Parameters are not yet available, the plan is `FrontLang.get("key", { username: "You" }) // "hey %username%" => "hey You"`
 - a template helper
 - autodetect of languages (by far not final at branch `feature-autodetect`)
-- pluralisation
+- pluralization
 - territory fallback
-- providing of features from [CLDR](http://cldr.unicode.org/) like Number Formating and Dates
+- providing of features from [CLDR](http://cldr.unicode.org/) like number formatting and dates
