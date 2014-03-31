@@ -2,9 +2,10 @@
 
 A simple, lazy loading, client and server side translator for meteor.
 
-# Quickstart (should be intuitive)
+## Quickstart (should be intuitive)
 
-`languages/public.en_US.lang.yml`:
+### Translation file
+`languages/public.en_US.lang.yml`
 ```YAML
 user_login:
   header: login area
@@ -15,6 +16,7 @@ user_login:
     submit: login
 ```
 
+### JavaScript file
 `client/user_login.js` or any other js file:
 ```JavaScript
 Translator.setLanguage(["en_US"]); // global language
@@ -25,7 +27,7 @@ FrontLang.use("languages/public"); // without the "en_US.lang.yml"
 FrontLang.get("user_login.header"); // => login area
 ```
 
-# The Translation File
+## The Translation File
 This package uses [yaml files](http://www.yaml.org/) as translation files! These get compiled to json on the server side and then transmitted depending on the language and namespace so there is no unneeded loading of languages that are never used.
 
 A typical translation file name would be `app.en_US.lang.yml`.
@@ -46,8 +48,7 @@ user_login:
     submit: "login"
 ```
 
-## How to split the files
-
+### How to split the files
 You shouldn't use too many files as each one is another request (for the frontend at least).
 I recommend that you use a schema comparable to this:
 - `public.en_US.lang.yml` for everything that everyone can access
@@ -55,8 +56,6 @@ I recommend that you use a schema comparable to this:
 - `mails.en_US.lang.yml` for mails that the user won't see anyways as the server should send them
 
 Of course this is not a must. If you have only a few strings (kb) it can safely all be one file.
-
-# Getting the translation
 
 ## Namespaces
 This package uses namespaces. Basically every file is a namespace. Out of them you create `Translator` instances.
@@ -67,6 +66,13 @@ FrontLang = new Translator();
 FrontLang.use("languages/public");
 // now every key of languages/public.en_US.lang.yml
 // can be accessed with FrontLang.get("key");
+
+MailerLang = new Translator();
+MailerLang.use("languages/user_mail");
+MailerLang.use("languages/admin_mail");
+MailerLang.use("languages/status_mail");
+// the mailer translator will now look into 3 namespaces
+// there priority is from the first to the last (might change)
 
 MyPackageLang = new Translator();
 MyPackageLang.use("packages/my-package/lang");
