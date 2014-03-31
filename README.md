@@ -12,7 +12,7 @@ This package covers you with everything language related... because it's annoyin
 ## Quickstart (should be intuitive)
 
 ### Translation file
-eg. `languages/public.en_US.lang.yml`
+`languages/public.en_US.lang.yml`
 ```YAML
 user_login:
   header: login area
@@ -34,12 +34,10 @@ FrontLang.get("user_login.header"); // => login area
 ```
 
 ### Template
-A little Javascript:
 ```Javascript
-// this is required to ensure capsulation
+// this JavaScript is required to ensure capsulation
 Template.template_name.trans = FrontLang.createHelper();
 ```
-Then in your template:
 ```HTML
 <template name="template_name">
   <h1>{{trans "user_login.header"}}</h1>
