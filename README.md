@@ -1,11 +1,18 @@
-# meteor-translator
+# A powerful internationalisation package for Meteor
+This package covers you with everything language related... because it's annoying!
 
-A simple, lazy loading, client and server side translator for meteor.
+## Content
+- [Quickstart](#quickstart-should-be-intuitive)
+- [The Translation File](#the-translation-file)
+- [Namespaces](#namespaces)
+- [Language selection](#language-selection)
+- [Templates](#templates)
+- [TODO](#todo)
 
 ## Quickstart (should be intuitive)
 
 ### Translation file
-`languages/public.en_US.lang.yml`
+eg. `languages/public.en_US.lang.yml`
 ```YAML
 user_login:
   header: login area
@@ -16,8 +23,7 @@ user_login:
     submit: login
 ```
 
-### JavaScript file
-`client/user_login.js` or any other js file:
+### JavaScript
 ```JavaScript
 Translator.setLanguage(["en_US"]); // global language
 
@@ -27,11 +33,24 @@ FrontLang.use("languages/public"); // without the "en_US.lang.yml"
 FrontLang.get("user_login.header"); // => login area
 ```
 
+### Template
+A little Javascript:
+```Javascript
+// this is required to ensure capsulation
+Template.template_name.trans = FrontLang.createHelper();
+```
+Then in your template:
+```HTML
+<template name="template_name">
+  <h1>{{trans "user_login.header"}}</h1>
+</template>
+```
+
 ## The Translation File
 This package uses [yaml files](http://www.yaml.org/) as translation files! These get compiled to json on the server side and then transmitted depending on the language and namespace so there is no unneeded loading of languages that are never used.
 
-A typical translation file name would be `app.en_US.lang.yml`.
-- The `app` is the namespace
+A typical translation file name would be `public.en_US.lang.yml`.
+- The `public` is the namespace
 - The `en_US` tells which locale it belongs to.
 - The `lang.yml` identifies it as a language file.
  
@@ -80,7 +99,7 @@ MyPackageLang.use("packages/my-package/lang");
 // for a meteor package. Other scenarios include mails etc.
 ```
 
-## Choosing a Language
+## Language selection
 ### Global
 Most of the time your application uses (at least in the frontend) one language.
 That's why there is a global Language for everything!
@@ -103,9 +122,27 @@ FrontLang.setLanguage(["de_DE"]);
 FrontLang.get("hello"); // => Hallo
 ```
 
-# TODO
+## Templates
+Because of the namespaces there is no global translation helper. However there is a helper to create a helper. ;)
+```JavaScript
+FrontLang = new Translator();
+FrontLang.use("languages/public");
+
+// and now the helper
+Template.template_name.trans = FrontLang.createHelper();
+```
+That should be easy enough and keeps the capsulation. Also it prevents a collision with other i18n packages.
+If you desire you can still create a global helper with `UI.registerHelper("trans", FrontLang.createHelper())`.
+
+The use in the template is then as you'd expect it:
+```HTML
+<template name="template_name">
+  <h1>{{trans "user_login.header"}}</h1>
+</template>
+```
+
+## TODO
 - Parameters are not yet available, the plan is `FrontLang.get("key", { username: "You" }) // "hey %username%" => "hey You"`
-- a template helper
 - autodetect of languages (by far not final at branch `feature-autodetect`)
 - pluralization
 - territory fallback
