@@ -38,5 +38,5 @@ Tinytest.add("FilterList - validation failing", function (test) {
 Tinytest.add("FilterList - validation success", function (test) {
   var filterList = new Translator.FilterList("filter", _.isString);
   var result = filterList.filter("some string");
-  test.equal(result, "some-string");
+  test.equal(result, "some string");
 });
