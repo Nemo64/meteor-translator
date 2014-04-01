@@ -10,7 +10,8 @@ Package._transitional_registerBuildPlugin({
 });
 
 Package.on_use(function(api) {
-  api.use(["http", "underscore", "ejson", "deps"]);
+  api.use(["underscore", "ejson", "deps"], ["client", "server"]);
+  api.use(["http"], ["client"]);
 
   api.add_files([
     "lib/Locale.js",
@@ -20,8 +21,13 @@ Package.on_use(function(api) {
     "lib/Translator.js",
     "lib/Translator/globalLang.js"
   ], ["client", "server"]);
-  api.add_files(["client/Namespace.js"], ["client"]);
-  api.add_files(["server/Namespace.js"], ["server"]);
+  api.add_files([
+    "client/Namespace.js",
+    "client/helper.js"
+  ], ["client"]);
+  api.add_files([
+    "server/Namespace.js"
+  ], ["server"]);
   
   api.add_files(["Translator.js"], ["client", "server"]);
   api.export(["Translator"]);
