@@ -12,15 +12,12 @@ This package covers you with everything language related... because it's annoyin
 ## Quickstart (should be intuitive)
 
 ### Translation file
-`languages/public.en_US.lang.yml`
+`languages/user.en_US.lang.yml`
 ```YAML
-user_login:
-  header: login area
-  labels:
-    username: username
-    password: password
-    no_account: Create a new account!
-    submit: login
+user_area:
+  header: "user area"
+  message:
+    greeting: "Hello {{name}}!"
 ```
 
 ### JavaScript
@@ -28,9 +25,10 @@ user_login:
 Translator.setLanguage(["en_US"]); // global language
 
 FrontLang = new Translator(); // translator for frontend
-FrontLang.use("languages/public"); // without the "en_US.lang.yml"
+FrontLang.use('languages/user'); // without the "en_US.lang.yml"
 
-FrontLang.get("user_login.header"); // => login area
+FrontLang.get('user_area.header'); // => user area
+FrontLang.get('user_area.message.greeting', { name: "world" }); // => Hello world!
 ```
 
 ### Template
@@ -40,7 +38,8 @@ Template.template_name.trans = FrontLang.createHelper();
 ```
 ```HTML
 <template name="template_name">
-  <h1>{{trans "user_login.header"}}</h1>
+    <h1>{{trans "user_area"}}</h1>
+    <p>{{trans "user_area.message.greeting" name="world"}}</p>
 </template>
 ```
 
@@ -63,6 +62,10 @@ user_login:
     no_account: "No account yet? Create one right now!"
     lost_password: "Did you loose your password?"
     submit: "login"
+  errors:
+    wrong_login: "Login into {{account}} failed!"
+    enter_username: "please enter a username"
+    enter_password: "please enter a password"
 ```
 
 ### How to split the files
@@ -139,8 +142,22 @@ The use in the template is then as you'd expect it:
 </template>
 ```
 
+## Parameter
+Sometimes parts can't be translated because they are dynamic. For this case there are parameters. Want to greet your users?
+```YAML
+greeting: "Hello {{name}}!"
+long_time_notice: "It has been {{days}} days!"
+```
+Then you can pass these parameters to the get method or a template.
+```JavaScript
+FrontLang.get('greeting', { name: user.name });
+FrontLang.get('long_time_notice', { days: user.daysSinceLogin() });
+```
+```HTML
+<p>{{trans 'greeting' name=user.name}}<p>
+<p>{{trans 'greeting' name="Mustermann"}}<p>
+```
 ## TODO
-- Parameters are not yet available, the plan is `FrontLang.get("key", { username: "You" }) // "hey %username%" => "hey You"`
 - autodetect of languages (by far not final at branch `feature-autodetect`)
 - pluralization
 - territory fallback
