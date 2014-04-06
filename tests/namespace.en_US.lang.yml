@@ -1,5 +1,7 @@
-a_key: Hello Test
+a_key: Hello test
 login:
   label:
     username: username
     password: password
+weather:
+  message: It is {{weather}} today!

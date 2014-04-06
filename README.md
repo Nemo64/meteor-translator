@@ -1,65 +1,164 @@
-# meteor-translator
+# A powerful internationalisation package for Meteor
+This package covers you with everything language related... because it's annoying!
 
-a simple, lazy loading, client and server side translator for meteor
+## Content
+- [Quickstart](#quickstart-should-be-intuitive)
+- [The Translation File](#the-translation-file)
+- [Namespaces](#namespaces)
+- [Language selection](#language-selection)
+- [Templates](#templates)
+- [TODO](#todo)
 
-**This project is not done yet. As soon as I think it's ready I'll make a atmosphere entry.**
+## Quickstart (should be intuitive)
 
-# Basic usage
+### Translation file
+`languages/user.en_US.lang.yml`
+```YAML
+user_area:
+  header: "user area"
+  message:
+    greeting: "Hello {{name}}!"
+```
+
+### JavaScript
+```JavaScript
+Translator.setLanguage(["en_US"]); // global language
+
+FrontLang = new Translator(); // translator for frontend
+FrontLang.use('languages/user'); // without the "en_US.lang.yml"
+
+FrontLang.get('user_area.header'); // => user area
+FrontLang.get('user_area.message.greeting', { name: "world" }); // => Hello world!
+```
+
+### Template
+```Javascript
+// this JavaScript is required to ensure capsulation
+Template.template_name.trans = FrontLang.createHelper();
+```
+```HTML
+<template name="template_name">
+    <h1>{{trans "user_area"}}</h1>
+    <p>{{trans "user_area.message.greeting" name="world"}}</p>
+</template>
+```
 
 ## The Translation File
 This package uses [yaml files](http://www.yaml.org/) as translation files! These get compiled to json on the server side and then transmitted depending on the language and namespace so there is no unneeded loading of languages that are never used.
 
-A typical translation file name would be `app.en_US.lang.yml`.
-- The `app` is the namespace
+A typical translation file name would be `public.en_US.lang.yml`.
+- The `public` is the namespace
 - The `en_US` tells which locale it belongs to.
 - The `lang.yml` identifies it as a language file.
  
-Lets see how the file could look like:
+example:
 
 ```YAML
 user_login:
-  title: "Login area"
+  title: "login area"
   label:
     username: "username"
     password: "password"
     no_account: "No account yet? Create one right now!"
     lost_password: "Did you loose your password?"
     submit: "login"
+  errors:
+    wrong_login: "Login into {{account}} failed!"
+    enter_username: "please enter a username"
+    enter_password: "please enter a password"
 ```
 
-Easy right? But now how to get the translation
-
-## Getting the translation
-
-```Javascript
-FrontLang = new Translator(["en_US"]); // multiple languages are possible as fallback
-FrontLang.use("path/to/namespace"); // the langauge file without the language eg "app", not "app.en_US.lang.yml"
-
-Template.login.title = function () {
-  return FrontLang.get("user_login.title");
-}
-```
-
-And there you have you Translation! You should create multiple translators for different contexts like `MailLang` etc.
-In this case our translations will be used for the frontend so it's name is `FrontLang` (Frontend Language)
-
-The `FrontLang.use()` lets you say which translation namespaces to use.
-You can use multiple but every namespace is another request so do not use too many.
-It could also conflict if 2 namespaces have the same keys.
-You should try splitting your namespaces like this:
+### How to split the files
+You shouldn't use too many files as each one is another request (for the frontend at least).
+I recommend that you use a schema comparable to this:
 - `public.en_US.lang.yml` for everything that everyone can access
 - `user.en_US.lang.yml` for content most users won't even see if they don't have an account
 - `mails.en_US.lang.yml` for mails that the user won't see anyways as the server should send them
 
-and so on... Let's say a user has now logged in. You can simply use `FrontLang.use("lang/user")` anytime to add namespaces.
+Of course this is not a must. If you have only a few strings (kb) it can safely all be one file.
 
-You can also change the language during runtime (eg. if the user selects one).
-```Javascript
-FrontLang.setLanguage(["de_DE", "en_US"]); // reactively change the language
+## Namespaces
+This package uses namespaces. Basically every file is a namespace. Out of them you create `Translator` instances.
+```JavaScript
+Translator.setLanguage(["en_US"]); // global language
+
+FrontLang = new Translator();
+FrontLang.use("languages/public");
+// now every key of languages/public.en_US.lang.yml
+// can be accessed with FrontLang.get("key");
+
+MailerLang = new Translator();
+MailerLang.use("languages/user_mail");
+MailerLang.use("languages/admin_mail");
+MailerLang.use("languages/status_mail");
+// the mailer translator will now look into 3 namespaces
+// there priority is from the first to the last (might change)
+
+MyPackageLang = new Translator();
+MyPackageLang.use("packages/my-package/lang");
+// this can be used if you want to use this translator
+// for a meteor package. Other scenarios include mails etc.
 ```
-And that concludes it for now ;) There are more features to come so be patient!
 
-### TODO
-- This does not work on the server side yet because [i can't access the json from there](https://github.com/meteor/meteor/issues/1906)
-- Parameters are not yet available, the plan is `FrontLang.get("Hi %username%", { username: "username" }`
-- More test for the reactive loading of files
+## Language selection
+### Global
+Most of the time your application uses (at least in the frontend) one language.
+That's why there is a global Language for everything!
+```JavaScript
+Translator.setLanguage(["en_US"]); // initial set
+// ... 
+// user selects new language
+Translator.setLanguage(["cs_CZ"]);
+// this reactively changes all translations
+```
+
+### Local
+But that might be to limiting (especially on the server side) so you can overwrite it for a translator.
+```JavaScript
+FrontLang = new Translator();
+FrontLang.use("languages/public");
+
+// per translator
+FrontLang.setLanguage(["de_DE"]);
+FrontLang.get("hello"); // => Hallo
+```
+
+## Templates
+Because of the namespaces there is no global translation helper. However there is a helper to create a helper. ;)
+```JavaScript
+FrontLang = new Translator();
+FrontLang.use("languages/public");
+
+// and now the helper
+Template.template_name.trans = FrontLang.createHelper();
+```
+That should be easy enough and keeps the capsulation. Also it prevents a collision with other i18n packages.
+If you desire you can still create a global helper with `UI.registerHelper("trans", FrontLang.createHelper())`.
+
+The use in the template is then as you'd expect it:
+```HTML
+<template name="template_name">
+  <h1>{{trans "user_login.header"}}</h1>
+</template>
+```
+
+## Parameter
+Sometimes parts can't be translated because they are dynamic. For this case there are parameters. Want to greet your users?
+```YAML
+greeting: "Hello {{name}}!"
+long_time_notice: "It has been {{days}} days!"
+```
+Then you can pass these parameters to the get method or a template.
+```JavaScript
+FrontLang.get('greeting', { name: user.name });
+FrontLang.get('long_time_notice', { days: user.daysSinceLogin() });
+```
+```HTML
+<p>{{trans 'greeting' name=user.name}}<p>
+<p>{{trans 'greeting' name="Mustermann"}}<p>
+```
+## TODO
+- autodetect of languages (by far not final at branch `feature-autodetect`)
+- pluralization
+- territory fallback
+- providing of features from [CLDR](http://cldr.unicode.org/) like number formatting and dates

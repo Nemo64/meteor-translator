@@ -16,7 +16,7 @@ Namespace = function (name) {
   NamespaceAbstract.apply(self, arguments);
   self._locales = {}; // see loop in prepare
   self._loading = 0; // for telling if a request is running
-  self._loadingDep = new Deps.Dependency();
+  self._loadingDep = new Deps.Dependency(); // only important for #isLoading
 };
 
 _.extend(Namespace, NamespaceAbstract); // cheap extend
@@ -64,6 +64,10 @@ Namespace.prototype.prepare = function (language) {
 Namespace.prototype._prepareLocales = function (locales) {
   var self = this;
   var locale = locales.shift(); // only prepare the first locale
+  if (locale == null) {
+    console.warn("No more locales to load. All hope is lost", self);
+    return;
+  }
   
   var localeData = self._locales[locale];
   if (! localeData.loaded) {
@@ -81,11 +85,7 @@ Namespace.prototype._prepareLocales = function (locales) {
       
       if (error) {
         self._loadError(locale, filename, error);
-        if (locales.length > 0) {
-          self._prepareLocale(locales); // prepare the next locale
-        } else {
-          console.error("No more locales to load. All hope is lost for " + self);
-        }
+        self._prepareLocale(locales); // prepare the next locale
       }
       
       else try {

@@ -1,5 +1,10 @@
 var yaml = Npm.require("js-yaml");
 
+var RX_VALID_KEY = /^\w+$/; // only 0-9, a-z and _
+var keyValid = function (key) {
+  return RX_VALID_KEY.test(key);
+}
+
 /**
  * @param {string} baseKey
  * @param {mixed}  value
@@ -8,13 +13,22 @@ var yaml = Npm.require("js-yaml");
 var parseValue = function (baseKey, value, result) {
   if (_.isObject(value) && ! _.isArray(value)) {
     _.each(value, function (value, key) {
-      parseValue(baseKey + "." + key, value, result);
+      var newKey = baseKey + "." + key;
+      
+      // if a key does not only contain wordchars
+      // it could be more logic involved so pass it though
+      if (keyValid(key)) {
+        parseValue(newKey, value, result);
+      } else {
+        result[newKey] = value;
+      }
     });
   } else {
     result[baseKey] = value;
   }
 }
 
+// compiler for .lang.yml files
 var handler = function (compileStep, isLiterate) {
   var source = compileStep.read().toString("utf8");
   try {
@@ -23,10 +37,17 @@ var handler = function (compileStep, isLiterate) {
     // parse the document
     var parsedDoc = {};
     _.each(doc, function (value, key) {
+      if (! keyValid(key)) {
+        var msg = "Only wordchars and underscores are allowed ";
+        msg += "in translation keys. Got '" + baseKey + "'";
+        throw new Error(msg);
+      }
       parseValue(key, value, parsedDoc);
     });
     var jsonDoc = JSON.stringify(parsedDoc);
     var filename = compileStep.inputPath + ".json";
+    
+    
     
     if (compileStep.arch == "browser") {
       // save the file asset
@@ -42,8 +63,7 @@ var handler = function (compileStep, isLiterate) {
       // add it as a js file for the server
       compileStep.addJavaScript({
         path: compileStep.inputPath,
-        data: //"typeof _LANG == 'undefined' && (_LANG = {});\n"
-          "Translator._files[" + JSON.stringify(filename) + "] = " + jsonDoc,
+        data: "Translator._files[" + JSON.stringify(filename) + "] = " + jsonDoc,
         sourcePath: compileStep.inputPath,
         bare: false
       });
