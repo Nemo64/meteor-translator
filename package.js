@@ -45,6 +45,7 @@ Package.on_test(function (api) {
     'tests/LanguageArray.js',
     'tests/Namespace.js',
     'tests/FilterList.js',
-    'tests/FilterList/parameter.js'
+    'tests/FilterList/parameter.js',
+    'tests/Translator.js'
   ], ['client', 'server']);
 });
