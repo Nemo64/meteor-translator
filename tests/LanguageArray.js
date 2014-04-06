@@ -9,7 +9,7 @@ var NORMAL_LOCALES_INSTANCE = [
 
 
 
-Tinytest.add("LanguageArray - with string array", function (test) {
+Tinytest.add("Translator - LanguageArray - with string array", function (test) {
   var language = new Translator.LanguageArray(NORMAL_LOCALES_STRING);
   test.equal(language.getLocales(), NORMAL_LOCALES_INSTANCE);
   test.equal(language.getLocale(), NORMAL_LOCALES_INSTANCE[0]);
@@ -18,7 +18,7 @@ Tinytest.add("LanguageArray - with string array", function (test) {
 
 
 
-Tinytest.add("LanguageArray - with a string", function (test) {
+Tinytest.add("Translator - LanguageArray - with a string", function (test) {
   var language = new Translator.LanguageArray(NORMAL_LOCALES_STRING[0]);
   test.equal(language.getLocales(), [NORMAL_LOCALES_INSTANCE[0]]);
   test.equal(language.getLocale(), NORMAL_LOCALES_INSTANCE[0]);
@@ -28,7 +28,7 @@ Tinytest.add("LanguageArray - with a string", function (test) {
 
 
 
-Tinytest.add("LanguageArray - with Locale instances", function (test) {
+Tinytest.add("Translator - LanguageArray - with Locale instances", function (test) {
   var language = new Translator.LanguageArray(NORMAL_LOCALES_INSTANCE);
   test.equal(language.getLocales(), NORMAL_LOCALES_INSTANCE);
   test.equal(language.getLocale(), NORMAL_LOCALES_INSTANCE[0]);
@@ -38,7 +38,7 @@ Tinytest.add("LanguageArray - with Locale instances", function (test) {
 
 
 
-Tinytest.add("LanguageArray - without parameter", function (test) {
+Tinytest.add("Translator - LanguageArray - without parameter", function (test) {
   var language = new Translator.LanguageArray();
   test.equal(language.getLocales(), []);
   test.equal(language.getLocale(), undefined);
@@ -48,7 +48,7 @@ Tinytest.add("LanguageArray - without parameter", function (test) {
 
 
 
-Tinytest.add("LanguageArray - equals", function (test) {
+Tinytest.add("Translator - LanguageArray - equals", function (test) {
   var language = new Translator.LanguageArray(NORMAL_LOCALES_INSTANCE);
   var other = new Translator.LanguageArray(NORMAL_LOCALES_INSTANCE);
   test.isTrue(language.equals(other));
@@ -65,7 +65,7 @@ var wrongLocales = {
   "null in array": [null]
 };
 _.each(wrongLocales, function (locales, name) {
-  Tinytest.add("LanguageArray - wrong with " + name, function (test) {
+  Tinytest.add("Translator - LanguageArray - wrong with " + name, function (test) {
     try {
       new Translator.LanguageArray(locales);
       test.fail();
