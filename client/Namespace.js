@@ -56,6 +56,26 @@ Namespace.prototype.prepare = function (language) {
   
   self._prepareLocales(locales);
 };
+
+/**
+ * @private
+ * @param {Locale} locale
+ * @return {string}
+ */
+Namespace.prototype._filenameForLocale = function (locale) {
+  return this._name + '.' + locale.toString() + '.lang.yml.json';
+};
+
+/**
+ * @private
+ * @param {Locale} locale
+ * @return {boolean}
+ */
+Namespace.prototype._localeFileExists = function (locale) {
+  var namespaces = Injected.obj('translator-namespaces');
+  var namespace = namespaces[this];
+  return namespace != null && namespace.hasOwnProperty(locale);
+};
   
 /**
  * @private
@@ -71,32 +91,41 @@ Namespace.prototype._prepareLocales = function (locales) {
   
   var localeData = self._locales[locale];
   if (! localeData.loaded) {
-    
-    var filename = self._filenameForLocale(locale);
-    filename = "/" + filename; // absolute so routing doesn't get in the way
-    
-    // start loading the file
-    self._loading++;
-    self._loadingDep.changed();
-    HTTP.get(filename, function (error, data) {
-      self._loading--;
-      self._loadingDep.changed();
-      localeData.loaded = true;
-      
-      if (error) {
-        self._loadError(locale, filename, error);
-        self._prepareLocale(locales); // prepare the next locale
-      }
-      
-      else try {
-        localeData.data = JSON.parse(data.content);
-      } catch (e) {
-        self._loadError(locale, filename, e);
-      }
-      
-      localeData.dep.changed();
-    });
+    if (self._localeFileExists(locale)) {
+      self._loadLocale(locale, localeData);
+    } else {
+      // because this locale does not exist for this namespace skip to the next
+      self._prepareLocales(locales); // locales is already shifted
+    }
   }
+};
+
+/**
+ * @private
+ * @param {Locale} locale
+ * @param {object} localeData
+ */
+Namespace.prototype._loadLocale = function (locale, localeData) {
+  var self = this;
+  self._loading++;
+  self._loadingDep.changed();
+  var filename = self._filenameForLocale(locale);
+  HTTP.get('/' + filename, function (error, data) {
+    self._loading--;
+    self._loadingDep.changed();
+    localeData.loaded = true;
+    
+    if (error) {
+      self._loadError(locale, filename, error);
+      self._prepareLocale(locales); // prepare the next locale
+    } else try {
+      localeData.data = JSON.parse(data.content);
+    } catch (e) {
+      self._loadError(locale, filename, e);
+    }
+    
+    localeData.dep.changed();
+  });
 };
   
 /**

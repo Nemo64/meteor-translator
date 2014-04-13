@@ -3,8 +3,9 @@
 Inject.obj('translator-namespaces', function (req) {
   var result = {};
   _.each(Translator._namespaces, function (locales, namespace) {
+    var namespaceObj = result[namespace] = {};
     _.each(locales, function (_, locale) {
-      result[namespace + '.' + locale + '.lang.yml.json'] = 1;
+      namespaceObj[locale] = 1; // set locale exists
     });
   });
   return result;

@@ -4,32 +4,44 @@ Package.describe({
 
 Package._transitional_registerBuildPlugin({
   name: 'compileLanguage',
-  use: ['underscore'],
-  sources: ['plugin/compile-language.js'],
+  use: ['underscore', 'ejson'],
+  sources: [
+    'lib/Locale.js',
+    'lib/LanguageArray.js',
+    'plugin/compile-language.js'
+  ],
   npmDependencies: { 'js-yaml': '3.0.2' }
 });
 
 Package.on_use(function(api) {
-  api.use(['underscore', 'ejson', 'deps', 'headers'], ['client', 'server']);
-  api.use(['http'], ['client']);
+  api.use([
+    'underscore',
+    'ejson',
+    'deps',
+    // meteorite
+    'inject-initial'
+  ]);
+  api.use([
+    'http'
+  ], 'client');
 
   api.add_files([
     'lib/Locale.js',
     'lib/LanguageArray.js',
-    "lib/LanguageArrayAutodetect.js",
     'lib/NamespaceAbstract.js',
     'lib/FilterList.js',
     'lib/Translator.js',
     'lib/FilterList/parameter.js',
     'lib/Translator/globalLang.js'
-  ], ['client', 'server']);
+  ]);
   api.add_files([
     'client/Namespace.js',
     'client/helper.js'
-  ], ['client']);
+  ], 'client');
   api.add_files([
-    'server/Namespace.js'
-  ], ['server']);
+    'server/Namespace.js',
+    'server/inject/namespaces.js'
+  ], 'server');
   
   api.add_files(['Translator.js'], ['client', 'server']);
   api.export(['Translator']);
