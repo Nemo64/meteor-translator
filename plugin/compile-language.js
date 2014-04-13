@@ -1,4 +1,5 @@
-var yaml = Npm.require("js-yaml");
+var yaml = Npm.require('js-yaml');
+var path = Npm.require('path');
 
 var RX_VALID_KEY = /^\w+$/; // only 0-9, a-z and _
 var keyValid = function (key) {
@@ -28,45 +29,61 @@ var parseValue = function (baseKey, value, result) {
   }
 }
 
-// compiler for .lang.yml files
-var handler = function (compileStep, isLiterate) {
-  var source = compileStep.read().toString("utf8");
-  try {
-    var doc = yaml.safeLoad(source);
-    
-    // parse the document
-    var parsedDoc = {};
-    _.each(doc, function (value, key) {
-      if (! keyValid(key)) {
-        var msg = "Only wordchars and underscores are allowed ";
-        msg += "in translation keys. Got '" + baseKey + "'";
-        throw new Error(msg);
-      }
-      parseValue(key, value, parsedDoc);
-    });
-    var jsonDoc = JSON.stringify(parsedDoc);
-    var filename = compileStep.inputPath + ".json";
-    
-    
-    
-    if (compileStep.arch == "browser") {
-      // save the file asset
-      compileStep.addAsset({
-        path: filename,
-        data: new Buffer(jsonDoc)
-      });
+/**
+ * Compiles the yaml string into an object.
+ * @param {string} source
+ * @return {object}
+ */
+var compileYaml = function (source) {
+  var doc = yaml.safeLoad(source);
+  var parsedDoc = {};
+  _.each(doc, function (value, key) {
+    if (! keyValid(key)) {
+      var msg = "Only wordchars and underscores are allowed ";
+      msg += "in translation keys. Got '" + baseKey + "'";
+      throw new Error(msg);
     }
+    parseValue(key, value, parsedDoc);
+  });
+  return parsedDoc;
+};
+
+// compiler for .lang.yml files
+var RX_FILE_ENDING = /\.([^\.]*)\.lang\.yml$/i;
+var handler = function (compileStep, isLiterate) {
+  try {
+    var basePath = compileStep.inputPath;
+    var parsedDoc = compileYaml(compileStep.read().toString('utf8'));
+    var jsonString = JSON.stringify(parsedDoc);
     
-    if (compileStep.arch == "os") {
-      // XXX this entire part is a hack for accessing assets on the server
-      filename = compileStep.rootOutputPath + "/" + filename;
-      // add it as a js file for the server
-      compileStep.addJavaScript({
-        path: compileStep.inputPath,
-        data: "Translator._files[" + JSON.stringify(filename) + "] = " + jsonDoc,
-        sourcePath: compileStep.inputPath,
-        bare: false
-      });
+    // add the files depending on client/server
+    switch (compileStep.arch) {
+      
+      case 'browser':
+        // save the file asset
+        compileStep.addAsset({
+          path: basePath + '.json', // XXX
+          data: new Buffer(jsonString)
+        });
+        break;
+        
+      case 'os':
+        // XXX this entire part is a hack for accessing assets on the server
+        var fullPath = path.join(compileStep.rootOutputPath, basePath);
+        var namespace = path.relative('/', fullPath).replace(RX_FILE_ENDING, '');
+        var locale = new Locale(basePath.match(RX_FILE_ENDING)[1]); // XXX array access
+        
+        var jsVar = 'Translator._namespaces[' + JSON.stringify(namespace) + ']';
+        var js = '(' + jsVar + '||(' + jsVar + '={}))'; // obj for namespace
+        js += '["' + locale.toString() + '"]=' + jsonString; // add value
+        // add it as a js file for the server
+        compileStep.addJavaScript({
+          path: basePath,
+          data: js,
+          sourcePath: basePath,
+          bare: false
+        });
+        break;
     }
     
   } catch (e) {
