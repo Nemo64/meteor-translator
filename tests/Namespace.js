@@ -63,15 +63,11 @@ testAsyncMulti("Translator - Namespace - access none existing key", [
   }
 ]);
 
-testAsyncMulti("Translator - Namespace - does not exist", [
-  function (test, expect) {
+Tinytest.add("Translator - Namespace - none existing namespace", function (test) {
+  try {
     var namespace = new Translator.Namespace("none existing namespace");
-    var expect = expect(undefined);
-    Deps.autorun(function (dep) {
-      var result = namespace.get('a_key', LANGUAGE_FOREIGN);
-      if (! namespace.isLoading()) {
-        expect(result);
-      }
-    });
+    test.isTrue(false);
+  } catch (e) {
+    test.instanceOf(e, Error);
   }
-]);
+});

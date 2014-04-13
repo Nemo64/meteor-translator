@@ -16,7 +16,13 @@ Namespace = function (name) {
   var self = this;
   
   NamespaceAbstract.apply(self, arguments);
-  self._files = {}; // { "locale": { data: JSON } }
+  //self._locales = {}; // { "locale": { "key": "value" } }
+  
+  if (Translator._namespaces.hasOwnProperty(name)) {
+    self._locales = Translator._namespaces[name];
+  } else {
+    throw new Error("Namespace '" + self._name + "' does not exist");
+  }
 };
 
 _.extend(Namespace, NamespaceAbstract); // cheap extend
@@ -32,30 +38,11 @@ Namespace.prototype.isLoading = function () {
 };
 
 /**
- * Prepares the Namespace for a language.
- * It may download/interpret files for that.
+ * The server implementation is always prepared
  * 
  * @param {!Language} language
  */
-Namespace.prototype.prepare = function (language) {
-  var self = this;
-  
-  // other than the client implementation we prepare all locales
-  _.each(language._locales, function (locale) {
-    try {
-      self._files[locale] = { data: {} };
-      
-      var data = Translator._namespaces[self][locale]; // see note on top
-      if (_.isObject(data)) {
-        self._files[locale].data = data;
-      } else {
-        throw new Error("file was not loaded");
-      }
-    } catch (e) {
-      self._loadError(locale, self, e);
-    }
-  });
-};
+Namespace.prototype.prepare = function (language) {/* void */};
   
 /**
  * @param {string}    key
@@ -64,10 +51,12 @@ Namespace.prototype.prepare = function (language) {
  */
 Namespace.prototype.get = function (key, language) {
   var self = this;
-  self.prepare(language);
   
-  var file = _.find(self._files, function (file) {
-    return file.data.hasOwnProperty(key);
+  var locales = language.getLocales();
+  var locale = _.find(locales, function (locale) {
+    var data = self._locales[locale];
+    return data != null && data.hasOwnProperty(key);
   });
-  return file != null ? file.data[key] : undefined;
+  var data = self._locales[locale];
+  return data != null ? data[key] : undefined;
 };

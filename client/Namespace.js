@@ -17,6 +17,16 @@ Namespace = function (name) {
   self._locales = {}; // see loop in prepare
   self._loading = 0; // for telling if a request is running
   self._loadingDep = new Deps.Dependency(); // only important for #isLoading
+  self._localesWarned = false; // "out of locales to load"
+  //self._existingLocales = {}; // set of locale strings
+  
+  // get the existing locales from injection
+  var namespaces = Injected.obj('translator-namespaces');
+  if (namespaces.hasOwnProperty(self._name)) {
+    self._existingLocales = namespaces[self._name];
+  } else {
+    throw new Error("Namespace '" + self._name + "' does not exist");
+  }
 };
 
 _.extend(Namespace, NamespaceAbstract); // cheap extend
@@ -51,6 +61,7 @@ Namespace.prototype.prepare = function (language) {
         data: {},
         loaded: false
       };
+      self._warned = false; // more locales, more warnings
     }
   });
   
@@ -72,9 +83,7 @@ Namespace.prototype._filenameForLocale = function (locale) {
  * @return {boolean}
  */
 Namespace.prototype._localeFileExists = function (locale) {
-  var namespaces = Injected.obj('translator-namespaces');
-  var namespace = namespaces[this];
-  return namespace != null && namespace.hasOwnProperty(locale);
+  return this._existingLocales.hasOwnProperty(locale);
 };
   
 /**
@@ -85,7 +94,10 @@ Namespace.prototype._prepareLocales = function (locales) {
   var self = this;
   var locale = locales.shift(); // only prepare the first locale
   if (locale == null) {
-    console.warn("No more locales to load. All hope is lost", self);
+    if (! self._localesWarned) {
+      console.warn("No more locales to load. All hope is lost", self);
+      self._localesWarned = true;
+    }
     return;
   }
   
