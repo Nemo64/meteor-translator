@@ -2,13 +2,14 @@ var NAMESPACE = 'packages/translator/tests/namespace';
 var LANGUAGE_FOREIGN = new Translator.LanguageArray('de_DE');
 var LANGUAGE_DEFAULT = new Translator.LanguageArray();
 
-
-Tinytest.add("Translator - Namespace - correct path", function (test) {
-  var namespace = new Translator.Namespace(NAMESPACE);
-  var filename = namespace._filenameForLocale('de_DE');
-  var expect = NAMESPACE + '.de_DE.lang.yml.json';
-  test.equal(filename, expect, "the language and format should be appended");
-});
+if (Meteor.isClient) {
+  Tinytest.add("Translator - Namespace - correct path", function (test) {
+    var namespace = new Translator.Namespace(NAMESPACE);
+    var filename = namespace._filenameForLocale('de_DE');
+    var expect = NAMESPACE + '.de_DE.lang.yml.json';
+    test.equal(filename, expect, "the language and format should be appended");
+  });
+}
 
 testAsyncMulti("Translator - Namespace - check existence of an existing key", [
   function (test, expect) {

@@ -23,6 +23,34 @@ testAsyncMulti("Translator - basic get request", [
   }
 ]);
 
+testAsyncMulti("Translator - set language later", [
+  function (test, expect) {
+    var translator = new Translator();
+    translator.use('packages/translator/tests/namespace');
+    translator.setLanguage(['en_US']);
+    
+    translator.ready(expect(function () {
+      test.equal(translator.get('a_key'), "Hello test");
+    }));
+  }
+]);
+
+testAsyncMulti("Translator - change language later", [
+  function (test, expect) {
+    var translator = new Translator();
+    translator.use('packages/translator/tests/namespace');
+    translator.setLanguage(['de_DE']);
+    
+    var callback = expect(function () {
+      test.equal(translator.get('a_key'), "Hello test");
+    });
+    Meteor.setTimeout(function () {
+      translator.setLanguage(['en_US']);
+      translator.ready(callback);
+    }, 100);
+  }
+]);
+
 testAsyncMulti("Translator - ready callback without doing anything", [
   function (test, expect) {
     var translator = new Translator();
