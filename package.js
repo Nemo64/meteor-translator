@@ -40,7 +40,8 @@ Package.on_use(function(api) {
   ], 'client');
   api.add_files([
     'server/Namespace.js',
-    'server/inject/namespaces.js'
+    'server/inject/namespaces.js',
+    'server/inject/language.js'
   ], 'server');
   
   api.add_files(['Translator.js'], ['client', 'server']);
