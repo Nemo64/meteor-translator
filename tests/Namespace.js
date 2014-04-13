@@ -3,14 +3,14 @@ var LANGUAGE_FOREIGN = new Translator.LanguageArray('de_DE');
 var LANGUAGE_DEFAULT = new Translator.LanguageArray();
 
 
-Tinytest.add("Namespace - correct path", function (test) {
+Tinytest.add("Translator - Namespace - correct path", function (test) {
   var namespace = new Translator.Namespace(NAMESPACE);
   var filename = namespace._filenameForLocale('de_DE');
   var expect = NAMESPACE + '.de_DE.lang.yml.json';
   test.equal(filename, expect, "the language and format should be appended");
 });
 
-testAsyncMulti("Namespace - check existence of an existing key", [
+testAsyncMulti("Translator - Namespace - check existence of an existing key", [
   function (test, expect) {
     var namespace = new Translator.Namespace(NAMESPACE);
     var expect = expect(true);
@@ -23,7 +23,7 @@ testAsyncMulti("Namespace - check existence of an existing key", [
   }
 ]);
 
-testAsyncMulti("Namespace - check existence of a none existing key", [
+testAsyncMulti("Translator - Namespace - check existence of a none existing key", [
   function (test, expect) {
     var namespace = new Translator.Namespace(NAMESPACE);
     var expect = expect(false);
@@ -36,7 +36,7 @@ testAsyncMulti("Namespace - check existence of a none existing key", [
   }
 ]);
 
-testAsyncMulti("Namespace - access existing key", [
+testAsyncMulti("Translator - Namespace - access existing key", [
   function (test, expect) {
     var namespace = new Translator.Namespace(NAMESPACE);
     var expect = expect("Hallo Test");
@@ -49,7 +49,7 @@ testAsyncMulti("Namespace - access existing key", [
   }
 ]);
 
-testAsyncMulti("Namespace - access none existing key", [
+testAsyncMulti("Translator - Namespace - access none existing key", [
   function (test, expect) {
     var namespace = new Translator.Namespace(NAMESPACE);
     var expect = expect(undefined);
@@ -62,7 +62,7 @@ testAsyncMulti("Namespace - access none existing key", [
   }
 ]);
 
-testAsyncMulti("Namespace - does not exist", [
+testAsyncMulti("Translator - Namespace - does not exist", [
   function (test, expect) {
     var namespace = new Translator.Namespace("none existing namespace");
     var expect = expect(undefined);
