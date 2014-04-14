@@ -1,14 +1,14 @@
-# A powerful internationalisation package for Meteor
+# A powerful internationalization package for Meteor
 This package covers you with everything language related... because it's annoying!
 
 It's features are:
-- readable yaml files to store the translations
-- namespacing
-- parameters
-- language fallbacks
-- it only loads languages that are needed
-- autodetection of the user language (experimental)
-- reactive chaging of the language
+- readable **yaml** files to store the translations
+- **namespacing** though multiple files
+- **parameters** in the translation (`hello {{username}}`)
+- language **fallbacks**
+- **lazy loading** of languages as soon as they are needed
+- **automatic language detection** using the `accept-language` header (experimental)
+- **reactive changing** of the translations
 
 ## Content
 - [Quickstart](#quickstart-should-be-intuitive)
@@ -117,7 +117,7 @@ This package tries to automatically guess the language of the user using the `ac
 Most of the time your application uses (at least in the frontend) one language.
 That's why there is a global language for all translator instances!
 ```JavaScript
-// still using the autodetected language (en_US)
+// still using the automatically detected language (en_US)
 FrontLang.get('hello'); // hello!
 // ... 
 // user selects new language
