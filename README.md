@@ -1,12 +1,22 @@
 # A powerful internationalisation package for Meteor
 This package covers you with everything language related... because it's annoying!
 
+It's features are:
+- readable yaml files to store the translations
+- namespacing
+- parameters
+- language fallbacks
+- it only loads languages that are needed
+- autodetection of the user language (experimental)
+- reactive chaging of the language
+
 ## Content
 - [Quickstart](#quickstart-should-be-intuitive)
 - [The Translation File](#the-translation-file)
 - [Namespaces](#namespaces)
 - [Language selection](#language-selection)
 - [Templates](#templates)
+- [Parameter](#parameter)
 - [TODO](#todo)
 
 ## Quickstart (should be intuitive)
@@ -22,13 +32,12 @@ user_area:
 
 ### JavaScript
 ```JavaScript
-Translator.setLanguage(["en_US"]); // global language
-
 FrontLang = new Translator(); // translator for frontend
 FrontLang.use('languages/user'); // without the "en_US.lang.yml"
 
 FrontLang.get('user_area.header'); // => user area
 FrontLang.get('user_area.message.greeting', { name: "world" }); // => Hello world!
+// the language was automatically guessed
 ```
 
 ### Template
@@ -101,15 +110,20 @@ MyPackageLang.use("packages/my-package/lang");
 ```
 
 ## Language selection
+### Autodetect
+This package tries to automatically guess the language of the user using the `accept-language` header but you should always include a way for the user to change it!
+
 ### Global
 Most of the time your application uses (at least in the frontend) one language.
-That's why there is a global Language for everything!
+That's why there is a global language for all translator instances!
 ```JavaScript
-Translator.setLanguage(["en_US"]); // initial set
+// still using the autodetected language (en_US)
+FrontLang.get('hello'); // hello!
 // ... 
 // user selects new language
-Translator.setLanguage(["cs_CZ"]);
+Translator.setLanguage(["de_DE"]);
 // this reactively changes all translations
+FrontLang.get('hello'); // Hallo!
 ```
 
 ### Local
@@ -120,7 +134,7 @@ FrontLang.use("languages/public");
 
 // per translator
 FrontLang.setLanguage(["de_DE"]);
-FrontLang.get("hello"); // => Hallo
+FrontLang.get("hello"); // => Hallo!
 ```
 
 ## Templates
@@ -158,7 +172,8 @@ FrontLang.get('long_time_notice', { days: user.daysSinceLogin() });
 <p>{{trans 'greeting' name="Mustermann"}}<p>
 ```
 ## TODO
-- autodetect of languages (by far not final at branch `feature-autodetect`)
 - pluralization
+- remembering of the language when set globally
+- default fallback (for autodetect)
 - territory fallback
 - providing of features from [CLDR](http://cldr.unicode.org/) like number formatting and dates
