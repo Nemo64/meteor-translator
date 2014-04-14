@@ -1,3 +1,8 @@
+## v4.0
+- a lot of cleanup
+- the client now knows which namespaces exist
+- the language can now be detected automatically (client only)
+
 ## v0.3.0
 - fixed namespace not directly loading when setting the language first
 - added tests for the Translator object
