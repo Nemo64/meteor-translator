@@ -1,9 +1,11 @@
 {
   "name": "translator",
-  "description": "A feature rich translation package to cover you with internationalisation",
+  "description": "A feature rich internationalization package with autodetection, parameters and much more",
   "homepage": "https://github.com/Nemo64/meteor-translator",
   "author": "Marco Pfeiffer <cheat2000-git@yahoo.de>",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "git": "https://github.com/Nemo64/meteor-translator.git",
-  "packages": {}
+  "packages": {
+    "inject-initial": "0.0.7"
+  }
 }
