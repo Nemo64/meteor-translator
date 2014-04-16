@@ -14,12 +14,14 @@ Translator.setDefaultLanguage = function (language) {
 // the client script will pick it up and therefor always initially use
 // the language the browser has sent with the request
 var RX_LOCALE_SPLIT = /\s*[,;]\s*/;
-Inject.obj('translator-language', function (req) {
-  var headers = req.connection.parser.incoming.headers; // awesome object path
+// this function exists so it is testable!
+Translator._createLangaugeArrayFromHeader = function (headers) {
   var acceptLanguage = headers['accept-language']; // the key is already lower
-  
   var rawLocales = acceptLanguage.split(RX_LOCALE_SPLIT);
   var language = new LanguageArray(rawLocales, true);
-  language.merge(Translator._defaultLanguage);
-  return langauge;
+  return language.merge(Translator._defaultLanguage);
+};
+Inject.obj('translator-language', function (req) {
+  var headers = req.connection.parser.incoming.headers; // awesome object path
+  return Translator._createLangaugeArrayFromHeader(headers);
 });

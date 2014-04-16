@@ -44,22 +44,22 @@ Package.on_use(function(api) {
     'server/inject/language.js'
   ], 'server');
   
-  api.add_files(['Translator.js'], ['client', 'server']);
+  api.add_files(['Translator.js']);
   api.export(['Translator']);
 });
 
 Package.on_test(function (api) {
-  api.use(['translator', 'tinytest', 'test-helpers'], ['client', 'server']);
+  api.use(['translator', 'tinytest', 'test-helpers']);
   api.add_files([
-    'tests/namespace.de_DE.lang.yml',
-    'tests/namespace.en_US.lang.yml'
-  ], ['client', 'server']);
+    'test/namespace.de_DE.lang.yml',
+    'test/namespace.en_US.lang.yml'
+  ]);
   api.add_files([
-    'tests/Locale.js',
-    'tests/LanguageArray.js',
-    'tests/Namespace.js',
-    'tests/FilterList.js',
-    'tests/FilterList/parameter.js',
-    'tests/Translator.js'
-  ], ['client', 'server']);
+    'lib/Locale-test.js',
+    'lib/LanguageArray-test.js',
+    'lib/Namespace-test.js',
+    'lib/FilterList-test.js',
+    'lib/FilterList/parameter-test.js',
+    'lib/Translator-test.js'
+  ]);
 });
