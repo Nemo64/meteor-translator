@@ -54,7 +54,7 @@ Tinytest.add("Translator - Locale - only with language", function (test) {
 
 Tinytest.add("Translator - Locale - give locale and country", function (test) {
   try {
-    var locale = new Translator.Locale(LOCALE, DEFAULT_LOCALE_COUN);
+    var locale = new Translator.Locale(LOCALE, LOCALE_COUN);
     test.fail();
   } catch (e) {
     test.instanceOf(e, Error);
@@ -90,4 +90,14 @@ _.each(wrongValues, function (value1, name1) {
       }
     });
   });
+});
+
+
+
+
+
+Tinytest.add("Translator - Locale - equals", function (test) {
+  var locale1 = new Translator.Locale(LOCALE_LANG, LOCALE_COUN);
+  var locale2 = new Translator.Locale(LOCALE_LANG, LOCALE_COUN);
+  test.isTrue(locale1.equals(locale2));
 });
