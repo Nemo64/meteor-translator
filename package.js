@@ -32,7 +32,8 @@ Package.on_use(function(api) {
     'lib/FilterList.js',
     'lib/Translator.js',
     'lib/FilterList/parameter.js',
-    'lib/Translator/globalLang.js'
+    'lib/Translator/globalLang.js',
+    'lib/Translator/defaultLanguage.js'
   ]);
   api.add_files([
     'client/Namespace.js',
@@ -40,7 +41,6 @@ Package.on_use(function(api) {
   ], 'client');
   api.add_files([
     'server/Namespace.js',
-    'server/defaultLanguage.js',
     'server/inject/namespaces.js',
     'server/inject/accept-language.js'
   ], 'server');
