@@ -1,5 +1,7 @@
 ## v4.1
 - fixed error when paring an empty EJSON LanguageArray
+- cleaner language detection with tests
+- `Translator.setDefaultLanguage` added
 
 ## v4.0
 - a lot of cleanup

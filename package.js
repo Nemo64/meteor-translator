@@ -40,8 +40,9 @@ Package.on_use(function(api) {
   ], 'client');
   api.add_files([
     'server/Namespace.js',
+    'server/defaultLanguage.js',
     'server/inject/namespaces.js',
-    'server/inject/language.js'
+    'server/inject/accept-language.js'
   ], 'server');
   
   api.add_files(['Translator.js']);
@@ -62,4 +63,7 @@ Package.on_test(function (api) {
     'lib/FilterList/parameter-test.js',
     'lib/Translator-test.js'
   ]);
+  api.add_files([
+    'server/inject/accept-language-test.js'
+  ], 'server');
 });
