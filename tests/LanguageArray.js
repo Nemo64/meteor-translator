@@ -75,3 +75,22 @@ _.each(wrongLocales, function (locales, name) {
   });
 });
 
+
+
+
+Tinytest.add("Translator - LanguageArray - ejson normal", function (test) {
+  var language = new Translator.LanguageArray(NORMAL_LOCALES_INSTANCE);
+  var string = EJSON.stringify(language);
+  var parsed = EJSON.parse(string);
+  test.equal(language, parsed);
+});
+
+
+
+
+Tinytest.add("Translator - LanguageArray - ejson empty", function (test) {
+  var language = new Translator.LanguageArray();
+  var string = EJSON.stringify(language);
+  var parsed = EJSON.parse(string);
+  test.equal(language, parsed);
+});
