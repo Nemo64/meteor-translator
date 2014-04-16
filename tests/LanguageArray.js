@@ -48,6 +48,18 @@ Tinytest.add("Translator - LanguageArray - without parameter", function (test) {
 
 
 
+Tinytest.add("Translator - LanguageArray - merge", function (test) {
+  var language1 = new Translator.LanguageArray('de_DE');
+  var language2 = new Translator.LanguageArray(['de_DE', 'en_US']);
+  var result = language1.merge(language2);
+  var expect = new Translator.LanguageArray(['de_DE', 'en_US']);
+  test.equal(result, expect);
+});
+
+
+
+
+
 Tinytest.add("Translator - LanguageArray - equals", function (test) {
   var language = new Translator.LanguageArray(NORMAL_LOCALES_INSTANCE);
   var other = new Translator.LanguageArray(NORMAL_LOCALES_INSTANCE);
