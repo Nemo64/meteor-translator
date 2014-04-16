@@ -173,7 +173,7 @@ FrontLang.get('long_time_notice', { days: user.daysSinceLogin() });
 ```
 ## TODO
 - pluralization
-- remembering of the language when set globally
+- ~~remembering of the language when set globally~~ (not the job of this package)
 - default fallback (for autodetect)
 - territory fallback
 - providing of features from [CLDR](http://cldr.unicode.org/) like number formatting and dates
