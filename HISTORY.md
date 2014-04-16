@@ -1,3 +1,7 @@
+## v0.4.2
+- package restructored
+- removed parameter warnings (not needed)
+
 ## v0.4.1
 - fixed error when paring an empty EJSON LanguageArray
 - cleaner language detection with tests
