@@ -31,13 +31,13 @@ Package.on_use(function(api) {
     'src/Namespace.js',
     'src/FilterList.js',
     'src/Translator.js',
-    'src/FilterList/parameter.js',
+    'src/filter/parameter.js',
     'src/Translator/globalLang.js',
     'src/Translator/defaultLanguage.js'
   ]);
   api.add_files([
     'src/Namespace-client.js',
-    'src/helper-client.js'
+    'src/helper/createHelper-client.js'
   ], 'client');
   api.add_files([
     'src/Namespace-server.js',
@@ -60,7 +60,7 @@ Package.on_test(function (api) {
     'src/LanguageArray-test.js',
     'src/Namespace-test.js',
     'src/FilterList-test.js',
-    'src/FilterList/parameter-test.js',
+    'src/filter/parameter-test.js',
     'src/Translator-test.js'
   ]);
   api.add_files([
