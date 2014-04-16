@@ -1,4 +1,4 @@
-# A powerful internationalization package for Meteor
+# translator - powerful internationalization
 This package covers you with everything language related... because it's annoying!
 
 It's features are:
