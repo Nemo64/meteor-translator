@@ -111,7 +111,12 @@ MyPackageLang.use("packages/my-package/lang");
 
 ## Language selection
 ### Autodetect
-This package tries to automatically guess the language of the user using the `accept-language` header but you should always include a way for the user to change it!
+This package tries to automatically guess the language of the user using the `accept-language` header but you should always include a way for the user to change it! Also you should define a default language which will be used if none of the languages the browser offers exist.
+```JavaScript
+Translator.setDefaultLanguage(['en_US', 'en']);
+```
+- **Warning** If you do not define a global language or a default language your user might have no language at all and see the translation keys which you definetly want to prevent from happening!
+- **Note** The default language is currently only used for the autodetection! It won't have any effect if you set a language like below!
 
 ### Global
 Most of the time your application uses (at least in the frontend) one language.
@@ -174,6 +179,5 @@ FrontLang.get('long_time_notice', { days: user.daysSinceLogin() });
 ## TODO
 - pluralization
 - ~~remembering of the language when set globally~~ (not the job of this package)
-- default fallback (for autodetect)
 - territory fallback
 - providing of features from [CLDR](http://cldr.unicode.org/) like number formatting and dates
