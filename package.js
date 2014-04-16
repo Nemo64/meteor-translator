@@ -28,7 +28,7 @@ Package.on_use(function(api) {
   api.add_files([
     'lib/Locale.js',
     'lib/LanguageArray.js',
-    'lib/NamespaceAbstract.js',
+    'lib/Namespace.js',
     'lib/FilterList.js',
     'lib/Translator.js',
     'lib/FilterList/parameter.js',

@@ -9,24 +9,16 @@ Translator._namespaces = {};
  * This is the server implementation which means it blocks.
  *
  * @protected use Namespace.instance(name) instead
- * @constructor
  * @param {string} name
  */
-Namespace = function (name) {
+Namespace.prototype._init = function (name) {
   var self = this;
-  
-  NamespaceAbstract.apply(self, arguments);
-  //self._locales = {}; // { "locale": { "key": "value" } }
-  
-  if (Translator._namespaces.hasOwnProperty(name)) {
-    self._locales = Translator._namespaces[name];
-  } else {
+  if (! Translator._namespaces.hasOwnProperty(name)) {
     throw new Error("Namespace '" + self._name + "' does not exist");
   }
+  
+  self._locales = Translator._namespaces[name];
 };
-
-_.extend(Namespace, NamespaceAbstract); // cheap extend
-_.extend(Namespace.prototype, NamespaceAbstract.prototype);
 
 /**
  * Tells if a reactive call could happen.

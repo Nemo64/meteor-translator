@@ -10,27 +10,21 @@
  * @private
  * @param {string} name
  */
-Namespace = function (name) {
+Namespace.prototype._init = function (name) {
   var self = this;
   
-  NamespaceAbstract.apply(self, arguments);
+  // get the existing locales from injection
+  var namespaces = Injected.obj('translator-namespaces');
+  if (! namespaces.hasOwnProperty(self._name)) {
+    throw new Error("Namespace '" + self._name + "' does not exist");
+  }
+  
   self._locales = {}; // see loop in prepare
   self._loading = 0; // for telling if a request is running
   self._loadingDep = new Deps.Dependency(); // only important for #isLoading
   self._localesWarned = false; // "out of locales to load"
-  //self._existingLocales = {}; // set of locale strings
-  
-  // get the existing locales from injection
-  var namespaces = Injected.obj('translator-namespaces');
-  if (namespaces.hasOwnProperty(self._name)) {
-    self._existingLocales = namespaces[self._name];
-  } else {
-    throw new Error("Namespace '" + self._name + "' does not exist");
-  }
+  self._existingLocales = namespaces[self._name]; // set of locale strings
 };
-
-_.extend(Namespace, NamespaceAbstract); // cheap extend
-_.extend(Namespace.prototype, NamespaceAbstract.prototype);
 
 /**
  * Tells if a reactive call could happen.
