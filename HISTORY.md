@@ -1,3 +1,6 @@
+## v4.1
+- fixed error when paring an empty EJSON LanguageArray
+
 ## v4.0
 - a lot of cleanup
 - the client now knows which namespaces exist
