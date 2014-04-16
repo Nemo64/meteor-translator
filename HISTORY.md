@@ -1,9 +1,9 @@
-## v4.1
+## v0.4.1
 - fixed error when paring an empty EJSON LanguageArray
 - cleaner language detection with tests
 - `Translator.setDefaultLanguage` added
 
-## v4.0
+## v0.4.0
 - a lot of cleanup
 - the client now knows which namespaces exist
 - the language can now be detected automatically (client only)
