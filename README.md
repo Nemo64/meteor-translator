@@ -2,7 +2,7 @@
 This package covers you with everything language related... because it's annoying!
 
 It's features are:
-- readable **yaml** files to store the translations
+- readable **[yaml files](http://www.yaml.org/)** to store the translations
 - **namespacing** though multiple files
 - **parameters** in the translation (`hello {{username}}`)
 - language **fallbacks**
