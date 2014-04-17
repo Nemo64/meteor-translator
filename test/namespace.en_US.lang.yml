@@ -5,3 +5,7 @@ login:
     password: password
 weather:
   message: It is {{weather}} today!
+fried_count:
+  friends == 0: You have no friends!
+  friends == 1: You have a friend!
+  friends >= 2: You have {{friends}} friends!

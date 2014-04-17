@@ -1,7 +1,7 @@
 var yaml = Npm.require('js-yaml');
 var path = Npm.require('path');
 
-var RX_VALID_KEY = /^\w+$/; // only 0-9, a-z and _
+var RX_VALID_KEY = /^\w+$/m; // only 0-9, a-z and _
 var keyValid = function (key) {
   return RX_VALID_KEY.test(key);
 }
@@ -13,17 +13,17 @@ var keyValid = function (key) {
  */
 var parseValue = function (baseKey, value, result) {
   if (_.isObject(value) && ! _.isArray(value)) {
-    _.each(value, function (value, key) {
-      var newKey = baseKey + "." + key;
-      
+    var allValid = _.every(_.keys(value), keyValid);
+    if (allValid) {
+      _.each(value, function (currentValue, key) {
+        var newKey = baseKey + "." + key;
+        parseValue(newKey, currentValue, result);
+      });
+    } else {
       // if a key does not only contain wordchars
       // it could be more logic involved so pass it though
-      if (keyValid(key)) {
-        parseValue(newKey, value, result);
-      } else {
-        result[newKey] = value;
-      }
-    });
+      result[baseKey] = value;
+    }
   } else {
     result[baseKey] = value;
   }

@@ -165,11 +165,11 @@ Translator.prototype.get = function (key, parameters) {
     var options = {
       key: key, // for warnings etc.
       language: language,
-      parameters: parameters || {}
+      locale: language.getLocale(), // TODO this should be the used locale
+      parameters: parameters || {},
+      translator: self
     };
-    result = Translator.objectFilter.filter(result, options);
-    result = Translator.stringFilter.filter(result, options);
-    return result;
+    return self.filter(result, options);
   } catch (e) {
     console.warn(e.message + "; Abort translation of '" + key + "'!");
   }
@@ -177,6 +177,19 @@ Translator.prototype.get = function (key, parameters) {
   // if something fails just return the key
   self._namespaceDep.depend(); // it might come later
   return key;
+};
+
+/**
+ * Applies all translation filters to the given string
+ *
+ * @param {string} string
+ * @param {Object.<string, *>} options
+ * @return {string}
+ */
+Translator.prototype.filter = function (string, options) {
+  string = Translator.objectFilter.filter(string, options);
+  string = Translator.stringFilter.filter(string, options);
+  return string;
 };
 
 /**
