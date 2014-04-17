@@ -1,3 +1,7 @@
+## v0.4.3
+- new filter for pluralization and general conditions
+- fix in language compiler that allowed all keys to go through
+
 ## v0.4.2
 - package restructored
 - removed parameter warnings (not needed)
