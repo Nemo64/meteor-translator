@@ -1,3 +1,9 @@
+var STATUS_NEW = 1;
+var STATUS_LOADING = 2;
+var STATUS_LOADED = 4;
+var STATUS_MISSING = 8;
+var STATUS_ERROR = 16;
+
 /**
  * The namespace is actually a bounch of files but one file per locale. eg.:
  * myTool.en_US.lang.yml
@@ -53,7 +59,7 @@ Namespace.prototype.prepare = function (language) {
       self._locales[locale] = {
         dep: new Deps.Dependency,
         data: {},
-        loaded: false
+        status: self._localeFileExists(locale) ? STATUS_NEW : STATUS_MISSING,
       };
       self._warned = false; // more locales, more warnings
     }
@@ -96,13 +102,14 @@ Namespace.prototype._prepareLocales = function (locales) {
   }
   
   var localeData = self._locales[locale];
-  if (! localeData.loaded) {
-    if (self._localeFileExists(locale)) {
+  switch (localeData.status) {
+    case STATUS_NEW:
       self._loadLocale(locale, localeData);
-    } else {
-      // because this locale does not exist for this namespace skip to the next
+      break;
+    case STATUS_MISSING:
+    case STATUS_ERROR:
       self._prepareLocales(locales); // locales is already shifted
-    }
+      break;
   }
 };
 
@@ -115,13 +122,15 @@ Namespace.prototype._loadLocale = function (locale, localeData) {
   var self = this;
   self._loading++;
   self._loadingDep.changed();
+  localeData.status = STATUS_LOADING;
   var filename = self._filenameForLocale(locale);
   HTTP.get('/' + filename, function (error, data) {
     self._loading--;
     self._loadingDep.changed();
-    localeData.loaded = true;
+    localeData.status = STATUS_LOADED;
     
     if (error) {
+      localeData.status = STATUS_ERROR;
       self._loadError(locale, filename, error);
       self._prepareLocale(locales); // prepare the next locale
     } else try {
