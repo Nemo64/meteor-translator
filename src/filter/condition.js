@@ -1,14 +1,16 @@
 var keywords = {
+  "null": null,
+  "none": null,
   "true": true,
   "false": false,
   "yes": true,
   "no": false,
   "on": true,
   "off": false,
-  "Infinity": Infinity,
-  "+Infinity": Infinity,
-  "-Infinity": -Infinity,
-  "NaN": NaN
+  "infinity": Infinity,
+  "+infinity": Infinity,
+  "-infinity": -Infinity,
+  "nan": NaN
 };
 var operators = [
   { // grouping
@@ -58,8 +60,9 @@ var operators = [
   { // parameter and keywords
     rx: /^\s*([a-z_]\w*)\s*$/i,
     func: function (all, key, params) {
-      if (keywords.hasOwnProperty(key)) {
-        return keywords[key];
+      var lowerKey = key.toLowerCase();
+      if (keywords.hasOwnProperty(lowerKey)) {
+        return keywords[lowerKey];
       } else if (params.hasOwnProperty(key)) {
         return params[key];
       } else {
