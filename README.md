@@ -22,8 +22,8 @@ It's features are:
 ## Quickstart (should be intuitive)
 
 ### Translation file
-`languages/user.en_US.lang.yml`
 ```YAML
+#languages/user.en_US.lang.yml
 user_area:
   header: "user area"
   message:
@@ -32,12 +32,12 @@ user_area:
 
 ### JavaScript
 ```JavaScript
+Translator.setDefaultLanguage(['en_US']); // autodetect fallback
 FrontLang = new Translator(); // translator for frontend
 FrontLang.use('languages/user'); // without the "en_US.lang.yml"
 
 FrontLang.get('user_area.header'); // => user area
 FrontLang.get('user_area.message.greeting', { name: "world" }); // => Hello world!
-// the language was automatically guessed
 ```
 
 ### Template
@@ -143,7 +143,7 @@ FrontLang.get("hello"); // => Hallo!
 ```
 
 ## Templates
-Because of the namespaces there is no global translation helper. However there is a helper to create a helper. ;)
+Because of the namespaces there is no global translation helper. However there is a helper to create a helper.
 ```JavaScript
 FrontLang = new Translator();
 FrontLang.use("languages/public");
@@ -176,8 +176,25 @@ FrontLang.get('long_time_notice', { days: user.daysSinceLogin() });
 <p>{{trans 'greeting' name=user.name}}<p>
 <p>{{trans 'greeting' name="Mustermann"}}<p>
 ```
+
+### Conditions
+The most common case for this is pluralization. You can write conditions that are similar to JavaScript in the translation files to show different texts depending on a parameter.
+
+```YAML
+friend_count:
+  friends==0: "You have no friends!"
+  friends==1: "You have a friend!"
+  friends>=2: "You have {{friends}} friends!"
+```
+
+The conditions are **not** parsed by JavaScript and are limited in there capabilities. This is what is supported:
+- comperators `==`, `!=`, `>`, `>=`, `<`, `<=`
+- strings and numbers like they would be in JavaScript: `"string"`, `13`, `5e+6` etc
+- the keywords `null` and `none` represent `null`. usage: `user == none`
+- the keywords `true`, `on`, `yes` represent `true`. usage: `active == yes`
+- the keywords `false`, `off`, `no` represent `false`. usage: `power == off`
+- also the math keywords `infinity`, `-infinity` and `nan` are supportet
+
 ## TODO
-- pluralization
-- ~~remembering of the language when set globally~~ (not the job of this package)
-- territory fallback
-- providing of features from [CLDR](http://cldr.unicode.org/) like number formatting and dates
+- Territory fallback like "i want British English but there is only American English"! This is useful for the auto detection of languages! I need help with this because I don't know if that'll work with most languages!
+- Providing of features from [CLDR](http://cldr.unicode.org/). The plan is to automatically format numbers with the correct punctuation. Also Dates and time spans should be automatically taken care of. This might require [moment](https://atmospherejs.com/package/moment). I have to look if i can prepare all required information in the language-compiler to send only needed information directly with the language file it is used in.
