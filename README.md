@@ -1,4 +1,4 @@
-# translator - powerful internationalization
+# translator - powerful internationalization [![Build Status](https://travis-ci.org/Nemo64/meteor-translator.png?branch=master)](https://travis-ci.org/Nemo64/meteor-translator)
 This package covers you with everything language related... because it's annoying!
 
 It's features are:
