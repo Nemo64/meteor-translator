@@ -8,9 +8,12 @@ Package._transitional_registerBuildPlugin({
   sources: [
     'src/Locale.js',
     'src/LanguageArray.js',
-    'src/plugin/compile-language.js'
+    'src/plugin/resource-handler.js'
   ],
-  npmDependencies: { 'js-yaml': '3.0.2' }
+  npmDependencies: {
+    'js-yaml': '3.0.2',
+    'cldr': '2.1.6'
+  }
 });
 
 Package.on_use(function(api) {
