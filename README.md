@@ -1,5 +1,5 @@
-# translator - powerful internationalization [![Build Status](https://travis-ci.org/Nemo64/meteor-translator.png?branch=master)](https://travis-ci.org/Nemo64/meteor-translator)
-This package covers you with everything language related... because it's annoying!
+# translator - powerful internationalization
+A general i18n utility belt to seperate your app from the language.
 
 It's features are:
 - readable **[yaml files](http://www.yaml.org/)** to store the translations
