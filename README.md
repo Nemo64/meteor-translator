@@ -1,5 +1,5 @@
 # translator - powerful internationalization
-This package covers you with everything language related... because it's annoying!
+A general i18n utility belt to seperate your app from the language.
 
 It's features are:
 - readable **[yaml files](http://www.yaml.org/)** to store the translations

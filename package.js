@@ -46,7 +46,7 @@ Package.on_use(function(api) {
   ]);
   api.add_files([
     'src/Namespace-client.js',
-    'src/helper/createHelper-client.js'
+    'src/Translator-client.js'
   ], 'client');
   api.add_files([
     'src/Namespace-server.js',
