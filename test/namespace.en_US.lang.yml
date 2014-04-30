@@ -4,8 +4,10 @@ login:
     username: username
     password: password
 weather:
-  message: It is {{weather}} today!
-fried_count:
-  friends == 0: You have no friends!
-  friends == 1: You have a friend!
-  friends >= 2: You have {{friends}} friends!
+  message: It is {weather} today!
+friend_count: >
+  {friends, plural,
+    0={You have no friends!}
+    one={You have a friend!}
+    other={You have # friends!}
+  }

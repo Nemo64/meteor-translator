@@ -8,7 +8,10 @@ Package._transitional_registerBuildPlugin({
   sources: [
     'src/Locale.js',
     'src/LanguageArray.js',
-    'src/plugin/resource-handler.js'
+    'src/FilterList.js',
+    'src/plugin/resource-handler.js',
+    'src/plugin/message-format.js',
+    'src/message-format/plural-preprocess.js'
   ],
   npmDependencies: {
     'js-yaml': '3.0.2',
@@ -34,8 +37,10 @@ Package.on_use(function(api) {
     'src/Namespace.js',
     'src/FilterList.js',
     'src/Translator.js',
-    'src/filter/parameter.js',
-    'src/filter/condition.js',
+    //'src/filter/parameter.js',
+    'src/filter/message-format.js',
+    //'src/message-format/plural-postprocess.js',
+    //'src/filter/condition.js',
     'src/Translator/globalLang.js',
     'src/Translator/defaultLanguage.js'
   ]);
@@ -65,7 +70,6 @@ Package.on_test(function (api) {
     'src/Namespace-test.js',
     'src/FilterList-test.js',
     'src/filter/parameter-test.js',
-    'src/filter/condition-test.js',
     'src/Translator-test.js'
   ]);
   api.add_files([

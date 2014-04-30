@@ -4,8 +4,8 @@ login:
     username: Benutzername
     password: Passwort
 weather:
-  message: Es ist {{weather}} heute!
+  message: Es ist {weather} heute!
 fried_count:
   friends == 0: Du hast keine Freunde!
   friends == 1: Du hast einen Freund!
-  friends >= 2: Du hast {{friends}} Freunde!
+  friends >= 2: Du hast {friends} Freunde!

@@ -94,19 +94,19 @@ testAsyncMulti("Translator - fill in parameter", [
 testAsyncMulti("Translator - conditions", [
   function (test, expect) {
     englishTrans.ready(expect(function () {
-      var result = englishTrans.get('fried_count', { friends: 0 });
+      var result = englishTrans.get('friend_count', { friends: 0 });
       test.equal(result, "You have no friends!");
     }));
   },
   function (test, expect) {
     englishTrans.ready(expect(function () {
-      var result = englishTrans.get('fried_count', { friends: 1 });
+      var result = englishTrans.get('friend_count', { friends: 1 });
       test.equal(result, "You have a friend!");
     }));
   },
   function (test, expect) {
     englishTrans.ready(expect(function () {
-      var result = englishTrans.get('fried_count', { friends: 5 });
+      var result = englishTrans.get('friend_count', { friends: 5 });
       test.equal(result, "You have 5 friends!");
     }));
   }
