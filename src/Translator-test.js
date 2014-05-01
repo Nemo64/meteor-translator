@@ -82,7 +82,7 @@ var englishTrans = new Translator();
 englishTrans.setLanguage(['en_US']);
 englishTrans.use(NAMESPACE);
 
-testAsyncMulti("Translator - fill in parameter", [
+testAsyncMulti("Translator - message-format - fill in parameter", [
   function (test, expect) {
     englishTrans.ready(expect(function () {
       var result = englishTrans.get('weather.message', { weather: "rainy" });
@@ -91,23 +91,62 @@ testAsyncMulti("Translator - fill in parameter", [
   }
 ]);
 
-testAsyncMulti("Translator - conditions", [
+testAsyncMulti("Translator - message-format - plural", [
   function (test, expect) {
     englishTrans.ready(expect(function () {
       var result = englishTrans.get('friend_count', { friends: 0 });
-      test.equal(result, "You have no friends!");
+      test.equal(result, "You have no friends!\n");
     }));
   },
   function (test, expect) {
     englishTrans.ready(expect(function () {
       var result = englishTrans.get('friend_count', { friends: 1 });
-      test.equal(result, "You have a friend!");
+      test.equal(result, "You have a friend!\n");
     }));
   },
   function (test, expect) {
     englishTrans.ready(expect(function () {
       var result = englishTrans.get('friend_count', { friends: 5 });
-      test.equal(result, "You have 5 friends!");
+      test.equal(result, "You have 5 friends!\n");
     }));
   }
+]);
+
+testAsyncMulti("Translator - message-format - plural and select", [
+  function (test, expect) {
+    englishTrans.ready(expect(function () {
+      var result = englishTrans.get('item_add', { count: 1, gender: 'female' });
+      test.equal(result, "She added one item!\n");
+    }));
+  },
+  function (test, expect) {
+    englishTrans.ready(expect(function () {
+      var result = englishTrans.get('item_add', { count: 5, gender: 'female' });
+      test.equal(result, "She added 5 items!\n");
+    }));
+  },
+  function (test, expect) {
+    englishTrans.ready(expect(function () {
+      var result = englishTrans.get('item_add', { count: 1, gender: 'male' });
+      test.equal(result, "He added one item!\n");
+    }));
+  },
+  function (test, expect) {
+    englishTrans.ready(expect(function () {
+      var result = englishTrans.get('item_add', { count: 5, gender: 'male' });
+      test.equal(result, "He added 5 items!\n");
+    }));
+  },
+  function (test, expect) {
+    englishTrans.ready(expect(function () {
+      var result = englishTrans.get('item_add', { count: 1, gender: null });
+      test.equal(result, "They added one item!\n");
+    }));
+  },
+  function (test, expect) {
+    englishTrans.ready(expect(function () {
+      var result = englishTrans.get('item_add', { count: 5, gender: null });
+      test.equal(result, "They added 5 items!\n");
+    }));
+  },
 ]);

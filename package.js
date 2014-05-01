@@ -14,6 +14,7 @@ Package._transitional_registerBuildPlugin({
     'src/FilterList.js',
     'src/plugin/resource-handler.js',
     'src/plugin/message-format.js',
+    'src/message-format/select-preprocess.js',
     'src/message-format/plural-preprocess.js'
   ],
   npmDependencies: {
@@ -42,6 +43,7 @@ Package.on_use(function(api) {
     'src/Translator.js',
     //'src/filter/parameter.js',
     'src/filter/message-format.js',
+    'src/message-format/select-postprocess.js',
     'src/message-format/plural-postprocess.js',
     //'src/message-format/plural-postprocess.js',
     //'src/filter/condition.js',
