@@ -105,7 +105,7 @@ Namespace.prototype._loadError = function (locale, filename, error) {
  * @return {bool}
  */
 Namespace.prototype.has = function (key, language) {
-  return this.get(key, language) !== undefined;
+  return ! _.isUndefined(this.get(key, language).value);
 };
 
 /**
