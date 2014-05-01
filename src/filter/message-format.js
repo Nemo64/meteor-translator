@@ -1,6 +1,6 @@
 MessageFormatPostprocess = {};
 
-Translator._messageFormat = function (object, options) {
+var filter = function (object, data) {
   if (! _.isArray(object)) {
     return object;
   }
@@ -14,12 +14,12 @@ Translator._messageFormat = function (object, options) {
     
     // spezial meaning parts
     else if (_.isObject(part)) {
-      if (options.parameters.hasOwnProperty(part.name)) {
-        var param = options.parameters[part.name];
+      if (data.parameters.hasOwnProperty(part.name)) {
+        var param = data.parameters[part.name];
         if (part.method == null) {
           result.push(param);
         } else if (MessageFormatPostprocess.hasOwnProperty(part.method)) {
-          result.push(MessageFormatPostprocess[part.method](part, options));
+          result.push(MessageFormatPostprocess[part.method](part, data));
         }
       } else {
         result.push('{' + part.name + '}');
@@ -31,4 +31,5 @@ Translator._messageFormat = function (object, options) {
   return result.join("");
 };
 
-Translator.objectFilter.prepend(Translator._messageFormat);
+Translator.objectFilter.prepend(filter);
+Translator._messageFormatFilter = filter;

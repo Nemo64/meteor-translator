@@ -8,6 +8,6 @@ weather:
 friend_count: >
   {friends, plural,
     0={You have no friends!}
-    one={You have a friend!}
-    other={You have # friends!}
+    one{You have a friend!}
+    other{You have # friends!}
   }

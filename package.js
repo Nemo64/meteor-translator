@@ -3,8 +3,11 @@ Package.describe({
 });
 
 Package._transitional_registerBuildPlugin({
-  name: 'compileLanguage',
-  use: ['underscore', 'ejson'],
+  name: 'language-compiler',
+  use: [
+    'underscore',
+    'ejson' // LanguageArray and Locale have it, not really required
+  ],
   sources: [
     'src/Locale.js',
     'src/LanguageArray.js',
@@ -15,14 +18,14 @@ Package._transitional_registerBuildPlugin({
   ],
   npmDependencies: {
     'js-yaml': '3.0.2',
-    'cldr': '2.1.6'
+    'cldr': '2.2.1'
   }
 });
 
 Package.on_use(function(api) {
   api.use([
     'underscore',
-    'ejson',
+    'ejson', // LanguageArray and Locale are ejson'able
     'deps',
     // meteorite
     'inject-initial'
@@ -39,6 +42,7 @@ Package.on_use(function(api) {
     'src/Translator.js',
     //'src/filter/parameter.js',
     'src/filter/message-format.js',
+    'src/message-format/plural-postprocess.js',
     //'src/message-format/plural-postprocess.js',
     //'src/filter/condition.js',
     'src/Translator/globalLang.js',

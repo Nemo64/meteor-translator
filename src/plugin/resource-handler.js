@@ -20,9 +20,9 @@ ResourceHandler = {
   /**
    * shortcut to call both filters
    */
-  filter: function (input, options) {
-    input = this.stringFilter.filter(input, options);
-    return this.objectFilter.filter(input, options);
+  filter: function (input, data) {
+    input = this.stringFilter.filter(input, data);
+    return this.objectFilter.filter(input, data);
   }
 };
 
@@ -35,15 +35,15 @@ var keyValid = function (key) {
  * @param {string} baseKey
  * @param {mixed}  value
  * @param {Object.<string, *>} result
- * @param {Object.<string, *>} addition
+ * @param {Object.<string, *>} data
  */
-var parseValue = function (baseKey, value, result, options) {
+var parseValue = function (baseKey, value, result, data) {
   if (_.isObject(value) && ! _.isArray(value)) {
     var allValid = _.every(_.keys(value), keyValid);
     if (allValid) {
       _.each(value, function (currentValue, key) {
         var newKey = baseKey + "." + key;
-        parseValue(newKey, currentValue, result, options);
+        parseValue(newKey, currentValue, result, data);
       });
     } else {
       // if a key does not only contain wordchars
@@ -52,7 +52,7 @@ var parseValue = function (baseKey, value, result, options) {
     }
   } else {
     // pass the value though all filters and add it
-    result[baseKey] = ResourceHandler.filter(value, options);
+    result[baseKey] = ResourceHandler.filter(value, data);
   }
 }
 
@@ -73,7 +73,7 @@ var compileYaml = function (source, locale) {
     }
     parseValue(key, value, parsedDoc, {
       locale: locale,
-      additions: parsedDoc.$
+      meta: parsedDoc.$
     });
   });
   return parsedDoc;
