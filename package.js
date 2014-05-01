@@ -73,7 +73,7 @@ Package.on_test(function (api) {
     'src/LanguageArray-test.js',
     'src/Namespace-test.js',
     'src/FilterList-test.js',
-    'src/filter/parameter-test.js',
+    //'src/filter/parameter-test.js',
     'src/Translator-test.js'
   ]);
   api.add_files([
