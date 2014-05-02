@@ -1,7 +1,8 @@
 var cldr = Npm.require('cldr');
 
 var convertCldrToMoment = function (dateString) {
-  dateString = dateString.replace(/y/g, "Y"); // moment uses caps year
+  dateString = dateString.replace(/d/g, 'D'); // moment uses caps days
+  dateString = dateString.replace(/y/g, 'Y'); // moment uses caps year
   dateString = dateString.replace(/(^|[^Y])Y($|[^Y])/g, '$1YYYY$2'); // one Y = YYYY
   dateString = dateString.replace(/E/g, 'd'); // E=d otherwise it's the same
   dateString = dateString.replace(/zzz/g, 'zz'); // FIXME deprecated by moment
@@ -18,7 +19,7 @@ var momentAddition = function (data) {
     var days = cldr.extractDayNames(locale, 'gregorian').format;
     meta['moment'] = {
       months: months.wide,
-      monthsShort: months.abbreviated, // XXX they should have a point at the end
+      monthsShort: months.abbreviated,
       weekdays: days.wide,
       weekdaysShort: days.abbreviated,
       weekdaysMin: days.short,
