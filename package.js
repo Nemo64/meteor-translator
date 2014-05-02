@@ -15,7 +15,8 @@ Package._transitional_registerBuildPlugin({
     'src/plugin/resource-handler.js',
     'src/plugin/message-format.js',
     'src/message-format/select-preprocess.js',
-    'src/message-format/plural-preprocess.js'
+    'src/message-format/plural-preprocess.js',
+    'src/message-format/datetime-preprocess.js'
   ],
   npmDependencies: {
     'js-yaml': '3.0.2',
@@ -29,7 +30,8 @@ Package.on_use(function(api) {
     'ejson', // LanguageArray and Locale are ejson'able
     'deps',
     // meteorite
-    'inject-initial'
+    'inject-initial',
+    'moment'
   ]);
   api.use([
     'http'
@@ -45,6 +47,7 @@ Package.on_use(function(api) {
     'src/filter/message-format.js',
     'src/message-format/select-postprocess.js',
     'src/message-format/plural-postprocess.js',
+    'src/message-format/datetime-postprocess.js',
     //'src/message-format/plural-postprocess.js',
     //'src/filter/condition.js',
     'src/Translator/globalLang.js',

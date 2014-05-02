@@ -17,3 +17,4 @@ item_add: >
     male  {{count, plural, one{He added one item!}  other{He added # items!}  }}
     other {{count, plural, one{They added one item!}other{They added # items!}}}
   }
+published_on: published on {published_at, date} at {published_at, time}

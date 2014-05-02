@@ -112,7 +112,7 @@ testAsyncMulti("Translator - message-format - plural", [
   }
 ]);
 
-testAsyncMulti("Translator - message-format - plural and select", [
+testAsyncMulti("Translator - message-format - combine plural and select", [
   function (test, expect) {
     englishTrans.ready(expect(function () {
       var result = englishTrans.get('item_add', { count: 1, gender: 'female' });
@@ -147,6 +147,16 @@ testAsyncMulti("Translator - message-format - plural and select", [
     englishTrans.ready(expect(function () {
       var result = englishTrans.get('item_add', { count: 5, gender: null });
       test.equal(result, "They added 5 items!\n");
+    }));
+  }
+]);
+
+testAsyncMulti("Translator - message-format - date and time", [
+  function (test, expect) {
+    englishTrans.ready(expect(function () {
+      var date = new Date(2014, 5, 2, 18, 13, 54);
+      var result = englishTrans.get('published_on', { published_at: date });
+      test.equal(result, "published on Jun 1, 2014 at 6:13 pm");
     }));
   },
 ]);

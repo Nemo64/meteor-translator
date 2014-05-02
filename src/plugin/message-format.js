@@ -94,8 +94,8 @@ var parseLiteral = function (string, push, data, parentVarName) {
  * This parser is for the message-format patterns.
  * This implementation is limited to 3 variants.
  * - {variable}
- * - {variable, method}
- * - {variable, method, p1{literal} p2{literal}}
+ * - {variable, method, [...]}
+ * - {variable, method, [...], p1{literal} p2{literal}}
  * 
  * @param {string} string the string to parse
  * @param {function(*)} push a push function from #createPush
@@ -105,9 +105,10 @@ var parseLiteral = function (string, push, data, parentVarName) {
 var parsePattern = function (string, push, data) {
   string = string.replace(/^\{\s*/); // remove first {
   var object = {/*
-    name: null,
-    method: null,
-    hash: {}
+    name: null, // name of the variable
+    method: null, // method to use
+    args: [], // additional arguments
+    hash: {} // all strings with key
   */};
   
   for (var i = 0; i < 1000; ++i) {
@@ -130,6 +131,8 @@ var parsePattern = function (string, push, data) {
         } else if (object.method == null) {
           object.method = trim(before);
         } else {
+          if (object.args == null) object.args = [];
+          object.args.push(trim(before));
           throw new SyntaxError("too many parts in pattern, found " + before);
         }
         if (char == "}") {
