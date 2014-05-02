@@ -13,8 +13,8 @@ friend_count: >
   }
 item_add: >
   {gender, select,
-    female{{count, plural, one{She added one item!} other{She added # items!} }}
-    male  {{count, plural, one{He added one item!}  other{He added # items!}  }}
-    other {{count, plural, one{They added one item!}other{They added # items!}}}
+    female{{count, plural, one{Sie fügte ein item hinzu!} other{Sie fügte # items hinzu!} }}
+    male  {{count, plural, one{Er fügte ein item hinzu!}  other{Er fügte # items hinzu!}  }}
+    other {{count, plural, one{Sie fügten ein item hinzu!}other{Sie fügten # items hinzu!}}}
   }
 published_on: veröffentlicht am {published_at, date} um {published_at, time}
