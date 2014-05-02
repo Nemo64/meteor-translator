@@ -18,11 +18,16 @@ var getPlural = function (data, number) {
 MessageFormatPostprocess.plural = function (object, data) {
   var parameter = data.parameters[object.name];
   
+  // if this is an array or array like use length
+  if (_.isObject(parameter)) {
+    parameter = parameter.length;
+  }
+  
   var value = object.hash[parameter + "="]; // equals variation
   if (value == null) {
-    value = object.hash[getPlural(data, parameter)]; // one, many, many... etc
+    value = object.hash[getPlural(data, parameter)]; // one, few, many... etc
     if (value == null) {
-      value = object.hash["other"]; // other also as fallback
+      value = object.hash["other"]; // other (also as fallback)
     }
   }
   
