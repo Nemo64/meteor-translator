@@ -4,10 +4,10 @@ var pluralFunctions = {/*
 
 var getPlural = function (data, number) {
   if (! pluralFunctions.hasOwnProperty(data.locale)) {
-    if (data.meta.cldrPlural != null) {
+    if (data.meta["plural"] != null) {
       "use strict"; // additional eval security
       // XX this should not be an eval
-      pluralFunctions[data.locale] = eval('(' + data.meta.cldrPlural + ')');
+      pluralFunctions[data.locale] = eval('(' + data.meta["plural"] + ')');
     } else {
       throw new Error("Translation file did not include plural function");
     }
