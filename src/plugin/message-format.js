@@ -35,7 +35,11 @@ var createPush = function (array) {
         obj = array.pop() + obj;
       }
     }
-    array.push(obj);
+    if (_.isArray(obj)) {
+      array.push.apply(array, obj);
+    } else {
+      array.push(obj);
+    }
   }
 };
 
@@ -133,7 +137,6 @@ var parsePattern = function (string, push, data) {
         } else {
           if (object.args == null) object.args = [];
           object.args.push(trim(before));
-          throw new SyntaxError("too many parts in pattern, found " + before);
         }
         if (char == "}") {
           push(preProcessObject(object, data));
@@ -186,7 +189,7 @@ var optimizeResult = function (result) {
   return (result.length === 1 && _.isString(result[0])) ? result[0] : result;
 }
 
-var handler = function (input, data) {
+messageFormatPreprocess = function (input, data) {
   if (! _.isString(input)) {
     return input;
   }
@@ -201,4 +204,4 @@ var handler = function (input, data) {
   return optimizeResult(result);
 };
 
-ResourceHandler.objectFilter.append(handler);
+ResourceHandler.objectFilter.append(messageFormatPreprocess);

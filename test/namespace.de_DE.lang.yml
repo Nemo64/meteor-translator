@@ -19,3 +19,4 @@ item_add: >
   }
 gender: "{gender, select, female{frau} male{mann}}"
 published_on: veröffentlicht am {published_at, date} um {published_at, time}
+published_on_short: veröffentlicht am {published_at, datetime, long}

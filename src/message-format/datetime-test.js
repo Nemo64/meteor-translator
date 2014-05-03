@@ -12,14 +12,30 @@ testAsyncMulti("Translator - message-format - date and time", [
     englishTrans.ready(expect(function () {
       var date = new Date(2014, 5, 2, 18, 13, 54);
       var result = englishTrans.get('published_on', { published_at: date });
-      test.equal(result, "published on Jun 2, 2014 at 6:13 pm");
+      test.equal(result, "published on Jun 2, 2014 at 6:13:54 pm");
     }));
   },
   function (test, expect) {
     germanTrans.ready(expect(function () {
       var date = new Date(2014, 5, 2, 18, 13, 54);
       var result = germanTrans.get('published_on', { published_at: date });
-      test.equal(result, "veröffentlicht am 02.06.2014 um 18:13");
+      test.equal(result, "veröffentlicht am 02.06.2014 um 18:13:54");
+    }));
+  }
+]);
+testAsyncMulti("Translator - message-format - datetime", [
+  function (test, expect) {
+    englishTrans.ready(expect(function () {
+      var date = new Date(2014, 5, 2, 18, 13, 54);
+      var result = englishTrans.get('published_on_short', { published_at: date });
+      test.equal(result, "published on June 2, 2014 at 6:13:54 pm ");
+    }));
+  },
+  function (test, expect) {
+    germanTrans.ready(expect(function () {
+      var date = new Date(2014, 5, 2, 18, 13, 54);
+      var result = germanTrans.get('published_on_short', { published_at: date });
+      test.equal(result, "veröffentlicht am 2. Juni 2014 18:13:54 ");
     }));
   }
 ]);
