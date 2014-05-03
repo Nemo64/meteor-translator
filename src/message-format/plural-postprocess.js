@@ -19,7 +19,7 @@ MessageFormatPostprocess.plural = function (object, data) {
   var parameter = data.parameters[object.name];
   
   // if this is an array or array like use length
-  if (_.isObject(parameter)) {
+  if (_.isArray(parameter)) {
     parameter = parameter.length;
   }
   

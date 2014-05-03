@@ -17,7 +17,9 @@ var filter = function (object, data) {
       if (data.parameters.hasOwnProperty(part.name)) {
         var param = data.parameters[part.name];
         if (part.method == null) {
-          result.push(param);
+          // arrays will be seen as length
+          // FIXME this should not be here (number method required)
+          result.push(_.isArray(param) ? param.length : param);
         } else if (MessageFormatPostprocess.hasOwnProperty(part.method)) {
           result.push(MessageFormatPostprocess[part.method](part, data));
         }

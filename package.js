@@ -79,6 +79,9 @@ Package.on_test(function (api) {
     'src/Namespace-test.js',
     'src/FilterList-test.js',
     //'src/filter/parameter-test.js',
+    'src/message-format/select-test.js',
+    'src/message-format/plural-test.js',
+    'src/message-format/datetime-test.js',
     'src/Translator-test.js'
   ]);
   api.add_files([

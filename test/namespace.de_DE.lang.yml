@@ -17,4 +17,5 @@ item_add: >
     male  {{count, plural, one{Er fügte ein item hinzu!}  other{Er fügte # items hinzu!}  }}
     other {{count, plural, one{Sie fügten ein item hinzu!}other{Sie fügten # items hinzu!}}}
   }
+gender: "{gender, select, female{frau} male{mann}}"
 published_on: veröffentlicht am {published_at, date} um {published_at, time}
