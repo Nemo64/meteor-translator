@@ -24,6 +24,7 @@ var filter = function (object, data) {
           result.push(MessageFormatPostprocess[part.method](part, data));
         }
       } else {
+        // fallback if parameter does not exist
         result.push('{' + part.name + '}');
       }
     } else {
