@@ -4,8 +4,10 @@ A general i18n utility belt to seperate your app from the language.
 It's features are:
 - readable **[yaml files](http://www.yaml.org/)** to store the translations
 - **namespacing** though multiple files
-- **parameters** in the translation (`hello {{username}}`)
-- language **fallbacks**
+- **parameters** in the translations `hello {username}`
+- **[icu messageformat](http://userguide.icu-project.org/formatparse/messages)** using [cldr](http://cldr.unicode.org/) `{num, plural, one{You have one friend} other{You have # friends}}`
+- **date formating** using [moment](http://momentjs.com/) and [cldr](http://cldr.unicode.org/) `released on {var, date} at {var, time}`
+- language **fallbacks** `["en_GB","en_US"]`
 - **lazy loading** of languages as soon as they are needed
 - **automatic language detection** using the `accept-language` header (experimental)
 - **reactive changing** of the translations
@@ -27,7 +29,7 @@ It's features are:
 user_area:
   header: "user area"
   message:
-    greeting: "Hello {{name}}!"
+    greeting: "Hello {name}!"
 ```
 
 ### JavaScript
@@ -72,7 +74,7 @@ user_login:
     lost_password: "Did you loose your password?"
     submit: "login"
   errors:
-    wrong_login: "Login into {{account}} failed!"
+    wrong_login: "Login into {account} failed!"
     enter_username: "please enter a username"
     enter_password: "please enter a password"
 ```
@@ -164,8 +166,8 @@ The use in the template is then as you'd expect it:
 ## Parameter
 Sometimes parts can't be translated because they are dynamic. For this case there are parameters. Want to greet your users?
 ```YAML
-greeting: "Hello {{name}}!"
-long_time_notice: "It has been {{days}} days!"
+greeting: "Hello {name}!"
+long_time_notice: "It has been {days} days!"
 ```
 Then you can pass these parameters to the get method or a template.
 ```JavaScript
@@ -177,24 +179,33 @@ FrontLang.get('long_time_notice', { days: user.daysSinceLogin() });
 <p>{{trans 'greeting' name="Mustermann"}}<p>
 ```
 
-### Conditions
-The most common case for this is pluralization. You can write conditions that are similar to JavaScript in the translation files to show different texts depending on a parameter.
-
+## Message-Format
+Variations in translations (because of plural or gender) can be represented by an [ICU message-format pattern](http://userguide.icu-project.org/formatparse/messages). The implementation isn't exactly like the specs tell. This is patially because of 2 compilation steps. They get transformed to json for the transfer so the client cen very easily interpret them. If there are things easily implementable to make it more standard conform please leave an issue or contribute yourself.
+### pluralization
 ```YAML
-friend_count:
-  friends==0: "You have no friends!"
-  friends==1: "You have a friend!"
-  friends>=2: "You have {{friends}} friends!"
+friend_count: >
+  {friends, plural,
+    0=   {You have no friends!}
+    one  {You have a friend!}
+    other{You have # friends!}
+  }
 ```
+There are 2 ways to tell when which variation should be used. The first is using `0=` or `1=` etc.. Those can come in handy for special cases like 0. The better way is using the cldr [plural rules](http://www.unicode.org/cldr/charts/25/supplemental/language_plural_rules.html) which automatically get compiled into the language files if needed. (the client only knows what it needs to know.) The equals variation always has a higher priority though. If no rule matches `other` will be used meaning `{var, plural, other{text}}` will always print `text`. If there is no `other` rule no text will be printed.
 
-The conditions are **not** parsed by JavaScript and are limited in there capabilities. This is what is supported:
-- comperators `==`, `!=`, `>`, `>=`, `<`, `<=`
-- strings and numbers like they would be in JavaScript: `"string"`, `13`, `5e+6` etc
-- the keywords `null` and `none` represent `null`. usage: `user == none`
-- the keywords `true`, `on`, `yes` represent `true`. usage: `active == yes`
-- the keywords `false`, `off`, `no` represent `false`. usage: `power == off`
-- also the math keywords `infinity`, `-infinity` and `nan` are supportet
+Any number variable and arrays can be used for the plural pattern. For arrays the length is used. If the type does not comform the `other` rule will be used.
 
+Note the nice way you can define multiline text in yaml. The Symfony Project has a [nice documentation](http://symfony.com/doc/current/components/yaml/yaml_format.html#strings) for that.
+### select
+Other variations like gender can be represented by the select pattern.
+```YAML
+item_add: >
+  {gender, select,
+    female{{count, plural, one{She added one item!} other{She added # items!} }}
+    male  {{count, plural, one{He added one item!}  other{He added # items!}  }}
+    other {{count, plural, one{They added one item!}other{They added # items!}}}
+  }
+```
+This example combines the select rule with the plural rule. The select rule searches for an exact match meaning `gender` must contain `female` or `male`. If no rule applies `other` will be used. If there is no `other` rule no text will be printed.
 ## TODO
 - Territory fallback like "i want British English but there is only American English"! This is useful for the auto detection of languages! I need help with this because I don't know if that'll work with most languages!
-- Providing of features from [CLDR](http://cldr.unicode.org/). The plan is to automatically format numbers with the correct punctuation. Also Dates and time spans should be automatically taken care of. This might require [moment](https://atmospherejs.com/package/moment). I have to look if i can prepare all required information in the language-compiler to send only needed information directly with the language file it is used in.
+- Providing more features from [CLDR](http://cldr.unicode.org/). The plan is to automatically format numbers with the correct punctuation.
