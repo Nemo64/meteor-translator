@@ -67,7 +67,7 @@ var convertCldrToMoment = function (dateString) {
   replace('v{1,4}', ''); // XXX not supported
   
   // cldr uses another schema to escape literals
-  dateString = dateString.replace(/'((?:[^']|'')+)'/, function (a, content) {
+  dateString = dateString.replace(/'((?:[^']|'')+)'/g, function (a, content) {
     return '[' + content.replace("''", "'") + ']'; // moment uses [] for escaping
   });
   return dateString;
