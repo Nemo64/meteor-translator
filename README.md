@@ -6,7 +6,7 @@ It's features are:
 - **namespacing** though multiple files
 - **parameters** in the translations `hello {username}`
 - **[icu messageformat](http://userguide.icu-project.org/formatparse/messages)** using [cldr](http://cldr.unicode.org/) `{num, plural, one{You have one friend} other{You have # friends}}`
-- **date formating** using [moment](http://momentjs.com/) and [cldr](http://cldr.unicode.org/) `released on {var, date} at {var, time}`
+- **date formating** using [moment](http://momentjs.com/) and [cldr](http://cldr.unicode.org/) `released on {var, date} at {var, time}` (might be rough, [see below](#date-and-time))
 - language **fallbacks** `["en_GB","en_US"]`
 - **lazy loading** of languages as soon as they are needed
 - **automatic language detection** using the `accept-language` header (experimental)
@@ -218,6 +218,8 @@ full: "It is {var, datetime, full}" # It is Sunday, May 4, 2014 at 2:15:06 pm
 # it can also be specified for the more percise variations like
 # {var, date, long} and {var, time, short}
 ```
+
+The support for dates isn't fully completed yet. Currently the implementation builds on [moment](http://momentjs.com/) but cldr is not compatible with moment so there may be some rough edges. In the future there might be either a own implementation (likely for deep integration) or at least a libary with better support for [these patterns](http://www.unicode.org/reports/tr35/tr35-29.html#Date_Format_Patterns).
 ## TODO
 - Territory fallback like "i want British English but there is only American English"! This is useful for the auto detection of languages! I need help with this because I don't know if that'll work with most languages!
 - Providing more features from [CLDR](http://cldr.unicode.org/). The plan is to automatically format numbers with the correct punctuation.
