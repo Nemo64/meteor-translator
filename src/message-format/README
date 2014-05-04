@@ -1,0 +1,3 @@
+These scripts represent message-format functions!
+The preprocess side will be called by plugin/message-format.js
+The postprocess side will be called by filter/message-format.js

@@ -175,7 +175,10 @@ Namespace.prototype.get = function (key, language) {
     return localeData.data.hasOwnProperty(key);
   });
   
-  return matchedLocale != null
-    ? self._locales[matchedLocale].data[key]
-    : undefined;
+  var data = matchedLocale && self._locales[matchedLocale].data;
+  return {
+    value: data && data[key],
+    meta: (data && data.$) || {},
+    locale: matchedLocale
+  };
 };

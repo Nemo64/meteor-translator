@@ -44,7 +44,7 @@ testAsyncMulti("Translator - Namespace - access existing key", [
     Deps.autorun(function (dep) {
       var result = namespace.get('a_key', LANGUAGE_FOREIGN);
       if (! namespace.isLoading()) {
-        expect(result);
+        expect(result.value);
       }
     });
   }
@@ -57,7 +57,7 @@ testAsyncMulti("Translator - Namespace - access none existing key", [
     Deps.autorun(function (dep) {
       var result = namespace.get('not_a_key', LANGUAGE_FOREIGN);
       if (! namespace.isLoading()) {
-        expect(result);
+        expect(result.value);
       }
     });
   }

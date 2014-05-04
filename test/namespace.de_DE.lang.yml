@@ -4,8 +4,19 @@ login:
     username: Benutzername
     password: Passwort
 weather:
-  message: Es ist {{weather}} heute!
-fried_count:
-  friends == 0: Du hast keine Freunde!
-  friends == 1: Du hast einen Freund!
-  friends >= 2: Du hast {{friends}} Freunde!
+  message: Es ist {weather} heute!
+friend_count: >
+  {friends, plural,
+    =0   {Du hast keine Freunde!}
+    one  {Du hast einen Freund!}
+    other{Du hast # Freunde!}
+  }
+item_add: >
+  {gender, select,
+    female{{count, plural, one{Sie fügte ein item hinzu!} other{Sie fügte # items hinzu!} }}
+    male  {{count, plural, one{Er fügte ein item hinzu!}  other{Er fügte # items hinzu!}  }}
+    other {{count, plural, one{Sie fügten ein item hinzu!}other{Sie fügten # items hinzu!}}}
+  }
+gender: "{gender, select, female{frau} male{mann}}"
+published_on: veröffentlicht am {published_at, date} um {published_at, time}
+published_on_short: veröffentlicht am {published_at, datetime, long}

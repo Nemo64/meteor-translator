@@ -50,5 +50,9 @@ Namespace.prototype.get = function (key, language) {
     return data != null && data.hasOwnProperty(key);
   });
   var data = self._locales[locale];
-  return data != null ? data[key] : undefined;
+  return {
+    value: data && data[key],
+    meta: (data && data.$) || {},
+    locale: locale
+  };
 };

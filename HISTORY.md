@@ -1,3 +1,10 @@
+## v1.0.0
+- icu message format instead of homebrew syntax (incompatible)
+- message format methods (select, plural, date & time, number)
+- dependency: node-cldr for common language patterns
+- dependency: moment for dates and times (not very compatible with cldr, better solution required)
+- dependency: numeral
+
 ## v0.4.3
 - new filter for pluralization and general conditions
 - fix in language compiler that allowed all keys to go through

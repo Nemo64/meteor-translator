@@ -162,14 +162,15 @@ Translator.prototype.get = function (key, parameters) {
   if (namespace != null) try {
     // no dependency required as new namespaces will be appended to the list
     var result = namespace.get(key, language);
-    var options = {
+    var data = {
       key: key, // for warnings etc.
       language: language,
-      locale: language.getLocale(), // TODO this should be the used locale
+      locale: result.locale,
       parameters: parameters || {},
-      translator: self
+      translator: self,
+      meta: result.meta
     };
-    return self.filter(result, options);
+    return self.filter(result.value, data);
   } catch (e) {
     console.warn(e.message + "; Abort translation of '" + key + "'!");
   }

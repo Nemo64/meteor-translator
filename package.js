@@ -3,23 +3,35 @@ Package.describe({
 });
 
 Package._transitional_registerBuildPlugin({
-  name: 'compileLanguage',
-  use: ['underscore', 'ejson'],
+  name: 'language-compiler',
+  use: [
+    'underscore',
+    'ejson' // LanguageArray and Locale have it, not really required
+  ],
   sources: [
     'src/Locale.js',
     'src/LanguageArray.js',
-    'src/plugin/compile-language.js'
+    'src/FilterList.js',
+    'src/plugin/resource-handler.js',
+    'src/plugin/message-format.js',
+    'src/message-format/select-preprocess.js',
+    'src/message-format/plural-preprocess.js',
+    'src/message-format/datetime-preprocess.js'
   ],
-  npmDependencies: { 'js-yaml': '3.0.2' }
+  npmDependencies: {
+    'js-yaml': '3.0.2',
+    'cldr': '2.2.1'
+  }
 });
 
 Package.on_use(function(api) {
   api.use([
     'underscore',
-    'ejson',
+    'ejson', // LanguageArray and Locale are ejson'able
     'deps',
     // meteorite
-    'inject-initial'
+    'inject-initial',
+    'moment'
   ]);
   api.use([
     'http'
@@ -31,8 +43,13 @@ Package.on_use(function(api) {
     'src/Namespace.js',
     'src/FilterList.js',
     'src/Translator.js',
-    'src/filter/parameter.js',
-    'src/filter/condition.js',
+    //'src/filter/parameter.js',
+    'src/filter/message-format.js',
+    'src/message-format/select-postprocess.js',
+    'src/message-format/plural-postprocess.js',
+    'src/message-format/datetime-postprocess.js',
+    //'src/message-format/plural-postprocess.js',
+    //'src/filter/condition.js',
     'src/Translator/globalLang.js',
     'src/Translator/defaultLanguage.js'
   ]);
@@ -61,8 +78,10 @@ Package.on_test(function (api) {
     'src/LanguageArray-test.js',
     'src/Namespace-test.js',
     'src/FilterList-test.js',
-    'src/filter/parameter-test.js',
-    'src/filter/condition-test.js',
+    //'src/filter/parameter-test.js',
+    'src/message-format/select-test.js',
+    'src/message-format/plural-test.js',
+    'src/message-format/datetime-test.js',
     'src/Translator-test.js'
   ]);
   api.add_files([
