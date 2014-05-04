@@ -206,6 +206,18 @@ item_add: >
   }
 ```
 This example combines the select rule with the plural rule. The select rule searches for an exact match meaning `gender` must contain `female` or `male`. If no rule applies `other` will be used. If there is no `other` rule no text will be printed.
+### date and time
+Printing out dates is abstracted though the message-format `{var, date}` and `{var, time}` similar to the java [implementation](http://icu-project.org/apiref/icu4j/com/ibm/icu/text/MessageFormat.html). A shortcut is possible with `{var, datetime}`. You can also specify how percise the date should be shown.
+```YAML
+short: "It is {var, datetime, short}" # It is 5/4/14, 2:15 pm
+medium: "It is {var, datetime, medium}" # It is May 4, 2014, 2:15:06 pm
+long: "It is {var, datetime, long}" # It is May 4, 2014 at 2:15:06 pm 
+full: "It is {var, datetime, full}" # It is Sunday, May 4, 2014 at 2:15:06 pm 
+
+# if the length is not specified medium will be used
+# it can also be specified for the more percise variations like
+# {var, date, long} and {var, time, short}
+```
 ## TODO
 - Territory fallback like "i want British English but there is only American English"! This is useful for the auto detection of languages! I need help with this because I don't know if that'll work with most languages!
 - Providing more features from [CLDR](http://cldr.unicode.org/). The plan is to automatically format numbers with the correct punctuation.
