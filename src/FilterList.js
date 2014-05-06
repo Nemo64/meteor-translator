@@ -13,68 +13,70 @@ FilterList = function (name, validator) {
   self.name = name;
   self._validator = validator;
   self._filters = [];
-}
-
-/**
- * The message which will be thrown on validation error.
- * 
- * @param {mixed} info  What the validation function returned.
- */
-FilterList.prototype.validationMessage = function (info) {
-  return "Filter '" + this.name + "' did not return a valid result!";
 };
 
-/**
- * Executes the filter list on the specified data.
- *
- * @param {mixed} data      The data to filter
- * @param {Object=} options Additional options passed to the filters
- */
-FilterList.prototype.filter = function (data, options) {
-  var self = this;
-  
-  _.each(self._filters, function (filter) {
-    data = filter.call(self, data, options);
-  });
-  
-  if (_.isFunction(self._validator)) {
-    var valid = self._validator(data);
-    if (! valid) {
-      throw new Error(self.validationMessage(valid));
+_.extend(FilterList.prototype, {
+  /**
+   * The message which will be thrown on validation error.
+   * 
+   * @param {mixed} info  What the validation function returned.
+   */
+  validationMessage: function (info) {
+    return "Filter '" + this.name + "' did not return a valid result!";
+  },
+
+  /**
+   * Executes the filter list on the specified data.
+   *
+   * @param {mixed} data      The data to filter
+   * @param {Object=} options Additional options passed to the filters
+   */
+  filter: function (data, options) {
+    var self = this;
+    
+    _.each(self._filters, function (filter) {
+      data = filter.call(self, data, options);
+    });
+    
+    if (_.isFunction(self._validator)) {
+      var valid = self._validator(data);
+      if (! valid) {
+        throw new Error(self.validationMessage(valid));
+      }
     }
+    
+    return data;
+  },
+
+  /**
+   * Checks if a filter is a valid function.
+   *
+   * @param {mixed} callback
+   */
+  _validateFilter: function (callback) {
+    if (! _.isFunction(callback)) {
+      throw new Error("A filter must be a function, "
+        + typeof callback + " given!");
+    }
+  },
+
+  /**
+   * Appends a new filter.
+   *
+   * @param {function(mixed, Object, this: FilterList):mixed}
+   */
+  append: function (callback) {
+    this._validateFilter(callback);
+    this._filters.push(callback);
+  },
+
+  /**
+   * Prepend a new filter.
+   *
+   * @param {function(mixed, Object, this: FilterList):mixed}
+   */
+  prepend: function (callback) {
+    this._validateFilter(callback);
+    this._filters.unshift(callback);
   }
-  
-  return data;
-};
-
-/**
- * Checks if a filter is a valid function.
- *
- * @param {mixed} callback
- */
-FilterList.prototype._validateFilter = function (callback) {
-  if (! _.isFunction(callback)) {
-    throw new Error("A filter must be a function, "
-      + typeof callback + " given!");
-  }
-};
-
-/**
- * Appends a new filter.
- *
- * @param {function(mixed, Object, this: FilterList):mixed}
- */
-FilterList.prototype.append = function (callback) {
-  this._validateFilter(callback);
-  this._filters.push(callback);
-};
-
-/**
- * Prepend a new filter.
- *
- * @param {function(mixed, Object, this: FilterList):mixed}
- */
-FilterList.prototype.prepend = function (callback) {
-  this._validateFilter(callback);
-  this._filters.unshift(callback);
-};
+});

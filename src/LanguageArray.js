@@ -46,82 +46,84 @@ LanguageArray.make = function (language) {
   }
 };
 
-/**
- * @return {!Array.<Locale>}
- */
-LanguageArray.prototype.getLocales = function () {
-  return this._locales.slice(); // copy to make the array safe
-};
-/**
- * @return {Locale}
- */
-LanguageArray.prototype.getLocale = function () {
-  return this._locales[0];
-};
-
-/**
- * @return {boolean}
- */
-LanguageArray.prototype.isEmpty = function () {
-  return this._locales.length === 0;
-};
-
-/**
- * Creates a new LanguageArray which will continer all locales of this
- * with the locales of the specified language array attached.
- * It prevents that the same locale can be added 2 times!
- *
- * @param {LangaugeArray|Array.<(Locale|string)>|Locale|string} other
- * @return {!LanguageArray}
- */
-LanguageArray.prototype.merge = function (other) {
-  other = this.constructor.make(other); // just to be sure
-  var locales = this._locales.concat(other._locales);
-  return new this.constructor(locales);
-}
-
-/**
- * @return {string}
- */
-LanguageArray.prototype.toString = function () {
-  return "[" + this._locales.join(",") + "]";
-}
-
-
-
-
-
-/**
- * @return {!Locale}
- */
-LanguageArray.prototype.clone = function () {
-  return new this.constructor(this._locales);
-};
-/**
- * @return {string}
- */
-LanguageArray.prototype.toJSONValue = function () {
-  return this._locales.join(' '); // shortcut for toString() on all
-};
-/**
- * @return {string}
- */
-LanguageArray.prototype.typeName = function () {
-  return "Translator.LanguageArray";
-};
-/**
- * @param {object}
- * @return {boolean}
- */
-LanguageArray.prototype.equals = function (other) {
-  var self = this;
+_.extend(LanguageArray.prototype, {
+  /**
+   * @return {!Array.<Locale>}
+   */
+  getLocales: function () {
+    return this._locales.slice(); // copy to make the array safe
+  },
   
-  return other instanceof self.constructor // same instance
-    && other._locales.length == this._locales.length // same amount of locales
-    && _.every(other._locales, function (locale, index) { // same locales
-      return self._locales[index].equals(locale);
-    });
-};
+  /**
+   * @return {Locale}
+   */
+  getLocale: function () {
+    return this._locales[0];
+  },
+
+  /**
+   * @return {boolean}
+   */
+  isEmpty: function () {
+    return this._locales.length === 0;
+  },
+
+  /**
+   * Creates a new LanguageArray which will continer all locales of this
+   * with the locales of the specified language array attached.
+   * It prevents that the same locale can be added 2 times!
+   *
+   * @param {LangaugeArray|Array.<(Locale|string)>|Locale|string} other
+   * @return {!LanguageArray}
+   */
+  merge: function (other) {
+    other = this.constructor.make(other); // just to be sure
+    var locales = this._locales.concat(other._locales);
+    return new this.constructor(locales);
+  },
+
+  /**
+   * @return {string}
+   */
+  toString: function () {
+    return "[" + this._locales.join(",") + "]";
+  },
+
+  /**
+   * @return {!Locale}
+   */
+  clone: function () {
+    return new this.constructor(this._locales);
+  },
+  
+  /**
+   * @return {string}
+   */
+  toJSONValue: function () {
+    return this._locales.join(' '); // shortcut for toString() on all
+  },
+  
+  /**
+   * @return {string}
+   */
+  typeName: function () {
+    return "Translator.LanguageArray";
+  },
+  
+  /**
+   * @param {object}
+   * @return {boolean}
+   */
+  equals: function (other) {
+    var self = this;
+    
+    return other instanceof self.constructor // same instance
+      && other._locales.length == this._locales.length // same amount of locales
+      && _.every(other._locales, function (locale, index) { // same locales
+        return self._locales[index].equals(locale);
+      });
+  }
+});
 
 EJSON.addType(LanguageArray.prototype.typeName(), function (locales) {
   var locales = locales != '' ? locales.split(' ') : null;
