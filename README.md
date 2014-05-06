@@ -6,7 +6,7 @@ It's features are:
 - **namespacing** though multiple files
 - **parameters** in the translations `hello {username}`
 - **[icu messageformat](http://userguide.icu-project.org/formatparse/messages)** using [cldr](http://cldr.unicode.org/) `{num, plural, one{You have one friend} other{You have # friends}}`
-- **date formating** using [moment](http://momentjs.com/) and [cldr](http://cldr.unicode.org/) `released on {var, date} at {var, time}`
+- **date formating** using [moment](http://momentjs.com/) and [cldr](http://cldr.unicode.org/) `released on {var, date} at {var, time}` (might be rough, [see below](#date-and-time))
 - language **fallbacks** `["en_GB","en_US"]`
 - **lazy loading** of languages as soon as they are needed
 - **automatic language detection** using the `accept-language` header (experimental)
@@ -206,6 +206,20 @@ item_add: >
   }
 ```
 This example combines the select rule with the plural rule. The select rule searches for an exact match meaning `gender` must contain `female` or `male`. If no rule applies `other` will be used. If there is no `other` rule no text will be printed.
+### date and time
+Printing out dates is abstracted though the message-format `{var, date}` and `{var, time}` similar to the java [implementation](http://icu-project.org/apiref/icu4j/com/ibm/icu/text/MessageFormat.html). A shortcut is possible with `{var, datetime}`. You can also specify how percise the date should be shown.
+```YAML
+short: "It is {var, datetime, short}" # It is 5/4/14, 2:15 pm
+medium: "It is {var, datetime, medium}" # It is May 4, 2014, 2:15:06 pm
+long: "It is {var, datetime, long}" # It is May 4, 2014 at 2:15:06 pm 
+full: "It is {var, datetime, full}" # It is Sunday, May 4, 2014 at 2:15:06 pm 
+
+# if the length is not specified medium will be used
+# it can also be specified for the more percise variations like
+# {var, date, long} and {var, time, short}
+```
+
+The support for dates isn't fully completed yet. Currently the implementation builds on [moment](http://momentjs.com/) but cldr is not compatible with moment so there may be some rough edges. In the future there might be either a own implementation (likely for deep integration) or at least a libary with better support for [these patterns](http://www.unicode.org/reports/tr35/tr35-29.html#Date_Format_Patterns).
 ## TODO
 - Territory fallback like "i want British English but there is only American English"! This is useful for the auto detection of languages! I need help with this because I don't know if that'll work with most languages!
 - Providing more features from [CLDR](http://cldr.unicode.org/). The plan is to automatically format numbers with the correct punctuation.
