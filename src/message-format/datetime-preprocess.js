@@ -125,37 +125,34 @@ var momentAddition = function (data) {
   }
 };
 
-MessageFormatPreprocess.date = function (object, data) {
-  momentAddition(data);
-  var formats = cldr.extractDateFormats(data.locale.toString(), 'gregorian');
-  var format = (object.args && formats[object.args[0]]) || formats.medium;
-  return {
-    name: object.name,
-    method: object.method,
-    format: convertCldrToMoment(format)
-  };
-};
-MessageFormatPreprocess.time = function (object, data) {
-  //momentAddition(data); // not needed for time
-  var formats = cldr.extractTimeFormats(data.locale.toString(), 'gregorian');
-  var format = (object.args && formats[object.args[0]]) || formats.medium;
-  return {
-    name: object.name,
-    method: object.method,
-    format: convertCldrToMoment(format)
-  };
-};
-
-// this method is virtual
-// it uses date and time on the client
-MessageFormatPreprocess.datetime = function (object, data) {
-  var formats = cldr.extractDateTimePatterns(data.locale.toString(), 'gregorian');
-  var format = (object.args && formats[object.args[0]]) || formats.medium;
-  var subFormats = object.args && object.args[0] && (', ' + object.args[0]) || '';
-  format = format.replace(/\{1\}/g, '{' + object.name + ', date' + subFormats + '}');
-  format = format.replace(/\{0\}/g, '{' + object.name + ', time' + subFormats + '}');
-  return messageFormatPreprocess(format, data);
-};
-MessageFormatPreprocess.duration = function (object, data) {
-  momentAddition(data);
-};
+_.extend(messageFormatPreprocess, {
+  date: function (object, data) {
+    momentAddition(data);
+    var formats = cldr.extractDateFormats(data.locale.toString(), 'gregorian');
+    var format = (object.args && formats[object.args[0]]) || formats.medium;
+    return {
+      name: object.name,
+      method: object.method,
+      format: convertCldrToMoment(format)
+    };
+  },
+  time: function (object, data) {
+    //momentAddition(data); // not needed for time
+    var formats = cldr.extractTimeFormats(data.locale.toString(), 'gregorian');
+    var format = (object.args && formats[object.args[0]]) || formats.medium;
+    return {
+      name: object.name,
+      method: object.method,
+      format: convertCldrToMoment(format)
+    };
+  },
+  // this method only exists on the server and will compile to date and time
+  datetime: function (object, data) {
+    var formats = cldr.extractDateTimePatterns(data.locale.toString(), 'gregorian');
+    var format = (object.args && formats[object.args[0]]) || formats.medium;
+    var subFormats = object.args && object.args[0] && (', ' + object.args[0]) || '';
+    format = format.replace(/\{1\}/g, '{' + object.name + ', date' + subFormats + '}');
+    format = format.replace(/\{0\}/g, '{' + object.name + ', time' + subFormats + '}');
+    return messageFormatPreprocess(format, data);
+  }
+});

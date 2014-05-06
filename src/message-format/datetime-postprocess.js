@@ -6,12 +6,12 @@ var createMoment = function (value, data) {
   return moment(value).lang(locale);
 };
 
-MessageFormatPostprocess.date = function (object, data) {
+messageFormatPostprocess.date = function (object, data) {
   var parameter = data.parameters[object.name];
   var moment = createMoment(parameter, data);
   return moment.format(object.format);
 };
-MessageFormatPostprocess.time = function (object, data) {
+messageFormatPostprocess.time = function (object, data) {
   var parameter = data.parameters[object.name];
   var moment = createMoment(parameter, data);
   return moment.format(object.format);

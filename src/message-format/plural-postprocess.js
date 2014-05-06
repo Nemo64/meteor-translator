@@ -15,7 +15,7 @@ var getPlural = function (data, number) {
   return pluralFunctions[data.locale](number);
 }
 
-MessageFormatPostprocess.plural = function (object, data) {
+messageFormatPostprocess.plural = function (object, data) {
   var parameter = data.parameters[object.name];
   
   // if this is an array or array like use length
@@ -31,5 +31,5 @@ MessageFormatPostprocess.plural = function (object, data) {
     }
   }
   
-  return Translator._messageFormatFilter(value, data); // recursion
+  return messageFormatPostprocess(value, data); // recursion
 };

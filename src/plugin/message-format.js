@@ -3,17 +3,17 @@
 //
 // modified messages will be arrays which will be joined later
 
-MessageFormatPreprocess = {/*
+/*messageFormatPreprocess = {
   "plural": function () {},
   "select": function () {}
-*/};
+};*/
 
 var preProcessObject = function (object, data) {
   if (object.method == null) {
     return object;
   }
-  if (MessageFormatPreprocess.hasOwnProperty(object.method)) {
-    return MessageFormatPreprocess[object.method](object, data);
+  if (messageFormatPreprocess.hasOwnProperty(object.method)) {
+    return messageFormatPreprocess[object.method](object, data);
   } else {
     throw new Error("There is no message-format method " + object.method);
   }

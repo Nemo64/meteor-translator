@@ -1,6 +1,4 @@
-MessageFormatPostprocess = {};
-
-var filter = function (object, data) {
+messageFormatPostprocess = function (object, data) {
   if (! _.isArray(object)) {
     return object;
   }
@@ -20,8 +18,8 @@ var filter = function (object, data) {
           // arrays will be seen as length
           // FIXME this should not be here (number method required)
           result.push(_.isArray(param) ? param.length : param);
-        } else if (MessageFormatPostprocess.hasOwnProperty(part.method)) {
-          result.push(MessageFormatPostprocess[part.method](part, data));
+        } else if (messageFormatPostprocess.hasOwnProperty(part.method)) {
+          result.push(messageFormatPostprocess[part.method](part, data));
         }
       } else {
         // fallback if parameter does not exist
@@ -34,5 +32,4 @@ var filter = function (object, data) {
   return result.join("");
 };
 
-Translator.objectFilter.prepend(filter);
-Translator._messageFormatFilter = filter;
+Translator.objectFilter.prepend(messageFormatPostprocess);

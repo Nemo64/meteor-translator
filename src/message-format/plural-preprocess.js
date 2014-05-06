@@ -1,6 +1,6 @@
 var cldr = Npm.require('cldr');
 
-MessageFormatPreprocess.plural = function (object, data) {
+messageFormatPreprocess.plural = function (object, data) {
   // add cldr information
   var meta = data.meta;
   if (! meta.hasOwnProperty('plural')) {

@@ -1,4 +1,4 @@
-MessageFormatPostprocess.select = function (object, data) {
+messageFormatPostprocess.select = function (object, data) {
   var parameter = data.parameters[object.name];
   
   var value = object.hash[parameter];
@@ -6,5 +6,5 @@ MessageFormatPostprocess.select = function (object, data) {
     value = object.hash["other"]; // other also as fallback
   }
   
-  return Translator._messageFormatFilter(value, data); // recursion
+  return messageFormatPostprocess(value, data); // recursion
 };
