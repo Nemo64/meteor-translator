@@ -32,7 +32,8 @@ Package.on_use(function(api) {
     'deps',
     // meteorite
     'inject-initial',
-    'moment'
+    'moment',
+    'numeral'
   ]);
   api.use([
     'http'

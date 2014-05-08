@@ -8,6 +8,6 @@
   "packages": {
     "inject-initial": "0.0.7",
     "moment": "2.6.0",
-    "numeral": "0.0.1"
+    "numeral": "1.5.3"
   }
 }
