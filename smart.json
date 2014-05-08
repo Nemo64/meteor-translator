@@ -7,6 +7,7 @@
   "git": "https://github.com/Nemo64/meteor-translator.git",
   "packages": {
     "inject-initial": "0.0.7",
-    "moment": "2.6.0"
+    "moment": "2.6.0",
+    "numeral": "0.0.1"
   }
 }
