@@ -1,3 +1,7 @@
+## v0.5.1
+- size optimisation
+- code cleanup
+
 ## v0.5.0
 - icu message format instead of homebrew syntax (incompatible)
 - message format methods (select, plural, date & time, number)
