@@ -43,19 +43,15 @@ Package.on_use(function(api) {
     'src/Namespace.js',
     'src/FilterList.js',
     'src/Translator.js',
-    //'src/filter/parameter.js',
     'src/filter/message-format.js',
     'src/message-format/select-postprocess.js',
     'src/message-format/plural-postprocess.js',
     'src/message-format/datetime-postprocess.js',
-    //'src/message-format/plural-postprocess.js',
-    //'src/filter/condition.js',
     'src/Translator/globalLang.js',
     'src/Translator/defaultLanguage.js'
   ]);
   api.add_files([
     'src/Namespace-client.js',
-    'src/Translator-client.js'
   ], 'client');
   api.add_files([
     'src/Namespace-server.js',
@@ -78,7 +74,6 @@ Package.on_test(function (api) {
     'src/LanguageArray-test.js',
     'src/Namespace-test.js',
     'src/FilterList-test.js',
-    //'src/filter/parameter-test.js',
     'src/message-format/select-test.js',
     'src/message-format/plural-test.js',
     'src/message-format/datetime-test.js',
