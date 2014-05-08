@@ -185,12 +185,12 @@ Variations in translations (because of plural or gender) can be represented by a
 ```YAML
 friend_count: >
   {friends, plural,
-    0=   {You have no friends!}
+    =0   {You have no friends!}
     one  {You have a friend!}
     other{You have # friends!}
   }
 ```
-There are 2 ways to tell when which variation should be used. The first is using `0=` or `1=` etc.. Those can come in handy for special cases like 0. The better way is using the cldr [plural rules](http://www.unicode.org/cldr/charts/25/supplemental/language_plural_rules.html) which automatically get compiled into the language files if needed. (the client only knows what it needs to know.) The equals variation always has a higher priority though. If no rule matches `other` will be used meaning `{var, plural, other{text}}` will always print `text`. If there is no `other` rule no text will be printed.
+There are 2 ways to tell when which variation should be used. The first is using `=0` or `=1` etc.. Those can come in handy for special cases like 0. The better way is using the cldr [plural rules](http://www.unicode.org/cldr/charts/25/supplemental/language_plural_rules.html) which automatically get compiled into the language files if needed. (the client only knows what it needs to know.) The equals variation always has a higher priority though. If no rule matches `other` will be used meaning `{var, plural, other{text}}` will always print `text`. If there is no `other` rule no text will be printed.
 
 Any number variable and arrays can be used for the plural pattern. For arrays the length is used. If the type does not comform the `other` rule will be used.
 
