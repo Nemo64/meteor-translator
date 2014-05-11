@@ -166,7 +166,6 @@ var parsePattern = function (string, push, data) {
  * @return {string} everything after the closing "}"
  */
 var parsePatternHash = function (string, object, data) {
-if (object == null) throw new Error("wat?");
   for (var i = 0; i < 1000; ++i) {
     var tokenPosition = string.search(/[{}]/);
     var name = trim(string.substr(0, tokenPosition));
