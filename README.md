@@ -221,10 +221,10 @@ The length can also be specified for the more percise variations like
 `{var, date, long}` and `{var, time, short}`.
 
 if you specify an exact format (like in custom) it does not matter if you use date, time or datetime.
-However it is always nice to hint so prefere `{var, date, M.d.y}` and `{var, time, h:mm:ss a}`
+However it is always nice to hint so prefere `{var, date, M.d.y}` and `{var, time, h:mm:ss a}`. You can [read here which patterns to use](http://www.unicode.org/reports/tr35/tr35-29.html#Date_Format_Patterns). However...
  
 
-The support for dates isn't fully completed yet. Currently the implementation builds on [moment](http://momentjs.com/) but cldr is not compatible with moment so there may be some rough edges. In the future there might be either a own implementation (likely for deep integration) or at least a libary with better support for [these patterns](http://www.unicode.org/reports/tr35/tr35-29.html#Date_Format_Patterns).
+*The support for dates isn't fully completed yet. Currently the implementation builds on [moment](http://momentjs.com/) but cldr is not compatible with moment so there may be some rough edges. In the future there might be either a own implementation (likely for deep integration) or at least a libary with better support for [these patterns](http://www.unicode.org/reports/tr35/tr35-29.html#Date_Format_Patterns).*
 ## TODO
 - Territory fallback like "i want British English but there is only American English"! This is useful for the auto detection of languages! I need help with this because I don't know if that'll work with most languages!
 - Providing more features from [CLDR](http://cldr.unicode.org/). The plan is to automatically format numbers with the correct punctuation.
