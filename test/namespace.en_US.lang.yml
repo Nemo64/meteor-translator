@@ -20,4 +20,4 @@ item_add: >
 gender: "{gender, select, female{female} male{male}}"
 published_on: published on {published_at, date} at {published_at, time}
 published_on_short: published on {published_at, datetime, long}
-published_on_own: published on {published_at, datetime, m.d.y}
+published_on_own: published on {published_at, datetime, M.d.y h:mm:ss a}
