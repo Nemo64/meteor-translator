@@ -212,12 +212,17 @@ Printing out dates is abstracted though the message-format `{var, date}` and `{v
 short: "It is {var, datetime, short}" # It is 5/4/14, 2:15 pm
 medium: "It is {var, datetime, medium}" # It is May 4, 2014, 2:15:06 pm
 long: "It is {var, datetime, long}" # It is May 4, 2014 at 2:15:06 pm 
-full: "It is {var, datetime, full}" # It is Sunday, May 4, 2014 at 2:15:06 pm 
-
-# if the length is not specified medium will be used
-# it can also be specified for the more percise variations like
-# {var, date, long} and {var, time, short}
+full: "It is {var, datetime, full}" # It is Sunday, May 4, 2014 at 2:15:06 pm
+custom: "It is {var, datetime, M.d.y h:mm:ss a}" # It is 6.2.2014 6:13:54 pm
 ```
+if the length (short, medium, long, full) is not specified medium will be used.
+
+The length can also be specified for the more percise variations like
+`{var, date, long}` and `{var, time, short}`.
+
+if you specify an exact format (like in custom) it does not matter if you use date, time or datetime.
+However it is always nice to hint so prefere `{var, date, M.d.y}` and `{var, time, h:mm:ss a}`
+ 
 
 The support for dates isn't fully completed yet. Currently the implementation builds on [moment](http://momentjs.com/) but cldr is not compatible with moment so there may be some rough edges. In the future there might be either a own implementation (likely for deep integration) or at least a libary with better support for [these patterns](http://www.unicode.org/reports/tr35/tr35-29.html#Date_Format_Patterns).
 ## TODO
