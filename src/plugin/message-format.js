@@ -5,19 +5,9 @@
 
 /*messageFormatPreprocess = {
   "plural": function () {},
-  "select": function () {}
+  "select": function () {},
+  ...
 };*/
-
-var preProcessObject = function (object, data) {
-  if (object.method == null) {
-    return object;
-  }
-  if (messageFormatPreprocess.hasOwnProperty(object.method)) {
-    return messageFormatPreprocess[object.method](object, data);
-  } else {
-    throw new Error("There is no message-format method " + object.method);
-  }
-};
 
 /**
  * Creates a special push function that has the array bound to it.
@@ -112,8 +102,27 @@ var parsePattern = function (string, push, data) {
     name: null, // name of the variable
     method: null, // method to use
     args: [], // additional arguments
+    rawArgs: '', // string of all args starting with the 3rd
     hash: {} // all strings with key
   */};
+
+  var pushObject = function () {
+    // rawArgs still needs trimming (can't be done below)
+    if (object.rawArgs != null) {
+      object.rawArgs = trim(object.rawArgs);
+    }
+    
+    // decide if it is needed to call a preprocess method
+    if (object.method == null) {
+      push(object);
+    } else if (messageFormatPreprocess.hasOwnProperty(object.method)) {
+      push(messageFormatPreprocess[object.method](object, data));
+    } else {
+      throw new Error("There is no message-format method " + object.method);
+    }
+    
+    return string;
+  };
   
   for (var i = 0; i < 1000; ++i) {
     var tokenPosition = string.search(/[,{}]/); // search ', { and }
@@ -122,30 +131,35 @@ var parsePattern = function (string, push, data) {
     string = string.substr(tokenPosition + 1);
     switch (char) {
     
+      // end of pattern
       case "}":
-        // after the third parameter part it ends here
+        // if there is just empty space end here
         if (/^\s*$/.test(before)) {
-          push(preProcessObject(object, data));
-          return string;
+          return pushObject();
         }
         // NO BREAK
+      // normal seperator of parameters "var, method, arg"
       case ",":
-        if (object.name == null) {
+        if (object.name == null) { // first argument is the variable name
           object.name = trim(before);
-        } else if (object.method == null) {
+        } else if (object.method == null) { // secound argument is the method
           object.method = trim(before);
-        } else {
-          if (object.args == null) object.args = [];
+        } else { // other arguments get stored in 2 ways:
+          if (object.args == null) {
+            object.args = []; // as an array for easy access
+            object.rawArgs = ''; // or as string if the , is required
+          }
           object.args.push(trim(before));
+          object.rawArgs += before;
         }
-        if (char == "}") {
-          push(preProcessObject(object, data));
-          return string; // end with less than 3 parts
+        // if this parser step was initiated as the last argument stop here
+        if (char === "}") {
+          return pushObject();
         }
         break;
-        
+
+      // nasted strings eg. "param{nasted string}"
       case "{":
-        // it this is the third part
         if (object.name != null && object.method != null) {
           object.hash = {};
           string = parsePatternHash(before + "{" + string, object, data);
@@ -158,7 +172,8 @@ var parsePattern = function (string, push, data) {
 }
 
 /**
- * Parses the third part of a message-format pattern.
+ * Parses the nasted part of a message-format pattern.
+ * eg. "one{added one item} other{added # items}"
  *
  * @param {string} string the string to parse
  * @param {Object.<string, *>} object The object that'll later be in the json
@@ -185,6 +200,12 @@ if (object == null) throw new Error("wat?");
   throw new SyntaxError("pattern hash parsing error: " + string);
 }
 
+/**
+ * If the result is just a string the array wrapping isn't needed.
+ *
+ * @param {Array.<*>} result
+ * @return {string|Array.<*>}
+ */
 var optimizeResult = function (result) {
   return (result.length === 1 && _.isString(result[0])) ? result[0] : result;
 }
