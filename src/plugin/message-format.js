@@ -124,7 +124,7 @@ var parsePattern = function (string, push, data) {
     
       case "}":
         // after the third parameter part it ends here
-        if (/^\s*$/m.test(before)) {
+        if (/^\s*$/.test(before)) {
           push(preProcessObject(object, data));
           return string;
         }
