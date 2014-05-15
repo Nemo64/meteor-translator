@@ -1,6 +1,6 @@
 {
   "name": "translator",
-  "description": "a feature rich internationalization package",
+  "description": "a feature rich internationalization (i18n) package",
   "homepage": "https://github.com/Nemo64/meteor-translator",
   "author": "Marco Pfeiffer <cheat2000-git@yahoo.de>",
   "version": "0.5.2",
