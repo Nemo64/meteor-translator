@@ -22,7 +22,8 @@ messageFormatPostprocess.number = function (object, data) {
     //parameter = Math.round(parameter / divider) * divider;
     var absString = Math.abs(parameter).toFixed(object.maxPost);
     var number = absString.match(/^[^\.]*/)[0] || '0';
-    var point = absString.replace(/^[^\.]*\./, '').replace(/0+$/, '');
+    var point = absString.replace(/^[^\.]*\./, '');
+    var pointZeroless = point.replace(/0+$/, '');
     
     var groups = object.groups;
     var groupResult = [];
@@ -39,8 +40,12 @@ messageFormatPostprocess.number = function (object, data) {
     console.log(parameter, number, point, groupResult);
     
     var result = groupResult.join(latnSymbols.group);
-    if (point.length > 0 && object.maxPost > 0) {
-      result += latnSymbols.decimal + point.substr(0, object.maxPost);
+    if (pointZeroless.length > 0 && object.maxPost > 0 || object.minPost) {
+      if (pointZeroless.length < object.minPost) {
+        result += latnSymbols.decimal + point.substr(0, object.minPost);
+      } else {
+        result += latnSymbols.decimal + pointZeroless;
+      }
     }
     return wrap(result);
   }
