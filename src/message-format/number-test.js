@@ -144,7 +144,7 @@ testAsyncMulti("Translator - message-format - number - positive plus sign", [
       test.equal(trans.get(key, { num: 0.25 }), "+0.25");
       test.equal(trans.get(key, { num: 2000.25 }), "+2,000.25");
       test.equal(trans.get(key, { num: -2000.25 }), "-2,000.25");
-      test.equal(trans.get(key, { num: Infinity }), "∞");
+      test.equal(trans.get(key, { num: Infinity }), "+∞");
       test.equal(trans.get(key, { num: -Infinity }), "-∞");
       test.equal(trans.get(key, { num: "hello" }), "NaN");
     }));
@@ -159,7 +159,7 @@ testAsyncMulti("Translator - message-format - number - positive plus sign", [
       test.equal(trans.get(key, { num: 0.25 }), "+0,25");
       test.equal(trans.get(key, { num: 2000.25 }), "+2.000,25");
       test.equal(trans.get(key, { num: -2000.25 }), "-2.000,25");
-      test.equal(trans.get(key, { num: Infinity }), "∞");
+      test.equal(trans.get(key, { num: Infinity }), "+∞");
       test.equal(trans.get(key, { num: -Infinity }), "-∞");
       test.equal(trans.get(key, { num: "hello" }), "NaN");
     }));
