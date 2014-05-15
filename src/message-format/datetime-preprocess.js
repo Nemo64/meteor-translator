@@ -153,7 +153,7 @@ _.extend(messageFormatPreprocess, {
     if (! _.isString(format)) {
       return dateAndTime(object, data);
     } else {
-      var subFormats = object.args && object.args[0] && (', ' + object.args[0]) || '';
+      var subFormats = object.args && object.rawArgs && (', ' + object.rawArgs) || '';
       format = format.replace(/\{1\}/g, '{' + object.name + ', date' + subFormats + '}');
       format = format.replace(/\{0\}/g, '{' + object.name + ', time' + subFormats + '}');
       return messageFormatPreprocess(format, data);

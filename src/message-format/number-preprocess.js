@@ -110,7 +110,7 @@ messageFormatPreprocess.number = function (object, data) {
   // type of number to print
   var type = (object.args && object.args[0]) || 'decimal';
   var formats = cldr.extractNumberFormats(data.locale.toString(), 'latn');
-  var format = formats[type] || object.args.join(','); // FIXME this discards spaces
+  var format = formats[type] || object.rawArgs; // FIXME this discards spaces
   switch (type) {
     // look at node-cldr documentation to get a roough feeling for whats happening
     // https://github.com/papandreou/node-cldr#cldrextractnumberformatslocaleidroot-numbersystemidlatn
