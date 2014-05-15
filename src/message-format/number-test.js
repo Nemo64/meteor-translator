@@ -59,7 +59,7 @@ testAsyncMulti("Translator - message-format - number - force digits after point"
       test.equal(trans.get(key, { num: 1000 }), "1.000,00");
       test.equal(trans.get(key, { num: 0.25 }), "0,25");
       test.equal(trans.get(key, { num: 2000.25 }), "2.000,25");
-      test.equal(trans.get(key, { num: -2000.25 }), "-2.000,25!");
+      test.equal(trans.get(key, { num: -2000.25 }), "-2.000,25");
       test.equal(trans.get(key, { num: Infinity }), "∞");
       test.equal(trans.get(key, { num: -Infinity }), "-∞");
       test.equal(trans.get(key, { num: "hello" }), "NaN");
@@ -77,7 +77,7 @@ testAsyncMulti("Translator - message-format - number - optional 1 digit after po
       test.equal(trans.get(key, { num: 1000 }), "1,000");
       test.equal(trans.get(key, { num: 0.25 }), "0.3");
       test.equal(trans.get(key, { num: 2000.25 }), "2,000.3");
-      test.equal(trans.get(key, { num: -2000.25 }), "-2,000.3!");
+      test.equal(trans.get(key, { num: -2000.25 }), "-2,000.3");
       test.equal(trans.get(key, { num: Infinity }), "∞");
       test.equal(trans.get(key, { num: -Infinity }), "-∞");
       test.equal(trans.get(key, { num: "hello" }), "NaN");
@@ -92,7 +92,7 @@ testAsyncMulti("Translator - message-format - number - optional 1 digit after po
       test.equal(trans.get(key, { num: 1000 }), "1.000");
       test.equal(trans.get(key, { num: 0.25 }), "0,3");
       test.equal(trans.get(key, { num: 2000.25 }), "2.000,3");
-      test.equal(trans.get(key, { num: -2000.25 }), "-2.000,3!");
+      test.equal(trans.get(key, { num: -2000.25 }), "-2.000,3");
       test.equal(trans.get(key, { num: Infinity }), "∞");
       test.equal(trans.get(key, { num: -Infinity }), "-∞");
       test.equal(trans.get(key, { num: "hello" }), "NaN");
@@ -110,7 +110,7 @@ testAsyncMulti("Translator - message-format - number - force min 4 digits prefor
       test.equal(trans.get(key, { num: 1000 }), "1,000");
       test.equal(trans.get(key, { num: 0.25 }), "0,000.25");
       test.equal(trans.get(key, { num: 2000.25 }), "2,000.25");
-      test.equal(trans.get(key, { num: -2000.25 }), "-2,000.25!");
+      test.equal(trans.get(key, { num: -2000.25 }), "-2,000.25");
       test.equal(trans.get(key, { num: Infinity }), "∞");
       test.equal(trans.get(key, { num: -Infinity }), "-∞");
       test.equal(trans.get(key, { num: "hello" }), "NaN");
@@ -125,7 +125,7 @@ testAsyncMulti("Translator - message-format - number - force min 4 digits prefor
       test.equal(trans.get(key, { num: 1000 }), "1.000");
       test.equal(trans.get(key, { num: 0.25 }), "0.000,25");
       test.equal(trans.get(key, { num: 2000.25 }), "2.000,25");
-      test.equal(trans.get(key, { num: -2000.25 }), "-2.000,25!");
+      test.equal(trans.get(key, { num: -2000.25 }), "-2.000,25");
       test.equal(trans.get(key, { num: Infinity }), "∞");
       test.equal(trans.get(key, { num: -Infinity }), "-∞");
       test.equal(trans.get(key, { num: "hello" }), "NaN");
@@ -143,7 +143,7 @@ testAsyncMulti("Translator - message-format - number - positive plus sign", [
       test.equal(trans.get(key, { num: 1000 }), "+1,000");
       test.equal(trans.get(key, { num: 0.25 }), "+0.25");
       test.equal(trans.get(key, { num: 2000.25 }), "+2,000.25");
-      test.equal(trans.get(key, { num: -2000.25 }), "-2,000.25!");
+      test.equal(trans.get(key, { num: -2000.25 }), "-2,000.25");
       test.equal(trans.get(key, { num: Infinity }), "∞");
       test.equal(trans.get(key, { num: -Infinity }), "-∞");
       test.equal(trans.get(key, { num: "hello" }), "NaN");
@@ -158,7 +158,7 @@ testAsyncMulti("Translator - message-format - number - positive plus sign", [
       test.equal(trans.get(key, { num: 1000 }), "+1.000");
       test.equal(trans.get(key, { num: 0.25 }), "+0,25");
       test.equal(trans.get(key, { num: 2000.25 }), "+2.000,25");
-      test.equal(trans.get(key, { num: -2000.25 }), "-2.000,25!");
+      test.equal(trans.get(key, { num: -2000.25 }), "-2.000,25");
       test.equal(trans.get(key, { num: Infinity }), "∞");
       test.equal(trans.get(key, { num: -Infinity }), "-∞");
       test.equal(trans.get(key, { num: "hello" }), "NaN");
@@ -176,7 +176,7 @@ testAsyncMulti("Translator - message-format - number - round to 0.05", [
       test.equal(trans.get(key, { num: 1000 }), "1,000.00");
       test.equal(trans.get(key, { num: 0.23 }), "0.25");
       test.equal(trans.get(key, { num: 2000.23 }), "2,000.25");
-      test.equal(trans.get(key, { num: -2000.23 }), "-2,000.25!");
+      test.equal(trans.get(key, { num: -2000.23 }), "-2,000.25");
       test.equal(trans.get(key, { num: Infinity }), "∞");
       test.equal(trans.get(key, { num: -Infinity }), "-∞");
       test.equal(trans.get(key, { num: "hello" }), "NaN");
@@ -191,7 +191,7 @@ testAsyncMulti("Translator - message-format - number - round to 0.05", [
       test.equal(trans.get(key, { num: 1000 }), "1.000,00");
       test.equal(trans.get(key, { num: 0.23 }), "0,25");
       test.equal(trans.get(key, { num: 2000.23 }), "2.000,25");
-      test.equal(trans.get(key, { num: -2000.23 }), "-2.000,25!");
+      test.equal(trans.get(key, { num: -2000.23 }), "-2.000,25");
       test.equal(trans.get(key, { num: Infinity }), "∞");
       test.equal(trans.get(key, { num: -Infinity }), "-∞");
       test.equal(trans.get(key, { num: "hello" }), "NaN");
