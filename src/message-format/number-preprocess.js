@@ -36,7 +36,10 @@ var parseNumberFormat = function (string) {
       numberFormat[variant] = [hash[0] || '', hash[4] || ''];
       // TODO quotes and escaping not handled
     } else {
-      numberFormat[variant] = [numberFormat['+'][0] + '-', numberFormat['+'][1]];
+      numberFormat[variant] = [
+        numberFormat['+'][0].replace(/\+|$/, '-'),
+        numberFormat['+'][1]
+      ];
     }
   });
   
