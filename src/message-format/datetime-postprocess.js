@@ -11,8 +11,3 @@ messageFormatPostprocess.date = function (object, data) {
   var moment = createMoment(parameter, data);
   return moment.format(object.format);
 };
-messageFormatPostprocess.time = function (object, data) {
-  var parameter = data.parameters[object.name];
-  var moment = createMoment(parameter, data);
-  return moment.format(object.format);
-};

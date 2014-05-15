@@ -26,7 +26,7 @@ ResourceHandler = {
   }
 };
 
-var RX_VALID_KEY = /^\w+$/m; // only 0-9, a-z and _
+var RX_VALID_KEY = /^\w+$/; // only 0-9, a-z and _
 var keyValid = function (key) {
   return RX_VALID_KEY.test(key);
 }

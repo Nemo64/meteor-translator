@@ -1,3 +1,8 @@
+## v0.5.2
+- fixed missuse of multiline expressions
+- modified message-format parser to allow acccess to `rawArgs`
+- date and time formats accept now direct format input
+
 ## v0.5.1
 - size optimisation
 - code cleanup

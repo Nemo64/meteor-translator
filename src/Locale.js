@@ -1,5 +1,5 @@
-var RX_LOCALE = /^([A-Za-z]{2})(?:[_-]([A-Za-z]{2}))$/m;
-var RX_CODE = /^[A-Za-z]{2}$/m;
+var RX_LOCALE = /^([A-Za-z]{2})(?:[_-]([A-Za-z]{2}))$/;
+var RX_CODE = /^[A-Za-z]{2}$/;
 
 Locale = function (locale, territory) {
   var numArgs = arguments.length;

@@ -125,34 +125,38 @@ var momentAddition = function (data) {
   }
 };
 
+var dateAndTime = function (object, data) {
+  momentAddition(data);
+  
+  // either get the date or the time format
+  var formats = object.method == 'date'
+    ? cldr.extractDateFormats(data.locale.toString(), 'gregorian')
+    : cldr.extractTimeFormats(data.locale.toString(), 'gregorian');
+  var format = formats[object.rawArgs] || object.rawArgs || formats.medium;
+  
+  return {
+    name: object.name,
+    method: 'date', // there is just date at the client
+    format: convertCldrToMoment(format)
+  };
+};
+
 _.extend(messageFormatPreprocess, {
-  date: function (object, data) {
-    momentAddition(data);
-    var formats = cldr.extractDateFormats(data.locale.toString(), 'gregorian');
-    var format = (object.args && formats[object.args[0]]) || formats.medium;
-    return {
-      name: object.name,
-      method: object.method,
-      format: convertCldrToMoment(format)
-    };
-  },
-  time: function (object, data) {
-    //momentAddition(data); // not needed for time
-    var formats = cldr.extractTimeFormats(data.locale.toString(), 'gregorian');
-    var format = (object.args && formats[object.args[0]]) || formats.medium;
-    return {
-      name: object.name,
-      method: object.method,
-      format: convertCldrToMoment(format)
-    };
-  },
+  date: dateAndTime,
+  time: dateAndTime,
   // this method only exists on the server and will compile to date and time
   datetime: function (object, data) {
     var formats = cldr.extractDateTimePatterns(data.locale.toString(), 'gregorian');
-    var format = (object.args && formats[object.args[0]]) || formats.medium;
-    var subFormats = object.args && object.args[0] && (', ' + object.args[0]) || '';
-    format = format.replace(/\{1\}/g, '{' + object.name + ', date' + subFormats + '}');
-    format = format.replace(/\{0\}/g, '{' + object.name + ', time' + subFormats + '}');
-    return messageFormatPreprocess(format, data);
+    var format = formats[object.rawArgs] || (!object.rawArgs && formats.medium);
+    
+    // if the format is not found it is user-defined
+    if (! _.isString(format)) {
+      return dateAndTime(object, data);
+    } else {
+      var subFormats = object.args && object.args[0] && (', ' + object.args[0]) || '';
+      format = format.replace(/\{1\}/g, '{' + object.name + ', date' + subFormats + '}');
+      format = format.replace(/\{0\}/g, '{' + object.name + ', time' + subFormats + '}');
+      return messageFormatPreprocess(format, data);
+    }
   }
 });

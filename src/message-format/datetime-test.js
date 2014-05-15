@@ -49,3 +49,13 @@ testAsyncMulti("Translator - message-format - date and time without time object"
     }));
   }
 ]);
+
+testAsyncMulti("Translator - message-format - date with own format", [
+  function (test, expect) {
+    englishTrans.ready(expect(function () {
+      var date = new Date(2014, 5, 2, 18, 13, 54);
+      var result = englishTrans.get('published_on_own', { published_at: date });
+      test.equal(result, "published on 6.2.2014 6:13:54 pm");
+    }));
+  }
+]);
