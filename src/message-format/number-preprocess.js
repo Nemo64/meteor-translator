@@ -9,17 +9,34 @@ var RX_NUMBER = unescapedExpr('([\\d#@,]+)(?:\\.([\\d#]+))?(?:E(\\+?\\d+))?');
 var RX_SPLIT_PATTERNS = unescapedExpr(';');
 var RX_IS_SIGNIFICANT = unescapedExpr('@');
 var RX_IS_SCIENTIFIC  = unescapedExpr('E');
+var RX_PERCENT  = unescapedExpr('%', 'g');
+var RX_PERMILLE = unescapedExpr('‰', 'g');
+var RX_PLUS  = unescapedExpr('\\+', 'g');
+var RX_MINUS = unescapedExpr('\\-', 'g');
 var RX_PADDING = unescapedExpr('\\*(.)');
 
-var parseNumberFormat = function (string) {
+var replaceStaticChars = function (string, locale) {
+  var latnSymbols = cldr.extractNumberSymbols(locale, 'latn');
+  string = string.replace(RX_PERCENT, latnSymbols.percentSign);
+  string = string.replace(RX_PERMILLE, latnSymbols.perMille);
+  string = string.replace(RX_PLUS, latnSymbols.plusSign);
+  string = string.replace(RX_MINUS, latnSymbols.minusSign);
+  return string;
+};
+
+var parseNumberFormat = function (string, locale) {
   var numberFormat = {
     isSignificant: RX_IS_SIGNIFICANT.test(string) || void 0,
     isScientific: RX_IS_SCIENTIFIC.test(string) || void 0,
     
-    seperators: [] // where seperators have to be, eg. [3] = every 3 digits
+    multiplicator: RX_PERCENT.test(string) ? 100
+                 : RX_PERMILLE.test(string) ? 1000
+                 : void 0,
+    
+    groups: [] // where groups have to be, eg. [3] = every 3 digits
     // there are cases eg in Hindi where patterns like #,##,##0 [3,2] are needed
     // the last number will be repeated.
-    // UTS only requires a primary and secondary seperator
+    // UTS only requires a primary and secondary group
     
     //'+': ['', ''] // prefix and suffix for a positive number
     //'-': ['', ''] // prefix and suffix for a negative number 
@@ -30,17 +47,21 @@ var parseNumberFormat = function (string) {
   var patterns = string.replace(RX_PADDING, ''); // for now remove padding
   patterns = patterns.split(RX_SPLIT_PATTERNS, 2); // split both patterns
   _.each(['+', '-'], function (variant, index) {
-    if (index < patterns.length) {
-      var pattern = patterns[index];
-      var hash = pattern.split(RX_NUMBER, 2);
-      numberFormat[variant] = [hash[0] || '', hash[4] || ''];
-      // TODO quotes and escaping not handled
-    } else {
-      numberFormat[variant] = [
-        numberFormat['+'][0].replace(/\+|$/, '-'),
-        numberFormat['+'][1]
-      ];
+    var pattern = patterns[index];
+    // it this is the minus pattern put there is no specific for -
+    if (pattern == null) {
+      pattern = patterns[0];
+      if (RX_PLUS.test(pattern)) {
+        pattern = pattern.replace(RX_PLUS, '-');
+      } else {
+        pattern = pattern.replace(RX_NUMBER, '-$&');
+      }
     }
+    var hash = pattern.split(RX_NUMBER, 2);
+    numberFormat[variant] = [
+      replaceStaticChars(hash[0] || '', locale),
+      replaceStaticChars(hash[4] || '', locale)
+    ];
   });
   
   var pattern = patterns[0].match(RX_NUMBER); // only look at the first
@@ -48,6 +69,7 @@ var parseNumberFormat = function (string) {
   var postPoint = pattern[2] || '';
   var exponent = pattern[3] || '';
   
+  // parse the main part of the number
   if (numberFormat.isSignificant) {
     if (/\d/.test(prePoint) || postPoint != '') {
       throw new Error("significant number patterns may not contain"
@@ -73,14 +95,15 @@ var parseNumberFormat = function (string) {
     });
   }
   
-  // handle seperators
+  // handle groups
   prePoint.replace(/,([\d#]+)/g, function (s, numbers) {
-    numberFormat.seperators.unshift(numbers.length);
+    numberFormat.groups.unshift(numbers.length);
   });
-  numberFormat.seperators = numberFormat.seperators.slice(0, 2); // only 2
+  numberFormat.groups = numberFormat.groups.slice(0, 2); // only 2
   
+  // parse the sientific part of the number
   if (numberFormat.isScientific) {
-    if (numberFormat.seperators.length > 0) {
+    if (numberFormat.groups.length > 0) {
       throw new Error("Exponential patterns may not contain grouping separators.");
     }
     _.extend(numberFormat, { // <=
@@ -107,7 +130,16 @@ messageFormatPreprocess.number = function (object, data) {
   // add cldr information
   var meta = data.meta;
   if (! meta.hasOwnProperty('latnSymbols')) {
-    meta['latnSymbols'] = cldr.extractNumberSymbols(locale, 'latn');
+    var latnSymbols = cldr.extractNumberSymbols(locale, 'latn');
+    meta['latnSymbols'] = _.pick(latnSymbols,
+      'decimal',
+      'group',
+      'plusSign', // only required for exponent
+      'minusSign', // only required for exponent
+      'exponential',
+      'infinity',
+      'nan'
+    );
   }
   
   // type of number to print
