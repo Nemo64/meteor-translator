@@ -91,7 +91,7 @@ var parseNumberFormat = function (string) {
 
 var parseNumberFormatWithPlural = function (formats) {
   console.log(formats);
-  formats = _.pick(formats, 'zero', 'one', 'two', 'few', 'many', 'other');
+  formats = _.pick(formats, 'zero', 'one', 'two', 'few', 'many', 'other'); // XXX there may be =0
   return _.map(formats, parseNumberFormat);
 };
 
