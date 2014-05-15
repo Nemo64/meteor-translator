@@ -18,8 +18,8 @@ messageFormatPostprocess.number = function (object, data) {
   parameter *= object.multiplicator || 1;
   
   if (! object.isScientific) {
-    //var divider = (object.divider || 1) * Math.pow(10, object.maxPost || 0);
-    //parameter = Math.round(parameter / divider) * divider;
+    var divider = object.divider || (1 / Math.pow(10, object.maxPost || 0));
+    parameter = Math.round(parameter / divider) * divider;
     var absString = Math.abs(parameter).toFixed(object.maxPost);
     var prePoint = absString.match(/^[^\.]*/)[0] || '0';
     var postPoint = absString.replace(/^[^\.]*\./, '');
