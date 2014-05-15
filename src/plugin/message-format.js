@@ -109,7 +109,7 @@ var parsePattern = function (string, push, data) {
   var pushObject = function () {
     // rawArgs still needs trimming (can't be done below)
     if (object.rawArgs != null) {
-      object.rawArgs = trim(object.rawArgs);
+      object.rawArgs = trim(object.rawArgs.join(','));
     }
     
     // decide if it is needed to call a preprocess method
@@ -147,10 +147,10 @@ var parsePattern = function (string, push, data) {
         } else { // other arguments get stored in 2 ways:
           if (object.args == null) {
             object.args = []; // as an array for easy access
-            object.rawArgs = ''; // or as string if the , is required
+            object.rawArgs = []; // or as string if the , is required
           }
           object.args.push(trim(before));
-          object.rawArgs += before;
+          object.rawArgs.push(before);
         }
         // if this parser step was initiated as the last argument stop here
         if (char === "}") {
