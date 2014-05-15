@@ -1,3 +1,10 @@
+function pad(str, length, character) {
+    while (str.length < length) {
+        str = character + str;
+    }
+    return str;
+}
+
 messageFormatPostprocess.number = function (object, data) {
   var parameter = data.parameters[object.name];
   var latnSymbols = data.meta.latnSymbols;
@@ -21,7 +28,7 @@ messageFormatPostprocess.number = function (object, data) {
     var divider = object.divider || (1 / Math.pow(10, object.maxPost || 0));
     parameter = Math.round(parameter / divider) * divider;
     var absString = Math.abs(parameter).toFixed(object.maxPost);
-    var prePoint = absString.match(/^[^\.]*/)[0] || '0';
+    var prePoint = pad(absString.match(/^[^\.]*/)[0] || '0', object.digits, '0');
     var postPoint = absString.replace(/^[^\.]*\./, '');
     var postPointZeroless = postPoint.replace(/0+$/, '');
     
