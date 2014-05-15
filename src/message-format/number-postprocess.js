@@ -21,13 +21,13 @@ messageFormatPostprocess.number = function (object, data) {
     //var divider = (object.divider || 1) * Math.pow(10, object.maxPost || 0);
     //parameter = Math.round(parameter / divider) * divider;
     var absString = Math.abs(parameter).toFixed(object.maxPost);
-    var number = absString.match(/^[^\.]*/)[0] || '0';
-    var point = absString.replace(/^[^\.]*\./, '');
-    var pointZeroless = point.replace(/0+$/, '');
+    var prePoint = absString.match(/^[^\.]*/)[0] || '0';
+    var postPoint = absString.replace(/^[^\.]*\./, '');
+    var postPointZeroless = postPoint.replace(/0+$/, '');
     
     var groups = object.groups;
     var groupResult = [];
-    var position = number.length;
+    var position = prePoint.length;
     for (var i = 0; position > 0 ; (i + 1) < groups.length && ++i) {
       var groupLength = groups[i];
       position -= groupLength;
@@ -35,16 +35,16 @@ messageFormatPostprocess.number = function (object, data) {
         groupLength += position;
         position = 0;
       }
-      groupResult.unshift(number.substr(position, groupLength));
+      groupResult.unshift(prePoint.substr(position, groupLength));
     }
-    console.log(parameter, number, point, groupResult);
+    console.log(parameter, prePoint, postPoint, groupResult);
     
     var result = groupResult.join(latnSymbols.group);
-    if (pointZeroless.length > 0 && object.maxPost > 0 || object.minPost) {
-      if (pointZeroless.length < object.minPost) {
-        result += latnSymbols.decimal + point.substr(0, object.minPost);
+    if (postPointZeroless.length > 0 && object.maxPost > 0 || object.minPost) {
+      if (postPointZeroless.length < object.minPost) {
+        result += latnSymbols.decimal + postPoint.substr(0, object.minPost);
       } else {
-        result += latnSymbols.decimal + pointZeroless;
+        result += latnSymbols.decimal + postPointZeroless;
       }
     }
     return wrap(result);
