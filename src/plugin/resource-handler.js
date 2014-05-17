@@ -80,7 +80,8 @@ var compileYaml = function (source, locale) {
 };
 
 // compiler for .lang.yml files
-var RX_FILE_ENDING = /\.([^\.]*)\.lang\.yml$/i;
+var RX_FILE_ENDING = /\.([^\.]*)\.lang\.(?:yml|json)$/i;
+var RX_FILE_FORMAT_ENDING = /\.lang\.(?:yml|json)$/i;
 var handler = function (compileStep, isLiterate) {
   try {
     var basePath = compileStep.inputPath;
@@ -94,7 +95,7 @@ var handler = function (compileStep, isLiterate) {
       case 'browser':
         // save the file asset
         compileStep.addAsset({
-          path: basePath + '.json', // XXX
+          path: basePath.replace(RX_FILE_FORMAT_ENDING, '') + '.json',
           data: new Buffer(jsonString)
         });
         break;
