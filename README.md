@@ -8,7 +8,7 @@ An i18n utility belt specifically designed for meteor to seperate your app from 
 - *namespacing* though multiple files
 - *variables* in the translations `hello {username}`
 - *[icu messageformat](http://userguide.icu-project.org/formatparse/messages)* using [cldr](http://cldr.unicode.org/) `{num, plural, one{You have one friend} other{You have # friends}}`
-- *date formating* using [moment](http://momentjs.com/) and [cldr](http://cldr.unicode.org/) `released on {var, date} at {var, time}` (might be rough, [see below](#date-and-time))
+- *date formating* using [moment](http://momentjs.com/) and [cldr](http://cldr.unicode.org/) `released on {var, date} at {var, time}` (might be rough, [read more](https://github.com/Nemo64/meteor-translator/wiki/Date-and-Time-patterns#implementation))
 - language *fallbacks* `["en_GB","en_US"]`
 - *lazy loading* of languages as soon as they are needed
 - *automatic language detection* using the `accept-language` header (experimental)
