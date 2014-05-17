@@ -1,5 +1,6 @@
 ## v0.5.3
 - locale type now accepts all cldr locales
+- the parser now is capable of `lang.json`
 
 ## v0.5.2
 - fixed missuse of multiline expressions
