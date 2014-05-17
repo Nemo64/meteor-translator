@@ -2,18 +2,18 @@
 A general i18n utility belt to seperate your app from the language.
 
 It's features are:
-- readable **[yaml files](http://www.yaml.org/)** or normal json files to store the language
-- **namespacing** though multiple files
-- **variables** in the translations `hello {username}`
-- **[icu messageformat](http://userguide.icu-project.org/formatparse/messages)** using [cldr](http://cldr.unicode.org/) `{num, plural, one{You have one friend} other{You have # friends}}`
-- **date formating** using [moment](http://momentjs.com/) and [cldr](http://cldr.unicode.org/) `released on {var, date} at {var, time}` (might be rough, [see below](#date-and-time))
-- language **fallbacks** `["en_GB","en_US"]`
-- **lazy loading** of languages as soon as they are needed
-- **automatic language detection** using the `accept-language` header (experimental)
-- **reactive changing** of the translations
-- a **small footprint** of 10 kb uglified and even less with gzip
+- readable *[yaml files](http://www.yaml.org/)* or normal json files to store the language
+- *namespacing* though multiple files
+- *variables* in the translations `hello {username}`
+- *[icu messageformat](http://userguide.icu-project.org/formatparse/messages)* using [cldr](http://cldr.unicode.org/) `{num, plural, one{You have one friend} other{You have # friends}}`
+- *date formating* using [moment](http://momentjs.com/) and [cldr](http://cldr.unicode.org/) `released on {var, date} at {var, time}` (might be rough, [see below](#date-and-time))
+- language *fallbacks* `["en_GB","en_US"]`
+- *lazy loading* of languages as soon as they are needed
+- *automatic language detection* using the `accept-language` header (experimental)
+- *reactive changing* of the translations
+- a *small footprint* of 10 kb uglified and even less with gzip
 
-You can [read the full documentation in the wiki](https://github.com/Nemo64/meteor-translator/wiki)!
+You can **[read the full documentation in the wiki](https://github.com/Nemo64/meteor-translator/wiki)!**
 
 ## Quickstart (should be intuitive)
 
