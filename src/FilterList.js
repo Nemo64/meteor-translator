@@ -1,7 +1,6 @@
 
 /**
- * Filter a little callbacks executed before a language string is final.
- * Filters include: parameter, pluralisation, i18n
+ * Filters are little callbacks executed before a language string is final.
  *
  * @constructor
  * @param {string} name
