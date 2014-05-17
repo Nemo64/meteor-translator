@@ -1,3 +1,6 @@
+## v0.5.3
+- locale type now accepts all cldr locales
+
 ## v0.5.2
 - fixed missuse of multiline expressions
 - modified message-format parser to allow acccess to `rawArgs`
