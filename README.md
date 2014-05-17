@@ -1,7 +1,9 @@
 # translator - powerful internationalization
-A general i18n utility belt to seperate your app from the language.
+An i18n utility belt specifically designed for meteor to seperate your app from the language.
 
-It's features are:
+**[read the full documentation in the wiki](https://github.com/Nemo64/meteor-translator/wiki)** or [see the quickstart!](#quickstart)
+
+## Features
 - readable *[yaml files](http://www.yaml.org/)* or normal json files to store the language
 - *namespacing* though multiple files
 - *variables* in the translations `hello {username}`
@@ -13,9 +15,7 @@ It's features are:
 - *reactive changing* of the translations
 - a *small footprint* of 10 kb uglified and even less with gzip
 
-You can **[read the full documentation in the wiki](https://github.com/Nemo64/meteor-translator/wiki)!**
-
-## Quickstart (should be intuitive)
+## Quickstart
 
 ### Translation file
 ```YAML
@@ -50,4 +50,4 @@ Template.template_name.trans = FrontLang.createHelper();
 
 ## TODO
 - Territory fallback like "i want British English but there is only American English"! This is useful for the auto detection of languages! I need help with this because I don't know if that'll work with most languages!
-- Providing more features from [CLDR](http://cldr.unicode.org/). The plan is to automatically format numbers with the correct punctuation.
+- Providing more features from [CLDR](http://cldr.unicode.org/). eg format numbers with the correct punctuation.
