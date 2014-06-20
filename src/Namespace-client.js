@@ -75,7 +75,7 @@ _.extend(Namespace.prototype, {
    * @return {string}
    */
   _filenameForLocale: function (locale) {
-    return this._name + '.' + locale.toString() + '.lang.yml.json';
+    return this._name + '.' + locale.toString() + '.json';
   },
 
   /**
