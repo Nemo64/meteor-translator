@@ -1,5 +1,8 @@
 var cldr = Npm.require('cldr');
 
+/**
+ * The resulting expression will only match if the content is not inside quotes
+ */
 var unescapedExpr = function (s, m) {
   return new RegExp(s + '(?=(?:[^\']|\'[^\']*\')*$)', m);
 };
@@ -83,7 +86,7 @@ var parseNumberFormat = function (string, locale) {
   } else {
     var padding = string.match(RX_PADDING);
     _.extend(numberFormat, { // <=
-      digits: prePoint.match(/\d*$/)[0].length,
+      digits: prePoint.replace(/\D/g, '').length,
       minPost: postPoint.match(/^\d*/)[0].length,
       maxPost: postPoint.match(/^[\d#]*/)[0].length,
       divider: parseFloat(pattern[0].replace(/[#@]/g, '0').replace(/,/g, '')) || void 0,

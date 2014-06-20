@@ -100,7 +100,7 @@ testAsyncMulti("Translator - message-format - number - optional 1 digit after po
   }
 ]);
 
-testAsyncMulti("Translator - message-format - number - force min 4 digits prefore point", [
+testAsyncMulti("Translator - message-format - number - force min 4 digits before point", [
   function (test, expect) {
     var key = 'more_digit_number';
     var trans = englishTrans;
