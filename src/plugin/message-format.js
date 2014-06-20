@@ -37,7 +37,7 @@ var createPush = function (array) {
  * A simple trim function
  */
 var trim = function (string) {
-  return string.replace(/^\s+|\s+$/, '');
+  return string.replace(/^\s+/, '').replace(/\s+$/, '');
 };
 
 /**
