@@ -293,7 +293,7 @@ testAsyncMulti("Translator - message-format - number - exponent with 2 digits", 
       test.equal(trans.get(key, { num: "hello" }), "NaN");
       
       test.equal(trans.get(key, { num: 1234 }), "12.34E2");
-      test.equal(trans.get(key, { num: 0.00123 }), "12.3E-2");
+      test.equal(trans.get(key, { num: 0.00123 }), "12.3E-4");
     }));
   },
   function (test, expect) {
@@ -304,14 +304,14 @@ testAsyncMulti("Translator - message-format - number - exponent with 2 digits", 
       test.equal(trans.get(key, { num: 10 }), "10E0");
       test.equal(trans.get(key, { num: 1000 }), "10E2");
       test.equal(trans.get(key, { num: 0.23 }), "23E-2");
-      test.equal(trans.get(key, { num: 2000.23 }), "2E3");
-      test.equal(trans.get(key, { num: -2000.23 }), "-2E3");
+      test.equal(trans.get(key, { num: 2000.23 }), "20E2");
+      test.equal(trans.get(key, { num: -2000.23 }), "-20E2");
       test.equal(trans.get(key, { num: Infinity }), "∞");
       test.equal(trans.get(key, { num: -Infinity }), "-∞");
       test.equal(trans.get(key, { num: "hello" }), "NaN");
       
       test.equal(trans.get(key, { num: 1234 }), "12,34E2");
-      test.equal(trans.get(key, { num: 0.00123 }), "12,3E-2");
+      test.equal(trans.get(key, { num: 0.00123 }), "12,3E-4");
     }));
   }
 ]);

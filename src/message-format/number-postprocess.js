@@ -27,13 +27,30 @@ messageFormatPostprocess.number = function (object, data) {
   
   parameter *= object.multiplicator || 1;
   
+  //////////////
+  // EXPONENT //
+  //////////////
+  
   if (object.isScientific) {
-    var minDigits = object.exponentMultiple + object.maxPost;
-    console.log(parameter, minDigits);
-    var string = parameter.toExponential(minDigits - 1);
-    var parts = string.split(/e/i);
+    var parts = parameter.toExponential().split(/e/i);
     var exponent = parseInt(parts[1], 10);
     parameter = parseFloat(parts[0]);
+    var moveDigits = object.digits - 1;
+    
+    // engineering notation
+    if (object.exponentMultiple !== object.digits) {
+      var round = exponent % object.exponentMultiple;
+      moveDigits += round;
+      if (round < 0) {
+        moveDigits += object.exponentMultiple;
+      }
+    }
+    
+    // if an amount of digits is required move numbers over
+    if (parameter !== 0.0 && moveDigits !== 0) {
+      parameter *= Math.pow(10, moveDigits);
+      exponent -= moveDigits;
+    }
     
     // add the exponent to the padding
     addition += latnSymbols.exponential;
@@ -42,17 +59,25 @@ messageFormatPostprocess.number = function (object, data) {
     } else if (object.exponentPlus) {
       addition += latnSymbols.plusSign;
     }
-    addition += Math.abs(exponent);
+    var absString = Math.abs(exponent).toString();
+    addition += pad(absString, object.exponent, '0');
   }
   
+  /////////////
+  // DECIMAL //
+  /////////////
+  
+  // round the number
   var divider = object.divider || (1 / Math.pow(10, object.maxPost || 0));
   parameter = Math.round(parameter / divider) * divider;
+  
+  // split the number into pre and post point parts
   var absString = Math.abs(parameter).toFixed(object.maxPost);
   var prePoint = pad(absString.match(/^[^\.]*/)[0] || '0', object.digits, '0');
   var postPoint = absString.replace(/^[^\.]*\./, '');
   var postPointZeroless = postPoint.replace(/0+$/, '');
   
-  var groups = object.groups;
+  var groups = object.groups || [];
   var groupResult = [];
   var position = prePoint.length;
   for (var i = 0; position > 0 ; (i + 1) < groups.length && ++i) {

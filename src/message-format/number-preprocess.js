@@ -56,7 +56,6 @@ var parseNumberFormat = function (string, locale) {
     if (pattern == null/* the plus pattern is always defined */) {
       pattern = patterns[0];
       hash = pattern.split(RX_NUMBER, 5);
-      console.log(hash, pattern);
       
       // the minus needs to be inserted into the generated pattern
       // if the plus pattern did contain a + it needs to be replaced
@@ -124,7 +123,8 @@ var parseNumberFormat = function (string, locale) {
     _.extend(numberFormat, { // <=
       exponentPlus: exponent.charAt(0) === '+' || void 0,
       exponent: exponent.replace(/\D/g, '').length,
-      exponentMultiple: prePoint.length || 1
+      exponentMultiple: prePoint.length || 1,
+      groups: void 0 // exponential numbers never have groups
     });
   }
   
