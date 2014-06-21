@@ -198,3 +198,159 @@ testAsyncMulti("Translator - message-format - number - round to 0.05", [
     }));
   }
 ]);
+
+testAsyncMulti("Translator - message-format - number - exponent", [
+  function (test, expect) {
+    var key = 'exponential_number';
+    var trans = englishTrans;
+    trans.ready(expect(function () {
+      test.equal(trans.get(key, { num: 0 }), "0E0");
+      test.equal(trans.get(key, { num: 10 }), "1E1");
+      test.equal(trans.get(key, { num: 1000 }), "1E3");
+      test.equal(trans.get(key, { num: 0.23 }), "2.3E-1");
+      test.equal(trans.get(key, { num: 2000.23 }), "2E3");
+      test.equal(trans.get(key, { num: -2000.23 }), "-2E3");
+      test.equal(trans.get(key, { num: Infinity }), "∞");
+      test.equal(trans.get(key, { num: -Infinity }), "-∞");
+      test.equal(trans.get(key, { num: "hello" }), "NaN");
+      
+      test.equal(trans.get(key, { num: 1234 }), "1.23E3");
+      test.equal(trans.get(key, { num: 0.00123 }), "1.23E-3");
+    }));
+  },
+  function (test, expect) {
+    var key = 'exponential_number';
+    var trans = germanTrans;
+    trans.ready(expect(function () {
+      test.equal(trans.get(key, { num: 0 }), "0E0");
+      test.equal(trans.get(key, { num: 10 }), "1E1");
+      test.equal(trans.get(key, { num: 1000 }), "1E3");
+      test.equal(trans.get(key, { num: 0.23 }), "2,3E-1");
+      test.equal(trans.get(key, { num: 2000.23 }), "2E3");
+      test.equal(trans.get(key, { num: -2000.23 }), "-2E3");
+      test.equal(trans.get(key, { num: Infinity }), "∞");
+      test.equal(trans.get(key, { num: -Infinity }), "-∞");
+      test.equal(trans.get(key, { num: "hello" }), "NaN");
+      
+      test.equal(trans.get(key, { num: 1234 }), "1,23E3");
+      test.equal(trans.get(key, { num: 0.00123 }), "1,23E-3");
+    }));
+  }
+]);
+
+testAsyncMulti("Translator - message-format - number - exponent plus", [
+  function (test, expect) {
+    var key = 'exponential_number_plus';
+    var trans = englishTrans;
+    trans.ready(expect(function () {
+      test.equal(trans.get(key, { num: 0 }), "0E+0");
+      test.equal(trans.get(key, { num: 10 }), "1E+1");
+      test.equal(trans.get(key, { num: 1000 }), "1E+3");
+      test.equal(trans.get(key, { num: 0.23 }), "2.3E-1");
+      test.equal(trans.get(key, { num: 2000.23 }), "2E+3");
+      test.equal(trans.get(key, { num: -2000.23 }), "-2E+3");
+      test.equal(trans.get(key, { num: Infinity }), "∞");
+      test.equal(trans.get(key, { num: -Infinity }), "-∞");
+      test.equal(trans.get(key, { num: "hello" }), "NaN");
+      
+      test.equal(trans.get(key, { num: 1234 }), "1.23E+3");
+      test.equal(trans.get(key, { num: 0.00123 }), "1.23E-3");
+    }));
+  },
+  function (test, expect) {
+    var key = 'exponential_number_plus';
+    var trans = germanTrans;
+    trans.ready(expect(function () {
+      test.equal(trans.get(key, { num: 0 }), "0E+0");
+      test.equal(trans.get(key, { num: 10 }), "1E+1");
+      test.equal(trans.get(key, { num: 1000 }), "1E+3");
+      test.equal(trans.get(key, { num: 0.23 }), "2,3E-1");
+      test.equal(trans.get(key, { num: 2000.23 }), "2E+3");
+      test.equal(trans.get(key, { num: -2000.23 }), "-2E+3");
+      test.equal(trans.get(key, { num: Infinity }), "∞");
+      test.equal(trans.get(key, { num: -Infinity }), "-∞");
+      test.equal(trans.get(key, { num: "hello" }), "NaN");
+      
+      test.equal(trans.get(key, { num: 1234 }), "1,23E+3");
+      test.equal(trans.get(key, { num: 0.00123 }), "1,23E-3");
+    }));
+  }
+]);
+
+testAsyncMulti("Translator - message-format - number - exponent with 2 digits", [
+  function (test, expect) {
+    var key = 'exponential_number_minimum';
+    var trans = englishTrans;
+    trans.ready(expect(function () {
+      test.equal(trans.get(key, { num: 0 }), "00E0");
+      test.equal(trans.get(key, { num: 10 }), "10E0");
+      test.equal(trans.get(key, { num: 1000 }), "10E2");
+      test.equal(trans.get(key, { num: 0.23 }), "23E-2");
+      test.equal(trans.get(key, { num: 2000.23 }), "20E2");
+      test.equal(trans.get(key, { num: -2000.23 }), "-20E2");
+      test.equal(trans.get(key, { num: Infinity }), "∞");
+      test.equal(trans.get(key, { num: -Infinity }), "-∞");
+      test.equal(trans.get(key, { num: "hello" }), "NaN");
+      
+      test.equal(trans.get(key, { num: 1234 }), "12.34E2");
+      test.equal(trans.get(key, { num: 0.00123 }), "12.3E-2");
+    }));
+  },
+  function (test, expect) {
+    var key = 'exponential_number_minimum';
+    var trans = germanTrans;
+    trans.ready(expect(function () {
+      test.equal(trans.get(key, { num: 0 }), "00E0");
+      test.equal(trans.get(key, { num: 10 }), "10E0");
+      test.equal(trans.get(key, { num: 1000 }), "10E2");
+      test.equal(trans.get(key, { num: 0.23 }), "23E-2");
+      test.equal(trans.get(key, { num: 2000.23 }), "2E3");
+      test.equal(trans.get(key, { num: -2000.23 }), "-2E3");
+      test.equal(trans.get(key, { num: Infinity }), "∞");
+      test.equal(trans.get(key, { num: -Infinity }), "-∞");
+      test.equal(trans.get(key, { num: "hello" }), "NaN");
+      
+      test.equal(trans.get(key, { num: 1234 }), "12,34E2");
+      test.equal(trans.get(key, { num: 0.00123 }), "12,3E-2");
+    }));
+  }
+]);
+
+testAsyncMulti("Translator - message-format - number - exponent exponent 3", [
+  function (test, expect) {
+    var key = 'exponential_number_multiple';
+    var trans = englishTrans;
+    trans.ready(expect(function () {
+      test.equal(trans.get(key, { num: 0 }), "0E0");
+      test.equal(trans.get(key, { num: 10 }), "10E0");
+      test.equal(trans.get(key, { num: 1000 }), "1E3");
+      test.equal(trans.get(key, { num: 0.23 }), "230E-3");
+      test.equal(trans.get(key, { num: 2000.23 }), "2E3");
+      test.equal(trans.get(key, { num: -2000.23 }), "-2E3");
+      test.equal(trans.get(key, { num: Infinity }), "∞");
+      test.equal(trans.get(key, { num: -Infinity }), "-∞");
+      test.equal(trans.get(key, { num: "hello" }), "NaN");
+      
+      test.equal(trans.get(key, { num: 1234 }), "1.23E3");
+      test.equal(trans.get(key, { num: 0.00123 }), "1.23E-3");
+    }));
+  },
+  function (test, expect) {
+    var key = 'exponential_number_multiple';
+    var trans = germanTrans;
+    trans.ready(expect(function () {
+      test.equal(trans.get(key, { num: 0 }), "0E0");
+      test.equal(trans.get(key, { num: 10 }), "10E0");
+      test.equal(trans.get(key, { num: 1000 }), "1E3");
+      test.equal(trans.get(key, { num: 0.23 }), "230E-3");
+      test.equal(trans.get(key, { num: 2000.23 }), "2E3");
+      test.equal(trans.get(key, { num: -2000.23 }), "-2E3");
+      test.equal(trans.get(key, { num: Infinity }), "∞");
+      test.equal(trans.get(key, { num: -Infinity }), "-∞");
+      test.equal(trans.get(key, { num: "hello" }), "NaN");
+      
+      test.equal(trans.get(key, { num: 1234 }), "1,23E3");
+      test.equal(trans.get(key, { num: 0.00123 }), "1,23E-3");
+    }));
+  }
+]);

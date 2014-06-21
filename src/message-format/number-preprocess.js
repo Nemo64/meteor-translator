@@ -51,16 +51,28 @@ var parseNumberFormat = function (string, locale) {
   patterns = patterns.split(RX_SPLIT_PATTERNS, 2); // split both patterns
   _.each(['+', '-'], function (variant, index) {
     var pattern = patterns[index];
-    // it this is the minus pattern put there is no specific for -
-    if (pattern == null) {
+    var hash;
+    // it this is the minus pattern and there is no specific for -
+    if (pattern == null/* the plus pattern is always defined */) {
       pattern = patterns[0];
-      if (RX_PLUS.test(pattern)) {
-        pattern = pattern.replace(RX_PLUS, '-');
+      hash = pattern.split(RX_NUMBER, 5);
+      console.log(hash, pattern);
+      
+      // the minus needs to be inserted into the generated pattern
+      // if the plus pattern did contain a + it needs to be replaced
+      // otherwise we place a minus before the number
+      var hasPlus = RX_PLUS.test(hash[0] + hash[4]);
+      if (hasPlus) {
+        // plus can be before and after the actual number
+        _.each([0, 4], function (index) {
+          hash[index] = hash[index].replace(RX_PLUS, '-');
+        });
       } else {
-        pattern = pattern.replace(RX_NUMBER, '-$&');
+          hash[0] = hash[0] + '-';
       }
+    } else {
+      hash = pattern.split(RX_NUMBER, 5);
     }
-    var hash = pattern.split(RX_NUMBER, 2);
     numberFormat[variant] = [
       replaceStaticChars(hash[0] || '', locale),
       replaceStaticChars(hash[4] || '', locale)
@@ -111,7 +123,8 @@ var parseNumberFormat = function (string, locale) {
     }
     _.extend(numberFormat, { // <=
       exponentPlus: exponent.charAt(0) === '+' || void 0,
-      exponent: exponent.replace(/\D/g, '').length
+      exponent: exponent.replace(/\D/g, '').length,
+      exponentMultiple: prePoint.length || 1
     });
   }
   
