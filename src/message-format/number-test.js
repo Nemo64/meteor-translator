@@ -354,3 +354,69 @@ testAsyncMulti("Translator - message-format - number - exponent exponent 3", [
     }));
   }
 ]);
+
+testAsyncMulti("Translator - message-format - number - percent", [
+  function (test, expect) {
+    var key = 'percent';
+    var trans = englishTrans;
+    trans.ready(expect(function () {
+      test.equal(trans.get(key, { num: 0 }), "00%");
+      test.equal(trans.get(key, { num: 10 }), "1,000%");
+      test.equal(trans.get(key, { num: 1000 }), "100,000%");
+      test.equal(trans.get(key, { num: 0.25 }), "25%");
+      test.equal(trans.get(key, { num: 2000.25 }), "200,025%");
+      test.equal(trans.get(key, { num: -2000.25 }), "-200,025%");
+      test.equal(trans.get(key, { num: Infinity }), "∞%");
+      test.equal(trans.get(key, { num: -Infinity }), "-∞%");
+      test.equal(trans.get(key, { num: "hello" }), "NaN");
+    }));
+  },
+  function (test, expect) {
+    var key = 'percent';
+    var trans = germanTrans;
+    trans.ready(expect(function () {
+      test.equal(trans.get(key, { num: 0 }), "00%");
+      test.equal(trans.get(key, { num: 10 }), "1.000%");
+      test.equal(trans.get(key, { num: 1000 }), "100.000%");
+      test.equal(trans.get(key, { num: 0.25 }), "25%");
+      test.equal(trans.get(key, { num: 2000.25 }), "200.025%");
+      test.equal(trans.get(key, { num: -2000.25 }), "-200.025%");
+      test.equal(trans.get(key, { num: Infinity }), "∞%");
+      test.equal(trans.get(key, { num: -Infinity }), "-∞%");
+      test.equal(trans.get(key, { num: "hello" }), "NaN");
+    }));
+  }
+]);
+
+testAsyncMulti("Translator - message-format - number - permille", [
+  function (test, expect) {
+    var key = 'permille';
+    var trans = englishTrans;
+    trans.ready(expect(function () {
+      test.equal(trans.get(key, { num: 0 }), "000‰");
+      test.equal(trans.get(key, { num: 10 }), "10,000‰");
+      test.equal(trans.get(key, { num: 1000 }), "1,000,000‰");
+      test.equal(trans.get(key, { num: 0.25 }), "250‰");
+      test.equal(trans.get(key, { num: 2000.25 }), "2,000,250‰");
+      test.equal(trans.get(key, { num: -2000.25 }), "-2,000,250‰");
+      test.equal(trans.get(key, { num: Infinity }), "∞‰");
+      test.equal(trans.get(key, { num: -Infinity }), "-∞‰");
+      test.equal(trans.get(key, { num: "hello" }), "NaN");
+    }));
+  },
+  function (test, expect) {
+    var key = 'permille';
+    var trans = germanTrans;
+    trans.ready(expect(function () {
+      test.equal(trans.get(key, { num: 0 }), "000‰");
+      test.equal(trans.get(key, { num: 10 }), "10.000‰");
+      test.equal(trans.get(key, { num: 1000 }), "1.000.000‰");
+      test.equal(trans.get(key, { num: 0.25 }), "250‰");
+      test.equal(trans.get(key, { num: 2000.25 }), "2.000.250‰");
+      test.equal(trans.get(key, { num: -2000.25 }), "-2.000.250‰");
+      test.equal(trans.get(key, { num: Infinity }), "∞‰");
+      test.equal(trans.get(key, { num: -Infinity }), "-∞‰");
+      test.equal(trans.get(key, { num: "hello" }), "NaN");
+    }));
+  }
+]);
