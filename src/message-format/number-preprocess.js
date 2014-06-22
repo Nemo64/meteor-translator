@@ -83,6 +83,13 @@ var parseNumberFormat = function (string, locale) {
   var postPoint = pattern[2] || '';
   var exponent = pattern[3] || '';
   
+  // handle groups (and remove "," from the prePoint variable
+  prePoint = prePoint.replace(/,([\d#@]+)/g, function (s, numbers) {
+    numberFormat.groups.unshift(numbers.length);
+    return numbers;
+  });
+  numberFormat.groups = numberFormat.groups.slice(0, 2); // only 2
+  
   // parse the main part of the number
   if (numberFormat.isSignificant) {
     if (/\d/.test(prePoint) || postPoint != '') {
@@ -91,7 +98,7 @@ var parseNumberFormat = function (string, locale) {
         + " Patterns such as \"@00\" or \"@.###\" are disallowed.");
     }
     _.extend(numberFormat, { // <=
-      min: prePoint.replace(/[^@]/g, '').length,
+      min: prePoint.match(/@+/)[0].length,
       max: prePoint.match(/@[@#]*/)[0].length
     })
   } else {
@@ -108,12 +115,6 @@ var parseNumberFormat = function (string, locale) {
       // XXX the scientific case is not well displayed here
     });
   }
-  
-  // handle groups
-  prePoint.replace(/,([\d#]+)/g, function (s, numbers) {
-    numberFormat.groups.unshift(numbers.length);
-  });
-  numberFormat.groups = numberFormat.groups.slice(0, 2); // only 2
   
   // parse the sientific part of the number
   if (numberFormat.isScientific) {

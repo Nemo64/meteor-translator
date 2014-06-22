@@ -63,16 +63,26 @@ messageFormatPostprocess.number = function (object, data) {
     addition += pad(absString, object.exponent, '0');
   }
   
+  ////////////////////////
+  // SIGNIFICANT NUMBER //
+  ////////////////////////
+  
+  if (object.isSignificant) {
+    parameter = parseFloat(parameter.toPrecision(object.max));
+    // FIXME implementation of minimum significant numbers required
+  }
+  
   /////////////
   // DECIMAL //
   /////////////
   
   // round the number
-  var divider = object.divider || (1 / Math.pow(10, object.maxPost || 0));
+  var maxPost = object.maxPost != null ? object.maxPost : 8;
+  var divider = object.divider || (1 / Math.pow(10, maxPost || 0));
   parameter = Math.round(parameter / divider) * divider;
   
   // split the number into pre and post point parts
-  var absString = Math.abs(parameter).toFixed(object.maxPost);
+  var absString = Math.abs(parameter).toFixed(maxPost);
   var prePoint = pad(absString.match(/^[^\.]*/)[0] || '0', object.digits, '0');
   var postPoint = absString.replace(/^[^\.]*\./, '');
   var postPointZeroless = postPoint.replace(/0+$/, '');
@@ -92,7 +102,7 @@ messageFormatPostprocess.number = function (object, data) {
   //console.log(parameter, prePoint, postPoint, groupResult);
   
   var result = groupResult.join(latnSymbols.group);
-  if (postPointZeroless.length > 0 && object.maxPost > 0 || object.minPost) {
+  if (postPointZeroless.length > 0 && maxPost > 0 || object.minPost) {
     if (postPointZeroless.length < object.minPost) {
       result += latnSymbols.decimal + postPoint.substr(0, object.minPost);
     } else {

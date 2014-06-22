@@ -355,6 +355,47 @@ testAsyncMulti("Translator - message-format - number - exponent exponent 3", [
   }
 ]);
 
+testAsyncMulti("Translator - message-format - number - significant 1-3", [
+  function (test, expect) {
+    var key = 'significant_number_one';
+    var trans = englishTrans;
+    trans.ready(expect(function () {
+      test.equal(trans.get(key, { num: 0 }), "0");
+      test.equal(trans.get(key, { num: 10 }), "10");
+      test.equal(trans.get(key, { num: 1000 }), "1,000");
+      test.equal(trans.get(key, { num: 0.25 }), "0.25");
+      test.equal(trans.get(key, { num: 2000.25 }), "2,000");
+      test.equal(trans.get(key, { num: -2000.25 }), "-2,000");
+      test.equal(trans.get(key, { num: Infinity }), "∞");
+      test.equal(trans.get(key, { num: -Infinity }), "-∞");
+      test.equal(trans.get(key, { num: "hello" }), "NaN");
+      
+      test.equal(trans.get(key, { num: 2.25 }), "2.25");
+      test.equal(trans.get(key, { num: 0.001234 }), "0.00123");
+      test.equal(trans.get(key, { num: 12345 }), "12,300");
+    }));
+  },
+  function (test, expect) {
+    var key = 'significant_number_one';
+    var trans = germanTrans;
+    trans.ready(expect(function () {
+      test.equal(trans.get(key, { num: 0 }), "0");
+      test.equal(trans.get(key, { num: 10 }), "10");
+      test.equal(trans.get(key, { num: 1000 }), "1.000");
+      test.equal(trans.get(key, { num: 0.25 }), "0,25");
+      test.equal(trans.get(key, { num: 2000.25 }), "2.000");
+      test.equal(trans.get(key, { num: -2000.25 }), "-2.000");
+      test.equal(trans.get(key, { num: Infinity }), "∞");
+      test.equal(trans.get(key, { num: -Infinity }), "-∞");
+      test.equal(trans.get(key, { num: "hello" }), "NaN");
+      
+      test.equal(trans.get(key, { num: 2.25 }), "2,25");
+      test.equal(trans.get(key, { num: 0.001234 }), "0,00123");
+      test.equal(trans.get(key, { num: 12345 }), "12.300");
+    }));
+  }
+]);
+
 testAsyncMulti("Translator - message-format - number - percent", [
   function (test, expect) {
     var key = 'percent';
