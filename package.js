@@ -16,7 +16,8 @@ Package._transitional_registerBuildPlugin({
     'src/plugin/message-format.js',
     'src/message-format/select-preprocess.js',
     'src/message-format/plural-preprocess.js',
-    'src/message-format/datetime-preprocess.js'
+    'src/message-format/datetime-preprocess.js',
+    'src/message-format/number-preprocess.js'
   ],
   npmDependencies: {
     'js-yaml': '3.0.2',
@@ -47,11 +48,12 @@ Package.on_use(function(api) {
     'src/message-format/select-postprocess.js',
     'src/message-format/plural-postprocess.js',
     'src/message-format/datetime-postprocess.js',
+    'src/message-format/number-postprocess.js',
     'src/Translator/globalLang.js',
     'src/Translator/defaultLanguage.js'
   ]);
   api.add_files([
-    'src/Namespace-client.js',
+    'src/Namespace-client.js'
   ], 'client');
   api.add_files([
     'src/Namespace-server.js',
@@ -77,6 +79,7 @@ Package.on_test(function (api) {
     'src/message-format/select-test.js',
     'src/message-format/plural-test.js',
     'src/message-format/datetime-test.js',
+    'src/message-format/number-test.js',
     'src/Translator-test.js'
   ]);
   api.add_files([

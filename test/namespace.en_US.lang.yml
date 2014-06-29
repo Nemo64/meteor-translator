@@ -21,3 +21,19 @@ gender: "{gender, select, female{female} male{male}}"
 published_on: published on {published_at, date} at {published_at, time}
 published_on_short: published on {published_at, datetime, long}
 published_on_own: published on {published_at, datetime, M.d.y h:mm:ss a}
+
+subscribers: "{num, plural, one{You have 1 subscriber!} other{You have {num, number} subscribers!}}"
+normal_number: "{num, number, #,##0.00}"
+more_point_number: "{num, number, #,##0.#}"
+more_digit_number: "{num, number, 0,000.##}"
+plus_number: "{num, number, +#,##0.##}"
+rounded_number: "{num, number, #,##0.05}"
+exponential_number: "{num, number, 0.##E0}"
+exponential_number_plus: "{num, number, 0.##E+0}"
+exponential_number_minimum: "{num, number, 00.##E0}"
+exponential_number_multiple: "{num, number, ##0.##E0}"
+significant_number_one: "{num, number, #,@##}"
+significant_number_two: "{num, number, #,@@#}"
+exponential_significant_number: "{num, number, @##E0}"
+percent: "{num, number, #,#00%}"
+permille: "{num, number, #,000‰}"
