@@ -90,6 +90,10 @@ var parseNumberFormat = function (string, locale) {
   });
   numberFormat.groups = numberFormat.groups.slice(0, 2); // only 2
   
+  /////////////////////////////////////
+  // SIGNIFICANT VS NORMAL FORMATING //
+  /////////////////////////////////////
+  
   // parse the main part of the number
   if (numberFormat.isSignificant) {
     if (/\d/.test(prePoint) || postPoint != '') {
@@ -98,8 +102,8 @@ var parseNumberFormat = function (string, locale) {
         + " Patterns such as \"@00\" or \"@.###\" are disallowed.");
     }
     _.extend(numberFormat, { // <=
-      min: prePoint.match(/@+/)[0].length,
-      max: prePoint.match(/@[@#]*/)[0].length
+      minSignificant: prePoint.match(/@+/)[0].length,
+      maxSignificant: prePoint.match(/@[@#]*/)[0].length
     })
   } else {
     var padding = string.match(RX_PADDING);
@@ -116,6 +120,10 @@ var parseNumberFormat = function (string, locale) {
     });
   }
   
+  /////////////////////////
+  // SCIENTIFIC NOTATION //
+  /////////////////////////
+  
   // parse the sientific part of the number
   if (numberFormat.isScientific) {
     if (numberFormat.groups.length > 0) {
@@ -124,7 +132,7 @@ var parseNumberFormat = function (string, locale) {
     _.extend(numberFormat, { // <=
       exponentPlus: exponent.charAt(0) === '+' || void 0,
       exponent: exponent.replace(/\D/g, '').length,
-      exponentMultiple: prePoint.length || 1,
+      exponentMultiple: prePoint.length > Math.max(numberFormat.digits, 1) ? prePoint.length : void 0,
       groups: void 0 // exponential numbers never have groups
     });
   }

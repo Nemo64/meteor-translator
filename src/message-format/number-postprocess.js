@@ -35,10 +35,10 @@ messageFormatPostprocess.number = function (object, data) {
     var parts = parameter.toExponential().split(/e/i);
     var exponent = parseInt(parts[1], 10);
     parameter = parseFloat(parts[0]);
-    var moveDigits = object.digits - 1;
+    var moveDigits = object.digits - 1 || 0;
     
     // engineering notation
-    if (object.exponentMultiple !== object.digits) {
+    if (object.exponentMultiple != null) {
       var round = exponent % object.exponentMultiple;
       moveDigits += round;
       if (round < 0) {
@@ -68,8 +68,7 @@ messageFormatPostprocess.number = function (object, data) {
   ////////////////////////
   
   if (object.isSignificant) {
-    parameter = parseFloat(parameter.toPrecision(object.max));
-    // FIXME implementation of minimum significant numbers required
+    parameter = parseFloat(parameter.toPrecision(object.maxSignificant));
   }
   
   /////////////
@@ -83,13 +82,15 @@ messageFormatPostprocess.number = function (object, data) {
   
   // split the number into pre and post point parts
   var absString = Math.abs(parameter).toFixed(maxPost);
-  var prePoint = pad(absString.match(/^[^\.]*/)[0] || '0', object.digits, '0');
+  var prePoint = absString.match(/^[^\.]*/)[0] || '0';
+  var prePointPadded = pad(prePoint, object.digits, '0');
   var postPoint = absString.replace(/^[^\.]*\./, '');
   var postPointZeroless = postPoint.replace(/0+$/, '');
   
+  // put prePost into groups
   var groups = object.groups || [];
   var groupResult = [];
-  var position = prePoint.length;
+  var position = prePointPadded.length;
   for (var i = 0; position > 0 ; (i + 1) < groups.length && ++i) {
     var groupLength = groups[i];
     position -= groupLength;
@@ -97,14 +98,22 @@ messageFormatPostprocess.number = function (object, data) {
       groupLength += position;
       position = 0;
     }
-    groupResult.unshift(prePoint.substr(position, groupLength));
+    groupResult.unshift(prePointPadded.substr(position, groupLength));
   }
-  //console.log(parameter, prePoint, postPoint, groupResult);
-  
   var result = groupResult.join(latnSymbols.group);
-  if (postPointZeroless.length > 0 && maxPost > 0 || object.minPost) {
-    if (postPointZeroless.length < object.minPost) {
-      result += latnSymbols.decimal + postPoint.substr(0, object.minPost);
+  
+  // build the postPoint number
+  // calculate required additions of postPoint if significant digits are used
+  var numSignificantDigits = prePoint.length + postPointZeroless.length;
+  var numAddNeeded = (object.minSignificant - numSignificantDigits) || 0;
+  var minPost = object.minPost || 0;
+  var minPost = Math.max(minPost, numAddNeeded - postPointZeroless.length);
+  
+  // now build and join postPoint
+  var requiresPostPoint = postPointZeroless.length > 0 && maxPost > 0;
+  if (requiresPostPoint || minPost > 0) {
+    if (postPointZeroless.length < minPost) {
+      result += latnSymbols.decimal + postPoint.substr(0, minPost);
     } else {
       result += latnSymbols.decimal + postPointZeroless;
     }

@@ -396,6 +396,94 @@ testAsyncMulti("Translator - message-format - number - significant 1-3", [
   }
 ]);
 
+testAsyncMulti("Translator - message-format - number - significant 2-3", [
+  function (test, expect) {
+    var key = 'significant_number_two';
+    var trans = englishTrans;
+    trans.ready(expect(function () {
+      test.equal(trans.get(key, { num: 0 }), "0.0");
+      test.equal(trans.get(key, { num: 10 }), "10");
+      test.equal(trans.get(key, { num: 1000 }), "1,000");
+      test.equal(trans.get(key, { num: 0.25 }), "0.25");
+      test.equal(trans.get(key, { num: 2000.25 }), "2,000");
+      test.equal(trans.get(key, { num: -2000.25 }), "-2,000");
+      test.equal(trans.get(key, { num: Infinity }), "∞");
+      test.equal(trans.get(key, { num: -Infinity }), "-∞");
+      test.equal(trans.get(key, { num: "hello" }), "NaN");
+      
+      test.equal(trans.get(key, { num: 2.25 }), "2.25");
+      test.equal(trans.get(key, { num: 0.001234 }), "0.00123");
+      test.equal(trans.get(key, { num: 12345 }), "12,300");
+    }));
+  },
+  function (test, expect) {
+    var key = 'significant_number_two';
+    var trans = germanTrans;
+    trans.ready(expect(function () {
+      test.equal(trans.get(key, { num: 0 }), "0,0");
+      test.equal(trans.get(key, { num: 10 }), "10");
+      test.equal(trans.get(key, { num: 1000 }), "1.000");
+      test.equal(trans.get(key, { num: 0.25 }), "0,25");
+      test.equal(trans.get(key, { num: 2000.25 }), "2.000");
+      test.equal(trans.get(key, { num: -2000.25 }), "-2.000");
+      test.equal(trans.get(key, { num: Infinity }), "∞");
+      test.equal(trans.get(key, { num: -Infinity }), "-∞");
+      test.equal(trans.get(key, { num: "hello" }), "NaN");
+      
+      test.equal(trans.get(key, { num: 2.25 }), "2,25");
+      test.equal(trans.get(key, { num: 0.001234 }), "0,00123");
+      test.equal(trans.get(key, { num: 12345 }), "12.300");
+    }));
+  }
+]);
+
+testAsyncMulti("Translator - message-format - number - exponential significant", [
+  function (test, expect) {
+    var key = 'exponential_significant_number';
+    var trans = englishTrans;
+    trans.ready(expect(function () {
+      test.equal(trans.get(key, { num: 0 }), "0E0");
+      test.equal(trans.get(key, { num: 10 }), "1E1");
+      test.equal(trans.get(key, { num: 1000 }), "1E3");
+      test.equal(trans.get(key, { num: 0.23 }), "2.3E-1");
+      test.equal(trans.get(key, { num: 2000.23 }), "2E3");
+      test.equal(trans.get(key, { num: -2000.23 }), "-2E3");
+      test.equal(trans.get(key, { num: Infinity }), "∞");
+      test.equal(trans.get(key, { num: -Infinity }), "-∞");
+      test.equal(trans.get(key, { num: "hello" }), "NaN");
+      
+      
+      test.equal(trans.get(key, { num: 2.25 }), "2.25E0");
+      test.equal(trans.get(key, { num: 0.001234 }), "1.23E-3");
+      test.equal(trans.get(key, { num: 12345 }), "1.23E4");
+      test.equal(trans.get(key, { num: 1234 }), "1.23E3");
+      test.equal(trans.get(key, { num: 0.00123 }), "1.23E-3");
+    }));
+  },
+  function (test, expect) {
+    var key = 'exponential_significant_number';
+    var trans = germanTrans;
+    trans.ready(expect(function () {
+      test.equal(trans.get(key, { num: 0 }), "0E0");
+      test.equal(trans.get(key, { num: 10 }), "1E1");
+      test.equal(trans.get(key, { num: 1000 }), "1E3");
+      test.equal(trans.get(key, { num: 0.23 }), "2,3E-1");
+      test.equal(trans.get(key, { num: 2000.23 }), "2E3");
+      test.equal(trans.get(key, { num: -2000.23 }), "-2E3");
+      test.equal(trans.get(key, { num: Infinity }), "∞");
+      test.equal(trans.get(key, { num: -Infinity }), "-∞");
+      test.equal(trans.get(key, { num: "hello" }), "NaN");
+      
+      
+      test.equal(trans.get(key, { num: 2.25 }), "2,25E0");
+      test.equal(trans.get(key, { num: 0.001234 }), "1,23E-3");
+      test.equal(trans.get(key, { num: 12345 }), "1,23E4");
+      test.equal(trans.get(key, { num: 1234 }), "1,23E3");
+      test.equal(trans.get(key, { num: 0.00123 }), "1,23E-3");
+    }));
+  }
+]);
+
 testAsyncMulti("Translator - message-format - number - percent", [
   function (test, expect) {
     var key = 'percent';
