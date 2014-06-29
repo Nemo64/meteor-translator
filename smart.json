@@ -3,10 +3,10 @@
   "description": "a feature rich internationalization (i18n) package",
   "homepage": "https://github.com/Nemo64/meteor-translator",
   "author": "Marco Pfeiffer <cheat2000-git@yahoo.de>",
-  "version": "0.5.3",
+  "version": "0.6.0",
   "git": "https://github.com/Nemo64/meteor-translator.git",
   "packages": {
-    "inject-initial": "0.0.7",
+    "inject-initial": "0.0.8",
     "moment": "2.6.0"
   }
 }

@@ -1,5 +1,7 @@
 Package.describe({
-  summary: "A feature rich translation package"
+  summary: "A feature rich translation package",
+  version: "0.6.0",
+  githubUrl: "https://github.com/Nemo64/meteor-translator.git"
 });
 
 Package._transitional_registerBuildPlugin({

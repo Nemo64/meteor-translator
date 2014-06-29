@@ -1,3 +1,6 @@
+## v0.6.0
+- added localized number message-format `{var, number}`
+
 ## v0.5.3
 - locale type now accepts all cldr locales
 - the parser now is capable of `lang.json`
