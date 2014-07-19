@@ -162,7 +162,7 @@ _.extend(Translator.prototype, {
       return namespace.has(key, language);
     });
     
-    if (namespace != null) try {
+    if (namespace != null) {
       // no dependency required as new namespaces will be appended to the list
       var result = namespace.get(key, language);
       var data = {
@@ -174,8 +174,6 @@ _.extend(Translator.prototype, {
         meta: result.meta
       };
       return self.filter(result.value, data);
-    } catch (e) {
-      console.warn(e.message + "; Abort translation of '" + key + "'!");
     }
     
     // if something fails just return the key
