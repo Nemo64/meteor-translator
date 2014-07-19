@@ -576,7 +576,7 @@ testAsyncMulti("Translator - message-format - number - percent locale default", 
     var key = 'percent_default';
     var trans = germanTrans;
     trans.ready(expect(function () {
-      // CAUTION: those are none breaking spaces
+      // CAUTION: those are none breaking spaces between unit and number
       test.equal(trans.get(key, { num: 0 }), "0 %");
       test.equal(trans.get(key, { num: 10 }), "1.000 %");
       test.equal(trans.get(key, { num: 1000 }), "100.000 %");
@@ -619,6 +619,93 @@ testAsyncMulti("Translator - message-format - number - permille", [
       test.equal(trans.get(key, { num: Infinity }), "∞‰");
       test.equal(trans.get(key, { num: -Infinity }), "-∞‰");
       test.equal(trans.get(key, { num: "hello" }), "NaN");
+    }));
+  }
+]);
+
+testAsyncMulti("Translator - message-format - number - readable short", [
+  function (test, expect) {
+    var key = 'readable_number_short';
+    var trans = englishTrans;
+    trans.ready(expect(function () {
+      test.equal(trans.get(key, { num: 0 }), "0");
+      test.equal(trans.get(key, { num: 10 }), "10");
+      test.equal(trans.get(key, { num: 1000 }), "1K");
+      test.equal(trans.get(key, { num: 0.25 }), "0.25");
+      test.equal(trans.get(key, { num: 2000.25 }), "2K");
+      test.equal(trans.get(key, { num: -2000.25 }), "-2K");
+      test.equal(trans.get(key, { num: Infinity }), "∞");
+      test.equal(trans.get(key, { num: -Infinity }), "-∞");
+      test.equal(trans.get(key, { num: "hello" }), "NaN");
+      
+      test.equal(trans.get(key, { num: 2000000 }), "2M");
+      test.equal(trans.get(key, { num: 2000000000 }), "2B");
+      test.equal(trans.get(key, { num: 2000000000000 }), "2T");
+      test.equal(trans.get(key, { num: 2000000000000000 }), "2000T");
+    }));
+  },
+  function (test, expect) {
+    var key = 'readable_number_short';
+    var trans = germanTrans;
+    trans.ready(expect(function () {
+      // CAUTION: those are none breaking spaces between unit and number
+      test.equal(trans.get(key, { num: 0 }), "0");
+      test.equal(trans.get(key, { num: 10 }), "10");
+      test.equal(trans.get(key, { num: 1000 }), "1 Tsd");
+      test.equal(trans.get(key, { num: 0.25 }), "0,25");
+      test.equal(trans.get(key, { num: 2000.25 }), "2 Tsd");
+      test.equal(trans.get(key, { num: -2000.25 }), "-2 Tsd");
+      test.equal(trans.get(key, { num: Infinity }), "∞");
+      test.equal(trans.get(key, { num: -Infinity }), "-∞");
+      test.equal(trans.get(key, { num: "hello" }), "NaN");
+      
+      test.equal(trans.get(key, { num: 2000000 }), "2 Mio");
+      test.equal(trans.get(key, { num: 2000000000 }), "2 Mrd");
+      test.equal(trans.get(key, { num: 2000000000000 }), "2 Bio");
+      test.equal(trans.get(key, { num: 2000000000000000 }), "2000 Bio");
+    }));
+  }
+]);
+
+testAsyncMulti("Translator - message-format - number - readable long", [
+  function (test, expect) {
+    var key = 'readable_number_long';
+    var trans = englishTrans;
+    trans.ready(expect(function () {
+      test.equal(trans.get(key, { num: 0 }), "0");
+      test.equal(trans.get(key, { num: 10 }), "10");
+      test.equal(trans.get(key, { num: 1000 }), "1 thousand");
+      test.equal(trans.get(key, { num: 0.25 }), "0.25");
+      test.equal(trans.get(key, { num: 2000.25 }), "2 thousand");
+      test.equal(trans.get(key, { num: -2000.25 }), "-2 thousand");
+      test.equal(trans.get(key, { num: Infinity }), "∞");
+      test.equal(trans.get(key, { num: -Infinity }), "-∞");
+      test.equal(trans.get(key, { num: "hello" }), "NaN");
+      
+      test.equal(trans.get(key, { num: 2000000 }), "2 million");
+      test.equal(trans.get(key, { num: 2000000000 }), "2 billion");
+      test.equal(trans.get(key, { num: 2000000000000 }), "2 trillion");
+      test.equal(trans.get(key, { num: 2000000000000000 }), "2000 trillion");
+    }));
+  },
+  function (test, expect) {
+    var key = 'readable_number_long';
+    var trans = germanTrans;
+    trans.ready(expect(function () {
+      test.equal(trans.get(key, { num: 0 }), "0");
+      test.equal(trans.get(key, { num: 10 }), "10");
+      test.equal(trans.get(key, { num: 1000 }), "1 Tausend");
+      test.equal(trans.get(key, { num: 0.25 }), "0,25");
+      test.equal(trans.get(key, { num: 2000.25 }), "2 Tausend");
+      test.equal(trans.get(key, { num: -2000.25 }), "-2 Tausend");
+      test.equal(trans.get(key, { num: Infinity }), "∞");
+      test.equal(trans.get(key, { num: -Infinity }), "-∞");
+      test.equal(trans.get(key, { num: "hello" }), "NaN");
+      
+      test.equal(trans.get(key, { num: 2000000 }), "2 Millionen");
+      test.equal(trans.get(key, { num: 2000000000 }), "2 Milliarden");
+      test.equal(trans.get(key, { num: 2000000000000 }), "2 Billionen");
+      test.equal(trans.get(key, { num: 2000000000000000 }), "2000 Billionen");
     }));
   }
 ]);

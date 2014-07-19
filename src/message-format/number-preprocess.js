@@ -142,18 +142,6 @@ var parseNumberFormat = function (string, data) {
   return numberFormat;
 };
 
-// FIXME this currently does not work
-var parseNumberFormatWithPlural = function (formats, object, data) {
-  // XXX this should go though the normal resolving process
-  return messageFormatPreprocess.plural({
-    name: object.name,
-    method: 'plural',
-    hash: _.map(_pluralFilter(formats), function (format) {
-      return parseNumberFormat(format, data.locale)
-    })
-  }, data);
-};
-
 messageFormatPreprocess.number = function (object, data) {
   var locale = data.locale.toString();
   // add cldr information
@@ -170,14 +158,24 @@ messageFormatPreprocess.number = function (object, data) {
       'nan'
     );
   }
+  // add object to store numberFormat description in
+  if (! meta.hasOwnProperty('numberFormat')) {
+    meta.numberFormat = {};
+  }
   
   // type of number to print
   var type = (object.args && object.args[0]) || 'decimal';
-  var formats = cldr.extractNumberFormats(data.locale.toString(), 'latn');
+  var formats = cldr.extractNumberFormats(locale, 'latn');
   var format = formats[type];
-  if (format == null) { // custom format
-    format = parseNumberFormat(object.rawArgs, data);
-  } else { // localized format
+  
+  // custom format
+  if (format == null) {
+    var key = object.rawArgs;
+    meta.numberFormat[key] = parseNumberFormat(object.rawArgs, data);
+    format = { ref: key };
+  
+  // localized format
+  } else {
       // look at node-cldr documentation to get a roough feeling for whats happening
       // https://github.com/papandreou/node-cldr#cldrextractnumberformatslocaleidroot-numbersystemidlatn
       var length = (object.args && object.args[1]) || 'default';
@@ -185,13 +183,33 @@ messageFormatPreprocess.number = function (object, data) {
         throw new Error("The number length '" + length
           + "' is unknown for a '" + type + "'");
       }
+      
       var formatVariation = format[length];
-      if (_.isObject(formatVariation)) { // the thousand etc are objects
-        format = _.map(formatVariation, function (format) {
-          return parseNumberFormatWithPlural(format, object, data);
+      // the thousand etc are objects
+      if (_.isObject(formatVariation)) {
+        var key = type + ':' + length;
+        meta.numberFormat[key] = {};
+        meta.numberFormat.default = parseNumberFormat(format.default, data);
+        
+        // 1000 => one => format
+        _.each(formatVariation, function (formats, startingNumber) {
+          var formatList = meta.numberFormat[key][startingNumber] = {};
+          _.each(_pluralFilter(formats), function (format, pluralForm) {
+            format = parseNumberFormat(format, data);
+            var divider = startingNumber / Math.pow(10, format.digits - 1);
+            format.multiplicator = (format.multiplicator || 1) / divider;
+            formatList[pluralForm] = format;
+          });
         });
+        
+        format = { ref: key, method: 'number_switch' };
+        messageFormatPreprocess.plural({}, data); // XXX trigger meta data
+      
+      // the normal basic numbers
       } else {
-        format = parseNumberFormat(formatVariation, data);
+        var key = formatVariation;
+        meta.numberFormat[key] = parseNumberFormat(formatVariation, data);
+        format = { ref: key };
       }
   }
   
