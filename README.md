@@ -9,7 +9,7 @@ An i18n utility belt specifically designed for meteor to seperate your app from 
 - *variables* in the translations `hello {username}` [~docs](https://github.com/Nemo64/meteor-translator/wiki/Variables)
 - *[icu messageformat](http://userguide.icu-project.org/formatparse/messages)* using [Unicode cldr](http://cldr.unicode.org/) [~docs](https://github.com/Nemo64/meteor-translator/wiki/Plural%20and%20Select%20patterns)
 - *date formating* using [moment](http://momentjs.com/) and [cldr](http://cldr.unicode.org/) `released on {var, date}` [~docs](https://github.com/Nemo64/meteor-translator/wiki/Date-and-Time-patterns#implementation)
-- *localized number formating* again using [cldr](http://cldr.unicode.org/) `{var, number}`
+- *localized number formating* again using [cldr](http://cldr.unicode.org/) `{var, number}` [~docs](https://github.com/Nemo64/meteor-translator/wiki/Number-patterns)
 - language *fallbacks* `["en_GB","en_US"]`
 - *lazy loading* of languages as soon as they are needed
 - *automatic language detection* using the `accept-language` header (experimental)
