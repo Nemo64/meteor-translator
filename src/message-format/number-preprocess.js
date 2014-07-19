@@ -27,7 +27,7 @@ var replaceStaticChars = function (string, locale) {
   return string;
 };
 
-var parseNumberFormat = function (string, locale) {
+var parseNumberFormat = function (string, data) {
   var numberFormat = {
     isSignificant: RX_IS_SIGNIFICANT.test(string) || void 0,
     isScientific: RX_IS_SCIENTIFIC.test(string) || void 0,
@@ -73,8 +73,8 @@ var parseNumberFormat = function (string, locale) {
       hash = pattern.split(RX_NUMBER, 5);
     }
     numberFormat[variant] = [
-      replaceStaticChars(hash[0] || '', locale),
-      replaceStaticChars(hash[4] || '', locale)
+      replaceStaticChars(hash[0] || '', data.locale),
+      replaceStaticChars(hash[4] || '', data.locale)
     ];
   });
   
@@ -142,17 +142,17 @@ var parseNumberFormat = function (string, locale) {
   return numberFormat;
 };
 
-var parseNumberFormatWithPlural = function (formats, locale) {
-  console.log(formats);
-  formats = _.pick(formats, 'zero', 'one', 'two', 'few', 'many', 'other'); // FIXME there may be =0
-  return _.map(formats, function (format) {
-    return parseNumberFormat(format, locale)
-  });
+// FIXME this currently does not work
+var parseNumberFormatWithPlural = function (formats, object, data) {
+  // XXX this should go though the normal resolving process
+  return messageFormatPreprocess.plural({
+    name: object.name,
+    method: 'plural',
+    hash: _.map(_pluralFilter(formats), function (format) {
+      return parseNumberFormat(format, data.locale)
+    })
+  }, data);
 };
-
-
-
-
 
 messageFormatPreprocess.number = function (object, data) {
   var locale = data.locale.toString();
@@ -176,7 +176,7 @@ messageFormatPreprocess.number = function (object, data) {
   var formats = cldr.extractNumberFormats(data.locale.toString(), 'latn');
   var format = formats[type];
   if (format == null) { // custom format
-    format = parseNumberFormat(object.rawArgs, data.locale);
+    format = parseNumberFormat(object.rawArgs, data);
   } else { // localized format
       // look at node-cldr documentation to get a roough feeling for whats happening
       // https://github.com/papandreou/node-cldr#cldrextractnumberformatslocaleidroot-numbersystemidlatn
@@ -188,10 +188,10 @@ messageFormatPreprocess.number = function (object, data) {
       var formatVariation = format[length];
       if (_.isObject(formatVariation)) { // the thousand etc are objects
         format = _.map(formatVariation, function (format) {
-          return parseNumberFormatWithPlural(format, data.locale);
+          return parseNumberFormatWithPlural(format, object, data);
         });
       } else {
-        format = parseNumberFormat(formatVariation, data.locale);
+        format = parseNumberFormat(formatVariation, data);
       }
   }
   

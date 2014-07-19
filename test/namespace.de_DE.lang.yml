@@ -39,3 +39,6 @@ exponential_significant_number: "{num, number, @##E0}"
 percent: "{num, number, #,#00%}"
 percent_default: "{num, number, percent}"
 permille: "{num, number, #,000‰}"
+
+readable_number_short: "{num, number, decimal, short}"
+readable_number_long: "{num, number, decimal, long}"
