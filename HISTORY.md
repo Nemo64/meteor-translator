@@ -1,3 +1,7 @@
+## v0.6.1
+- fixed localized default number formatting
+- fixed edge cases with `/a/g.test`
+
 ## v0.6.0
 - added localized number message-format `{var, number}`
 

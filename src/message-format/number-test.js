@@ -238,6 +238,45 @@ testAsyncMulti("Translator - message-format - number - exponent", [
   }
 ]);
 
+testAsyncMulti("Translator - message-format - number - exponent locale default", [
+  function (test, expect) {
+    var key = 'exponential_number_default';
+    var trans = englishTrans;
+    trans.ready(expect(function () {
+      test.equal(trans.get(key, { num: 0 }), "0E0");
+      test.equal(trans.get(key, { num: 10 }), "1E1");
+      test.equal(trans.get(key, { num: 1000 }), "1E3");
+      test.equal(trans.get(key, { num: 0.23 }), "2E-1");
+      test.equal(trans.get(key, { num: 2000.23 }), "2E3");
+      test.equal(trans.get(key, { num: -2000.23 }), "-2E3");
+      test.equal(trans.get(key, { num: Infinity }), "∞");
+      test.equal(trans.get(key, { num: -Infinity }), "-∞");
+      test.equal(trans.get(key, { num: "hello" }), "NaN");
+      
+      test.equal(trans.get(key, { num: 1234 }), "1E3");
+      test.equal(trans.get(key, { num: 0.00123 }), "1E-3");
+    }));
+  },
+  function (test, expect) {
+    var key = 'exponential_number_default';
+    var trans = germanTrans;
+    trans.ready(expect(function () {
+      test.equal(trans.get(key, { num: 0 }), "0E0");
+      test.equal(trans.get(key, { num: 10 }), "1E1");
+      test.equal(trans.get(key, { num: 1000 }), "1E3");
+      test.equal(trans.get(key, { num: 0.23 }), "2E-1");
+      test.equal(trans.get(key, { num: 2000.23 }), "2E3");
+      test.equal(trans.get(key, { num: -2000.23 }), "-2E3");
+      test.equal(trans.get(key, { num: Infinity }), "∞");
+      test.equal(trans.get(key, { num: -Infinity }), "-∞");
+      test.equal(trans.get(key, { num: "hello" }), "NaN");
+      
+      test.equal(trans.get(key, { num: 1234 }), "1E3");
+      test.equal(trans.get(key, { num: 0.00123 }), "1E-3");
+    }));
+  }
+]);
+
 testAsyncMulti("Translator - message-format - number - exponent plus", [
   function (test, expect) {
     var key = 'exponential_number_plus';
@@ -512,6 +551,40 @@ testAsyncMulti("Translator - message-format - number - percent", [
       test.equal(trans.get(key, { num: -2000.25 }), "-200.025%");
       test.equal(trans.get(key, { num: Infinity }), "∞%");
       test.equal(trans.get(key, { num: -Infinity }), "-∞%");
+      test.equal(trans.get(key, { num: "hello" }), "NaN");
+    }));
+  }
+]);
+
+testAsyncMulti("Translator - message-format - number - percent locale default", [
+  function (test, expect) {
+    var key = 'percent_default';
+    var trans = englishTrans;
+    trans.ready(expect(function () {
+      test.equal(trans.get(key, { num: 0 }), "0%");
+      test.equal(trans.get(key, { num: 10 }), "1,000%");
+      test.equal(trans.get(key, { num: 1000 }), "100,000%");
+      test.equal(trans.get(key, { num: 0.25 }), "25%");
+      test.equal(trans.get(key, { num: 2000.25 }), "200,025%");
+      test.equal(trans.get(key, { num: -2000.25 }), "-200,025%");
+      test.equal(trans.get(key, { num: Infinity }), "∞%");
+      test.equal(trans.get(key, { num: -Infinity }), "-∞%");
+      test.equal(trans.get(key, { num: "hello" }), "NaN");
+    }));
+  },
+  function (test, expect) {
+    var key = 'percent_default';
+    var trans = germanTrans;
+    trans.ready(expect(function () {
+      // CAUTION: those are none breaking spaces
+      test.equal(trans.get(key, { num: 0 }), "0 %");
+      test.equal(trans.get(key, { num: 10 }), "1.000 %");
+      test.equal(trans.get(key, { num: 1000 }), "100.000 %");
+      test.equal(trans.get(key, { num: 0.25 }), "25 %");
+      test.equal(trans.get(key, { num: 2000.25 }), "200.025 %");
+      test.equal(trans.get(key, { num: -2000.25 }), "-200.025 %");
+      test.equal(trans.get(key, { num: Infinity }), "∞ %");
+      test.equal(trans.get(key, { num: -Infinity }), "-∞ %");
       test.equal(trans.get(key, { num: "hello" }), "NaN");
     }));
   }

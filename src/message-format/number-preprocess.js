@@ -19,7 +19,7 @@ var RX_MINUS = unescapedExpr('\\-', 'g');
 var RX_PADDING = unescapedExpr('\\*(.)');
 
 var replaceStaticChars = function (string, locale) {
-  var latnSymbols = cldr.extractNumberSymbols(locale, 'latn');
+  var latnSymbols = cldr.extractNumberSymbols(locale.toString(), 'latn');
   string = string.replace(RX_PERCENT, latnSymbols.percentSign);
   string = string.replace(RX_PERMILLE, latnSymbols.perMille);
   string = string.replace(RX_PLUS, latnSymbols.plusSign);
@@ -32,8 +32,8 @@ var parseNumberFormat = function (string, locale) {
     isSignificant: RX_IS_SIGNIFICANT.test(string) || void 0,
     isScientific: RX_IS_SCIENTIFIC.test(string) || void 0,
     
-    multiplicator: RX_PERCENT.test(string) ? 100
-                 : RX_PERMILLE.test(string) ? 1000
+    multiplicator: string.match(RX_PERCENT) !== null ? 100
+                 : string.match(RX_PERMILLE) !== null ? 1000
                  : void 0,
     
     groups: [] // where groups have to be, eg. [3] = every 3 digits
@@ -60,7 +60,7 @@ var parseNumberFormat = function (string, locale) {
       // the minus needs to be inserted into the generated pattern
       // if the plus pattern did contain a + it needs to be replaced
       // otherwise we place a minus before the number
-      var hasPlus = RX_PLUS.test(hash[0] + hash[4]);
+      var hasPlus = (hash[0] + hash[4]).match(RX_PLUS) !== null;
       if (hasPlus) {
         // plus can be before and after the actual number
         _.each([0, 4], function (index) {
@@ -130,6 +130,8 @@ var parseNumberFormat = function (string, locale) {
       throw new Error("Exponential patterns may not contain grouping separators.");
     }
     _.extend(numberFormat, { // <=
+      // If there is a maximum, then the minimum number of integer digits is fixed at one.
+      digits: prePoint.length > numberFormat.digits ? 1 : numberFormat.digits,
       exponentPlus: exponent.charAt(0) === '+' || void 0,
       exponent: exponent.replace(/\D/g, '').length,
       exponentMultiple: prePoint.length > Math.max(numberFormat.digits, 1) ? prePoint.length : void 0,
@@ -140,10 +142,12 @@ var parseNumberFormat = function (string, locale) {
   return numberFormat;
 };
 
-var parseNumberFormatWithPlural = function (formats) {
+var parseNumberFormatWithPlural = function (formats, locale) {
   console.log(formats);
-  formats = _.pick(formats, 'zero', 'one', 'two', 'few', 'many', 'other'); // XXX there may be =0
-  return _.map(formats, parseNumberFormat);
+  formats = _.pick(formats, 'zero', 'one', 'two', 'few', 'many', 'other'); // FIXME there may be =0
+  return _.map(formats, function (format) {
+    return parseNumberFormat(format, locale)
+  });
 };
 
 
@@ -170,28 +174,25 @@ messageFormatPreprocess.number = function (object, data) {
   // type of number to print
   var type = (object.args && object.args[0]) || 'decimal';
   var formats = cldr.extractNumberFormats(data.locale.toString(), 'latn');
-  var format = formats[type] || object.rawArgs; // FIXME this discards spaces
-  switch (type) {
-    // look at node-cldr documentation to get a roough feeling for whats happening
-    // https://github.com/papandreou/node-cldr#cldrextractnumberformatslocaleidroot-numbersystemidlatn
-    case 'decimal':
-      var length = (object.args && object.args[0]) || 'default';
+  var format = formats[type];
+  if (format == null) { // custom format
+    format = parseNumberFormat(object.rawArgs, data.locale);
+  } else { // localized format
+      // look at node-cldr documentation to get a roough feeling for whats happening
+      // https://github.com/papandreou/node-cldr#cldrextractnumberformatslocaleidroot-numbersystemidlatn
+      var length = (object.args && object.args[1]) || 'default';
       if (! format.hasOwnProperty(length)) {
         throw new Error("The number length '" + length
           + "' is unknown for a '" + type + "'");
       }
-      
       var formatVariation = format[length];
       if (_.isObject(formatVariation)) { // the thousand etc are objects
         format = _.map(formatVariation, function (format) {
-          return parseNumberFormatWithPlural(format);
+          return parseNumberFormatWithPlural(format, data.locale);
         });
       } else {
-        format = parseNumberFormat(formatVariation);
+        format = parseNumberFormat(formatVariation, data.locale);
       }
-      break;
-    default:
-      format = parseNumberFormat(format);
   }
   
   return _.defaults(format, {
