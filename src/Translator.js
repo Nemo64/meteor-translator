@@ -201,12 +201,11 @@ _.extend(Translator.prototype, {
    *
    * @param {string}          key
    * @param {Array.<string>=} parameter
-   * @param {Language=}       language
    *
    * @return {function():string}
    */
-  getCallback: function (key, parameter, language) {
-    return _.bind(this.get, this, key, parameter, language);
+  getCallback: function (key, parameter) {
+    return _.bind(this.get, this, key, parameter);
   },
 
   createHelper: function () {
