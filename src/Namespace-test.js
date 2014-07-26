@@ -63,6 +63,20 @@ testAsyncMulti("Translator - Namespace - access none existing key", [
   }
 ]);
 
+testAsyncMulti("Translator - Namespace - access key though fallback", [
+  function (test, expect) {
+    var namespace = new Translator.Namespace(NAMESPACE);
+    var language = new Translator.LanguageArray(['it', 'en_US', 'de_DE']);
+    var expect = expect("Hallo Test");
+    Deps.autorun(function (dep) {
+      var result = namespace.get('a_key', LANGUAGE_FOREIGN);
+      if (! namespace.isLoading()) {
+        expect(result.value);
+      }
+    });
+  }
+]);
+
 Tinytest.add("Translator - Namespace - none existing namespace", function (test) {
   try {
     var namespace = new Translator.Namespace("none existing namespace");

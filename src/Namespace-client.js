@@ -168,7 +168,7 @@ _.extend(Namespace.prototype, {
       
       // because this implementation only loads the first locale the fallback is
       // never prepared. If it is needed to it now
-      if (! localeData.loaded) {
+      if (localeData.status < STATUS_LOADING) {
         self._prepareLocales(locales.slice(index)); // this and all after this
         return true; // this is our current best match (none :D)
       }
