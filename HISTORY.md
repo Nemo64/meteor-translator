@@ -1,3 +1,6 @@
+## v0.6.2
+- fixed fallback mechanism when using language autodetect
+
 ## v0.6.1
 - fixed localized default number formatting
 - fixed edge cases with `/a/g.test`
