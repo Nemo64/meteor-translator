@@ -153,11 +153,8 @@ _.extend(Namespace.prototype, {
     var self = this;
     self.prepare(language);
     
-    if (! Deps.active) {
-      console.warn(
-        "translation of '" + key + "' reqested outside of an reactive pipe!"
-        + " Cross your fingers that everything is loaded already"
-      );
+    if (! Deps.active && typeof console !== 'undefined') {
+      console.warn("Translation of '" + key + "' requested outside of a reactive context!");
     }
     
     // check all locales of the language
