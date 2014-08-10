@@ -29,7 +29,6 @@ _.extend(Namespace.prototype, {
     self._locales = {}; // see loop in prepare
     self._loading = 0; // for telling if a request is running
     self._loadingDep = new Deps.Dependency(); // only important for #isLoading
-    self._localesWarned = false; // "out of locales to load"
     self._existingLocales = namespaces[self._name]; // set of locale strings
   },
 
@@ -95,10 +94,6 @@ _.extend(Namespace.prototype, {
     var self = this;
     var locale = locales.shift(); // only prepare the first locale
     if (locale == null) {
-      if (! self._localesWarned) {
-        console.warn("No more locales to load. All hope is lost", self);
-        self._localesWarned = true;
-      }
       return;
     }
     

@@ -1,3 +1,8 @@
+## v0.6.3
+- get returns null instead of translation key if no match is found
+- console warn if translation is not found
+- removed not understandable locale load warning
+
 ## v0.6.2
 - fixed fallback mechanism when using language autodetect
 
