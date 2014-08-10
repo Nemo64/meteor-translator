@@ -176,9 +176,14 @@ _.extend(Translator.prototype, {
       return self.filter(result.value, data);
     }
     
-    // if something fails just return the key
+    // if the translation fails...
     self._namespaceDep.depend(); // it might come later
-    return key;
+    
+    if (! this.isLoading() && typeof console !== 'undefined') {
+      console.warn("Translation for key '" + key + '" is missing!');
+    }
+    
+    return null;
   },
 
   /**

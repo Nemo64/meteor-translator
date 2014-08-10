@@ -4,7 +4,7 @@ Translator.setLanguage(null); // ignore automated sources
 
 Tinytest.add("Translator - get without namespace", function (test) {
   var translator = new Translator();
-  test.equal(translator.get('a_key'), 'a_key');
+  test.isNull(translator.get('a_key'));
 });
 
 Tinytest.add("Translator - get with none existing namespace", function (test) {
@@ -35,7 +35,7 @@ testAsyncMulti("Translator - get without language", [
     translator.use(NAMESPACE);
     
     translator.ready(expect(function () {
-      test.equal(translator.get('a_key'), "a_key");
+      test.isNull(translator.get('a_key'));
     }));
   }
 ]);
