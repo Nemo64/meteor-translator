@@ -5,7 +5,7 @@ An i18n utility belt specifically designed for meteor to seperate your app from 
 
 ## Features
 - readable *[yaml files](http://www.yaml.org/)* or normal json files to store the language [~docs](https://github.com/Nemo64/meteor-translator/wiki/Writing-Language-Files#examples)
-- *namespacing* though multiple files [~docs](https://github.com/Nemo64/meteor-translator/wiki/Writing-Language-Files)
+- *namespacing* though multiple files [~docs](https://github.com/Nemo64/meteor-translator/wiki/Writing-Language-Files) (this will me be removed in future version to enable other features (like overwriting) and make the package easier to use)
 - *variables* in the translations `hello {username}` [~docs](https://github.com/Nemo64/meteor-translator/wiki/Variables)
 - *[icu messageformat](http://userguide.icu-project.org/formatparse/messages)* using [Unicode cldr](http://cldr.unicode.org/) [~docs](https://github.com/Nemo64/meteor-translator/wiki/Plural%20and%20Select%20patterns)
 - *date formating* using [moment](http://momentjs.com/) and [cldr](http://cldr.unicode.org/) `released on {var, date}` [~docs](https://github.com/Nemo64/meteor-translator/wiki/Date-and-Time-patterns#implementation)
