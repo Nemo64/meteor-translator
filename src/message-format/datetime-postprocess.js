@@ -1,10 +1,10 @@
 var createMoment = function (value, data) {
   var locale = "translator-" + data.locale.toString(); // prefixed locale
-  var before = moment.lang();
-  moment.lang(locale, data.meta.moment);
-  moment.lang(before); // don't screw with the global language
+  var before = moment.locale();
+  moment.locale(locale, data.meta.moment);
+  moment.locale(before); // don't screw with the global language
   var instance = moment(value);
-  return instance != null ? instance.lang(locale) : null;
+  return instance != null ? instance.locale(locale) : null;
 };
 
 messageFormatPostprocess.date = function (object, data) {

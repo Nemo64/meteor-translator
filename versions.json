@@ -38,7 +38,7 @@
     ],
     [
       "gadicohen:inject-initial",
-      "0.0.1"
+      "1.0.0"
     ],
     [
       "geojson-utils",
@@ -94,7 +94,7 @@
     ],
     [
       "mrt:moment",
-      "1.7.0"
+      "2.8.1"
     ],
     [
       "observe-sequence",
