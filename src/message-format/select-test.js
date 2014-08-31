@@ -1,4 +1,4 @@
-var NAMESPACE = 'packages/translator/test/namespace';
+var NAMESPACE = 'packages/local-test:nemo64:translator/test/namespace';
 var englishTrans = new Translator();
 englishTrans.setLanguage(['en_US']);
 englishTrans.use(NAMESPACE);

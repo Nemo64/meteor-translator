@@ -23,7 +23,7 @@ Package._transitional_registerBuildPlugin({
     'src/message-format/number-preprocess.js'
   ],
   npmDependencies: {
-    'js-yaml': '3.0.2',
+    'js-yaml': '3.2.1',
     'cldr': '2.2.1'
   }
 });
@@ -71,7 +71,7 @@ Package.on_use(function(api) {
 });
 
 Package.on_test(function (api) {
-  api.use(['nemo64:translator', 'underscore', 'tinytest', 'test-helpers']);
+  api.use(['nemo64:translator', 'mrt:moment', 'underscore', 'tinytest', 'test-helpers']);
   api.add_files([
     'test/namespace.de_DE.lang.yml',
     'test/namespace.en_US.lang.yml'

@@ -1,4 +1,4 @@
-var NAMESPACE = 'packages/translator/test/namespace';
+var NAMESPACE = 'packages/local-test:nemo64:translator/test/namespace';
 var englishTrans = new Translator();
 englishTrans.setLanguage(['en_US']);
 englishTrans.use(NAMESPACE);
@@ -28,14 +28,15 @@ testAsyncMulti("Translator - message-format - datetime", [
     englishTrans.ready(expect(function () {
       var date = new Date(2014, 5, 2, 18, 13, 54);
       var result = englishTrans.get('published_on_short', { published_at: date });
-      test.equal(result, "published on June 2, 2014 at 6:13:54 pm ");
+      var mom = moment(date);
+      test.equal(result, "published on June 2, 2014 at 6:13:54 pm " + mom.format('ZZ'));
     }));
   },
   function (test, expect) {
     germanTrans.ready(expect(function () {
       var date = new Date(2014, 5, 2, 18, 13, 54);
       var result = germanTrans.get('published_on_short', { published_at: date });
-      test.equal(result, "veröffentlicht am 2. Juni 2014 18:13:54 ");
+      test.equal(result, "veröffentlicht am 2. Juni 2014 18:13:54 " + moment(date).format('ZZ'));
     }));
   }
 ]);

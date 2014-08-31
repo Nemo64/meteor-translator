@@ -61,9 +61,9 @@ var convertCldrToMoment = function (dateString) {
   // secound
   replace('A+', ''); // XXX not supported
   // zone
-  replace('z{1,3}', 'zz'); // FIXME deprecated in moment
+  replace('z{1,4}', 'Z');
   replace('Z{1,3}', 'ZZ');
-  replace('ZZZZ', 'Z');
+  replace('ZZZZZ?', 'Z');
   replace('v{1,4}', ''); // XXX not supported
   
   // cldr uses another schema to escape literals
