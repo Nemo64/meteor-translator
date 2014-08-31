@@ -1,7 +1,8 @@
 Package.describe({
-  summary: "A feature rich translation package",
-  version: "0.6.3",
-  githubUrl: "https://github.com/Nemo64/meteor-translator.git"
+  name: "nemo64:translator",
+  summary: "A feature rich internationalization (i18n) solution with pluralization, number formatting, date formatting and more",
+  version: "0.6.4",
+  git: "https://github.com/Nemo64/meteor-translator"
 });
 
 Package._transitional_registerBuildPlugin({
@@ -28,13 +29,15 @@ Package._transitional_registerBuildPlugin({
 });
 
 Package.on_use(function(api) {
+  api.versionsFrom("METEOR@0.9.0");
+  
   api.use([
     'underscore',
     'ejson', // LanguageArray and Locale are ejson'able
     'deps',
     // meteorite
-    'inject-initial',
-    'moment'
+    'gadicohen:inject-initial',
+    'mrt:moment'
   ]);
   api.use([
     'http'
@@ -68,7 +71,7 @@ Package.on_use(function(api) {
 });
 
 Package.on_test(function (api) {
-  api.use(['translator', 'tinytest', 'test-helpers']);
+  api.use(['nemo64:translator', 'underscore', 'tinytest', 'test-helpers']);
   api.add_files([
     'test/namespace.de_DE.lang.yml',
     'test/namespace.en_US.lang.yml'

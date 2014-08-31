@@ -90,8 +90,9 @@ var handler = function (doc, compileStep, isLiterate) {
   
   // add the files depending on client/server
   switch (compileStep.arch) {
-    
-    case 'browser':
+   
+    case 'web.cordova': 
+    case 'web.browser':
       // save the file asset
       compileStep.addAsset({
         path: basePath.replace(RX_FILE_ENDING, '.$1') + '.json',
@@ -104,6 +105,7 @@ var handler = function (doc, compileStep, isLiterate) {
       var fullPath = path.join(compileStep.rootOutputPath, basePath);
       var namespace = path.relative('/', fullPath).replace(RX_FILE_ENDING, '');
       
+      console.log(namespace);
       var jsVar = 'Translator._namespaces[' + JSON.stringify(namespace) + ']';
       var js = '(' + jsVar + '||(' + jsVar + '={}))'; // obj for namespace
       js += '["' + locale.toString() + '"]=' + jsonString; // add value
@@ -115,6 +117,8 @@ var handler = function (doc, compileStep, isLiterate) {
         bare: false
       });
       break;
+    default:
+      console.warn("unkonwn arch '" + compileStep.arch + "', ignored");
   }
 };
 
