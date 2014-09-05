@@ -1,6 +1,7 @@
 Package.describe({
   summary: "A feature rich translation package",
-  version: "0.6.3",
+  version: "0.6.5",
+  git: "https://github.com/Nemo64/meteor-translator.git",
   githubUrl: "https://github.com/Nemo64/meteor-translator.git"
 });
 
@@ -28,6 +29,7 @@ Package._transitional_registerBuildPlugin({
 });
 
 Package.on_use(function(api) {
+  api.versionsFrom("METEOR-CORE@0.9.0-atm");
   api.use([
     'underscore',
     'ejson', // LanguageArray and Locale are ejson'able
@@ -68,7 +70,7 @@ Package.on_use(function(api) {
 });
 
 Package.on_test(function (api) {
-  api.use(['translator', 'tinytest', 'test-helpers']);
+  api.use(["nemo64:translator", 'tinytest', 'test-helpers']);
   api.add_files([
     'test/namespace.de_DE.lang.yml',
     'test/namespace.en_US.lang.yml'
