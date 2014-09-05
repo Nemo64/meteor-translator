@@ -1,4 +1,4 @@
-var NAMESPACE = 'packages/translator/test/namespace';
+var NAMESPACE = 'packages/local-test:nemo64:translator/test/namespace';
 // normalize the testing envirement
 Translator.setLanguage(null); // ignore automated sources
 

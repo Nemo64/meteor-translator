@@ -1,8 +1,8 @@
 Package.describe({
-  summary: "A feature rich translation package",
+  name: "nemo64:translator",
+  summary: "A feature rich internationalization (i18n) solution.",
   version: "0.6.5",
-  git: "https://github.com/Nemo64/meteor-translator.git",
-  githubUrl: "https://github.com/Nemo64/meteor-translator.git"
+  git: "https://github.com/Nemo64/meteor-translator"
 });
 
 Package._transitional_registerBuildPlugin({
@@ -23,20 +23,20 @@ Package._transitional_registerBuildPlugin({
     'src/message-format/number-preprocess.js'
   ],
   npmDependencies: {
-    'js-yaml': '3.0.2',
+    'js-yaml': '3.2.1',
     'cldr': '2.2.1'
   }
 });
 
 Package.on_use(function(api) {
-  api.versionsFrom("METEOR-CORE@0.9.0-atm");
+  api.versionsFrom("METEOR@0.9.0");
   api.use([
     'underscore',
     'ejson', // LanguageArray and Locale are ejson'able
     'deps',
     // meteorite
-    'inject-initial',
-    'moment'
+    'gadicohen:inject-initial@1.0.0',
+    'mrt:moment@2.8.1'
   ]);
   api.use([
     'http'
@@ -70,7 +70,7 @@ Package.on_use(function(api) {
 });
 
 Package.on_test(function (api) {
-  api.use(["nemo64:translator", 'tinytest', 'test-helpers']);
+  api.use(['nemo64:translator', 'mrt:moment@2.8.1', 'underscore', 'tinytest', 'test-helpers']);
   api.add_files([
     'test/namespace.de_DE.lang.yml',
     'test/namespace.en_US.lang.yml'

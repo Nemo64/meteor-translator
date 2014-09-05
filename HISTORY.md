@@ -1,3 +1,6 @@
+## v0.6.4 and v0.6.5
+- adjustments for meteor 0.9
+
 ## v0.6.3
 - get returns null instead of translation key if no match is found
 - console warn if translation is not found

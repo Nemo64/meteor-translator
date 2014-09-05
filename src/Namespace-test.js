@@ -1,4 +1,4 @@
-var NAMESPACE = 'packages/translator/test/namespace';
+var NAMESPACE = 'packages/local-test:nemo64:translator/test/namespace';
 var LANGUAGE_FOREIGN = new Translator.LanguageArray('de_DE');
 var LANGUAGE_DEFAULT = new Translator.LanguageArray();
 
