@@ -1,5 +1,3 @@
-var cldr = Npm.require('cldr');
-
 var convertCldrToMoment = function (dateString) {
   var replace = function (c, r) {
     var char = c.charAt(0);

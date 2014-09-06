@@ -1,5 +1,3 @@
-var cldr = Npm.require('cldr');
-
 var keywords = ['zero', 'one', 'two', 'few', 'many', 'other'];
 _pluralFilter = function (hash) {
   var result = {};

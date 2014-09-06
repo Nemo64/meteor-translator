@@ -9,7 +9,8 @@ Package._transitional_registerBuildPlugin({
   name: 'language-compiler',
   use: [
     'underscore',
-    'ejson' // LanguageArray and Locale have it, not really required
+    'ejson', // LanguageArray and Locale have it, not really required
+    'nemo64:cldr@2.2.1'
   ],
   sources: [
     'src/Locale.js',
@@ -23,8 +24,7 @@ Package._transitional_registerBuildPlugin({
     'src/message-format/number-preprocess.js'
   ],
   npmDependencies: {
-    'js-yaml': '3.2.1',
-    'cldr': '2.2.1'
+    'js-yaml': '3.2.1'
   }
 });
 

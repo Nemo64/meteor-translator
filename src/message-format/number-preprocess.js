@@ -1,5 +1,3 @@
-var cldr = Npm.require('cldr');
-
 /**
  * The resulting expression will only match if the content is not inside quotes
  */

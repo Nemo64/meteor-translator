@@ -1,6 +1,5 @@
 var yaml = Npm.require('js-yaml');
 var path = Npm.require('path');
-var cldr = Npm.require('cldr');
 
 /**
  * This general filter will outsource all pre compilation jobs!
