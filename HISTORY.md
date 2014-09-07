@@ -1,3 +1,8 @@
+## v1.0.0
+- removed namespaces
+- translation files are now concanated
+- the language matching is now more intelligent
+
 ## v0.6.4 and v0.6.5
 - adjustments for meteor 0.9
 
