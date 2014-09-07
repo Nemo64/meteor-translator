@@ -45,7 +45,6 @@ Package.on_use(function(api) {
   api.add_files([
     'src/Locale.js',
     'src/LanguageArray.js',
-    'src/Namespace.js',
     'src/FilterList.js',
     'src/Translator.js',
     'src/filter/message-format.js',
@@ -57,11 +56,10 @@ Package.on_use(function(api) {
     'src/Translator/defaultLanguage.js'
   ]);
   api.add_files([
-    'src/Namespace-client.js'
+    'src/Translator-client.js'
   ], 'client');
   api.add_files([
-    'src/Namespace-server.js',
-    'src/inject/namespaces-server.js',
+    'src/Translator-server.js',
     'src/inject/accept-language-server.js'
   ], 'server');
   
@@ -70,7 +68,13 @@ Package.on_use(function(api) {
 });
 
 Package.on_test(function (api) {
-  api.use(['nemo64:translator', 'mrt:moment@2.8.1', 'underscore', 'tinytest', 'test-helpers']);
+  api.use([
+    'nemo64:translator',
+    'mrt:moment@2.8.1',
+    'underscore',
+    'tinytest',
+    'test-helpers'
+  ]);
   api.add_files([
     'test/namespace.de_DE.lang.yml',
     'test/namespace.en_US.lang.yml'
@@ -78,7 +82,6 @@ Package.on_test(function (api) {
   api.add_files([
     'src/Locale-test.js',
     'src/LanguageArray-test.js',
-    'src/Namespace-test.js',
     'src/FilterList-test.js',
     'src/message-format/select-test.js',
     'src/message-format/plural-test.js',
