@@ -39,6 +39,7 @@ var keyValid = function (key) {
  */
 var parseValue = function (baseKey, value, result, data) {
   if (_.isObject(value) && ! _.isArray(value)) {
+    
     var allValid = _.every(_.keys(value), keyValid);
     if (allValid) {
       _.each(value, function (currentValue, key) {
@@ -50,6 +51,7 @@ var parseValue = function (baseKey, value, result, data) {
       // it could be more logic involved so pass it though
       result[baseKey] = value;
     }
+    
   } else {
     // pass the value though all filters and add it
     result[baseKey] = ResourceHandler.filter(value, data);
@@ -59,22 +61,28 @@ var parseValue = function (baseKey, value, result, data) {
 /**
  * Compiles the yaml string into an object.
  * @param {*} doc
- * @param {string} locale
+ * @param {Locale} locale
  * @return {object}
  */
 var compile = function (doc, locale) {
-  var compiledDoc = { $: {/* addition */} };
+  var compiledDoc = {
+    $: {/* this key is for meta data */}
+  };
+  
   _.each(doc, function (value, key) {
+    
     if (! keyValid(key)) {
       var msg = "Only wordchars and underscores are allowed ";
       msg += "in translation keys. Got '" + baseKey + "'";
       throw new Error(msg);
     }
+    
     parseValue(key, value, compiledDoc, {
       locale: locale,
       meta: compiledDoc.$
     });
   });
+  
   return compiledDoc;
 };
 
@@ -87,61 +95,61 @@ var handler = function (doc, compileStep, isLiterate) {
   var compiledDoc = compile(doc, locale);
   var jsonString = JSON.stringify(compiledDoc);
   
-  // add the files depending on client/server
-  switch (compileStep.arch) {
-   
-    case 'web.cordova': 
-    case 'web.browser':
-      // save the file asset
-      compileStep.addAsset({
-        path: basePath.replace(RX_FILE_ENDING, '.$1') + '.json',
-        data: new Buffer(jsonString)
-      });
-      break;
-      
-    case 'os':
-      // XXX this entire part is a hack for accessing assets on the server
-      var fullPath = path.join(compileStep.rootOutputPath, basePath);
-      var namespace = path.relative('/', fullPath).replace(RX_FILE_ENDING, '');
-      
-      var jsVar = 'Translator._namespaces[' + JSON.stringify(namespace) + ']';
-      var js = '(' + jsVar + '||(' + jsVar + '={}))'; // obj for namespace
-      js += '["' + locale.toString() + '"]=' + jsonString; // add value
-      // add it as a js file for the server
-      compileStep.addJavaScript({
-        path: basePath,
-        data: js,
-        sourcePath: basePath,
-        bare: false
-      });
-      break;
-    default:
-      console.warn("unkonwn arch '" + compileStep.arch + "', ignored");
-  }
+  var fullPath = path.join(compileStep.rootOutputPath, basePath);
+  var namespace = path.relative('/', fullPath).replace(RX_FILE_ENDING, '');
+  
+  var js = 'Translator._data["' + locale + '"]=' + jsonString + ';\n';
+  js += 'Translator._availableLocales["' + locale + '"]=new Translator.Locale("' + locale + '");';
+  // FIXME merging
+  
+  // add it as a js file for the server
+  compileStep.addJavaScript({
+    path: basePath,
+    data: js,
+    sourcePath: basePath
+  });
 };
 
-Plugin.registerSourceHandler("lang.yml", function (compileStep, isLiterate) {
-  try {
-    var source = compileStep.read().toString('utf8');
-    var doc = yaml.safeLoad(source);
-    handler(doc, compileStep, isLiterate);
-  } catch (e) {
-    compileStep.error({
-      message: e.message,
-      sourcePath: compileStep.inputPath
-    });
+Plugin.registerSourceHandler(
+  "lang.yml",
+  {archMatching: 'os'},
+  function (compileStep, isLiterate) {
+  
+    try {
+      
+      var source = compileStep.read().toString('utf8');
+      var doc = yaml.safeLoad(source);
+      handler(doc, compileStep, isLiterate);
+      
+    } catch (e) {
+      
+      compileStep.error({
+        message: e.message,
+        sourcePath: compileStep.inputPath
+      });
+      
+    }
   }
-});
+);
 
-Plugin.registerSourceHandler("lang.json", function (compileStep, isLiterate) {
-  try {
-    var source = compileStep.read().toString('utf8');
-    var doc = JSON.parse(source);
-    handler(doc, compileStep, isLiterate);
-  } catch (e) {
-    compileStep.error({
-      message: e.message,
-      sourcePath: compileStep.inputPath
-    });
+Plugin.registerSourceHandler(
+  "lang.json",
+  {archMatching: 'os'},
+  function (compileStep, isLiterate) {
+  
+    try {
+      
+      var source = compileStep.read().toString('utf8');
+      var doc = JSON.parse(source);
+      handler(doc, compileStep, isLiterate);
+      
+    } catch (e) {
+      
+      compileStep.error({
+        message: e.message,
+        sourcePath: compileStep.inputPath
+      });
+      
+    }
   }
-});
+);

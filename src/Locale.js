@@ -154,7 +154,53 @@ _.extend(Locale.prototype, {
    */
   equals: function (other) {
     return this.roughEquals(other)
-      && this._territory === other._territory;
+      && this._script === other._script
+      && this._territory === other._territory
+      && this._variant === other._variant;
+  },
+  
+  /**
+   * Weights how equal 2 locales are. The bigger the number the better.
+   * 0  = no match
+   * 10 = best possible match
+   *
+   * @param {mixed}
+   * @return {number}
+   */
+  weightDifferences: function (other) {
+    if (!(other instanceof this.constructor)) {
+      return 0; // always because it needs to be an instance of locale
+    }
+  
+    if (this._language !== other._language) {
+      return 0; // still a completly different language
+    }
+    
+    var result = 1; // yeah, we are getting somewhere
+    
+    if (this._territory === other._territory) {
+      result += 6;
+    } else if (this._territory == null || other._territory == null) {
+      result += 3;
+    }
+    
+    if (this._script === other._script) {
+      result += 2;
+    } else if (this._script == null || other._script == null) {
+      result += 1;
+    }
+    
+    if (this._variant === other._variant) {
+      result += 1;
+    } else if (this._variant == null || other._variant == null) {
+      result += 0.5;
+    }
+    
+    // this weighting is just a quick solution because
+    // I have no idea what is how important.
+    // please make better suggestions if you know more.
+    
+    return result;
   }
 });
 

@@ -88,6 +88,57 @@ _.extend(LanguageArray.prototype, {
   toString: function () {
     return "[" + this._locales.join(",") + "]";
   },
+  
+  /**
+   * this method sorts the given locales
+   * from the best matching to the worst matching.
+   *
+   * The use case is that the given locales are the available ones
+   * and the current instance are the locales the user wants.
+   *
+   * imagine following situations:
+   *
+   * user wants: "de_DE" "de_AT" "de" "en_US" "en"
+   * we have: "de_CH" "en_US"
+   * the user should preferably get de_CH as it has a higher priority for him
+   * en_US should be secound even though we have a perfect match for it
+   *
+   * another case:
+   * user wants: "en_US" "en_MP" "en"
+   * we have: "en" "en_MP"
+   * even though en_US soft-matches with every locale, en_MP must be prefered
+   *
+   * @param {Array.<Locale>} locales
+   * @return {Array.<Locale>}
+   */
+  prioritizeLocales: function (locales) {
+    var self = this;
+    // this array will contain the root language and its priority
+    var languageWeights = {};
+    
+    var matches = 0;
+    _.each(self._locales, function (locale) {
+      var language = locale.getLanguage();
+      
+      if (! languageWeights.hasOwnProperty(language)) {
+        languageWeights[language] = matches++;
+      }
+    });
+    
+    return _.sortBy(locales, function (locale) {
+      var baseWeight = languageWeights[locale.getLanguage()] * -10;
+      var weight = 0;
+      _.each(self._locales, function (languageLocale) {
+        weight = Math.max(weight, languageLocale.weightDifferences(locale));
+      });
+      
+      if (weight <= 0) {
+        return Infinity; // there was no match, put this at the end
+      } else {
+        return -(baseWeight + weight);
+      }
+    });
+  },
 
   /**
    * @return {!Locale}

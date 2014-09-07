@@ -106,3 +106,15 @@ Tinytest.add("Translator - LanguageArray - ejson empty", function (test) {
   var parsed = EJSON.parse(string);
   test.equal(language, parsed);
 });
+
+
+
+
+Tinytest.add("Translator - LanguageArray - prioritize locales", function (test) {
+  var language = new Translator.LanguageArray(["de_DE", "de_AT", "de", "en_US", "en"]);
+  var toSort = new Translator.LanguageArray(["en_US", "en", "de_DE", "de_CH", "de"]);
+  var expect = new Translator.LanguageArray(["de_DE", "de", "de_CH", "en_US", "en"]);
+  var result = toSort.getLocales();
+  result = language.prioritizeLocales(result);
+  test.equal(result.join(' '), expect._locales.join(' '));
+});

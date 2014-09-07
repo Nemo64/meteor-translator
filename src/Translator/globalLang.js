@@ -8,7 +8,7 @@
 Translator._globalLang = new LanguageArray();
 Translator._globalLangDep = new Deps.Dependency();
 
-// the server might have send us a default language
+// the server might have sent us a default language
 if (Meteor.isClient) {
   var language = Injected.obj('translator-language');
   if (language instanceof LanguageArray) {

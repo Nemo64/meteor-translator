@@ -5,22 +5,38 @@
 Translator = function (language) {
   var self = this;
   
-  self._usedNamespaces = {};
-  self._namespaceDep = new Deps.Dependency();
   self._language = null;
-  self._languageDep = new Deps.Dependency();
-  
-  self.setLanguage(language);
-  
-  Deps.autorun(function () {
-    self._namespaceDep.depend();
-    
-    // if what we get is the global lang it might rerun
-    _.each(self._usedNamespaces, function (namespace) {
-      namespace.prepare(self.getLanguage());
-    });
-  });
+  self._languageDep = new Tracker.Dependency();
 };
+
+/**
+ * This object will contain all translation data available.
+ * The key is the string representation of the key.
+ * The value is an object with the key value pairs.
+ *
+ * On the Server side:
+ * This variable will be filled by the resoure handler on the server side.
+ *
+ * On the Client side:
+ * The client does not have it so it needs to be transfered there.
+ * The requesting/sending happens in the server/client variants of this file.
+ *
+ * @type {Object.<string, Object.<string, mixed>>}
+ */
+Translator._data = {};
+
+/**
+ * This dependency gets changed whenever _data changes.
+ * 
+ * Only really needed on the client but it doesn't hurt on the server.
+ */
+Translator._dataDep = new Tracker.Dependency();
+
+/**
+ * This variables keeps instances of Locale.
+ * If one is in here, it must be available in _data.
+ */
+Translator._availableLocales = {};
 
 /**
  * This FilterList will be applied first. The result MUST be a string!
@@ -37,6 +53,7 @@ Translator.objectFilter = new FilterList("objectFilter", _.isString);
  */
 Translator.stringFilter = new FilterList("stringFilter", _.isString);
 
+
 _.extend(Translator.prototype, {
   
   /**
@@ -46,10 +63,7 @@ _.extend(Translator.prototype, {
    * @return {boolean}
    */
   isLoading: function () {
-    this._namespaceDep.depend();
-    return _.any(this._usedNamespaces, function (namespace) {
-      return namespace.isLoading();
-    });
+    throw new Error("Implementation of Translator#isLoading missing");
   },
 
   /**
@@ -63,20 +77,8 @@ _.extend(Translator.prototype, {
   ready: function (callback, repeat) {
     var self = this;
 
-    if (! _.isFunction(callback)) {
-      throw new Error("Translator ready callback is not a function");
-    }
-    Deps.autorun(function (c) {
-      // only depend on the namespace in client because the server implementation
-      // is synchron and therefor doesn't have these dependencies
-      if (Meteor.isClient) {
-        _.each(self._usedNamespaces, function (namespace) {
-          // TODO find a more obvious way instead of accessing a private member
-          _.each(namespace._locales, function (obj) {
-            obj.dep.depend(); // subscribe to changes of the locale files
-          });
-        });
-      }
+    Tracker.autorun(function (c) {
+      self._languageDep.depend();
       
       // callback
       if (! self.isLoading()) {
@@ -104,21 +106,18 @@ _.extend(Translator.prototype, {
     if (before != self._language) {
       self._languageDep.changed();
     }
-    Deps.flush(); // call prepare immediately to prevent isLoaded to be false directly after
-    // FIXME there shouldn't be a global flush here
   },
   
   /**
    * Gets the current language. If no language is defined
    *
-   * @param {boolean} reactive
    * @return {!LanguageArray}
    */
-  getLanguage: function (reactive) {
+  getLanguage: function () {
     var self = this;
+    self._languageDep.depend();
 
     if (self._language != null) {
-      self._languageDep.depend();
       return self._language;
     } else {
       // _globalLang is defined in globalLang.js
@@ -134,14 +133,7 @@ _.extend(Translator.prototype, {
    * @param {string} filename
    */
   use: function (filename) {
-    var self = this;
-    var alreadyUsed = self._usedNamespaces.hasOwnProperty(filename);
-    if (! alreadyUsed) Deps.nonreactive(function () {
-      var namespace = Namespace.instance(filename);
-      namespace.prepare(self.getLanguage());
-      self._usedNamespaces[filename] = namespace;
-      self._namespaceDep.changed();
-    });
+    console.warn("Translator.use() is deprecated and does nothing now! Simply remove it from your code");
   },
 
 
@@ -157,33 +149,31 @@ _.extend(Translator.prototype, {
   get: function (key, parameters) {
     var self = this;
     var language = self.getLanguage();
+    Translator._dataDep.depend();
     
-    var namespace = _.find(self._usedNamespaces, function (namespace) {
-      return namespace.has(key, language);
+    var locales = language.prioritizeLocales(Translator._availableLocales);
+    var locale = _.find(locales, function (locale) {
+      return Translator._data[locale.toString()].hasOwnProperty(key);
     });
     
-    if (namespace != null) {
-      // no dependency required as new namespaces will be appended to the list
-      var result = namespace.get(key, language);
-      var data = {
-        key: key, // for warnings etc.
-        language: language,
-        locale: result.locale,
-        parameters: parameters || {},
-        translator: self,
-        meta: result.meta
-      };
-      return self.filter(result.value, data);
+    // not found? then null
+    if (locale == null) {
+      return null;
     }
     
-    // if the translation fails...
-    self._namespaceDep.depend(); // it might come later
+    var result = Translator._data[locale.toString()][key];
+  
+    // this data object will contain all information 
+    var data = {
+      key: key, // for warnings etc.
+      language: language,
+      locale: result.locale,
+      parameters: parameters || {},
+      translator: self,
+      meta: result.meta
+    };
     
-    if (! this.isLoading() && typeof console !== 'undefined') {
-      console.warn("Translation for key '" + key + '" is missing!');
-    }
-    
-    return null;
+    return this.filter(result, data);
   },
 
   /**
