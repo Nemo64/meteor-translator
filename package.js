@@ -1,7 +1,7 @@
 Package.describe({
   name: "nemo64:translator",
   summary: "A feature rich internationalization (i18n) solution.",
-  version: "0.6.5",
+  version: "0.6.6",
   git: "https://github.com/Nemo64/meteor-translator"
 });
 

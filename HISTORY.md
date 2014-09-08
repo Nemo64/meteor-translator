@@ -1,3 +1,6 @@
+# v0.6.6
+- removed dependency to node-cldr and put it into a seperate package because of arch limitations in meteor 0.9
+
 ## v0.6.4 and v0.6.5
 - adjustments for meteor 0.9
 
