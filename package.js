@@ -1,7 +1,7 @@
 Package.describe({
   name: "nemo64:translator",
   summary: "A feature rich internationalization (i18n) solution.",
-  version: "0.6.6",
+  version: "0.6.11",
   git: "https://github.com/Nemo64/meteor-translator"
 });
 
@@ -29,7 +29,7 @@ Package._transitional_registerBuildPlugin({
 });
 
 Package.on_use(function(api) {
-  api.versionsFrom("METEOR@0.9.0");
+  api.versionsFrom("METEOR@0.9.1");
   api.use([
     'underscore',
     'ejson', // LanguageArray and Locale are ejson'able
@@ -69,7 +69,7 @@ Package.on_use(function(api) {
   api.export(['Translator']);
 });
 
-Package.on_test(function (api) {
+/*Package.on_test(function (api) {
   api.use(['nemo64:translator', 'mrt:moment@2.8.1', 'underscore', 'tinytest', 'test-helpers']);
   api.add_files([
     'test/namespace.de_DE.lang.yml',
@@ -89,4 +89,4 @@ Package.on_test(function (api) {
   api.add_files([
     'src/inject/accept-language-test.js'
   ], 'server');
-});
+});*/
