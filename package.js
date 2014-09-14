@@ -1,7 +1,7 @@
 Package.describe({
   name: "nemo64:translator",
   summary: "A feature rich internationalization (i18n) solution.",
-  version: "0.6.6",
+  version: "0.6.12",
   git: "https://github.com/Nemo64/meteor-translator"
 });
 
@@ -10,7 +10,7 @@ Package._transitional_registerBuildPlugin({
   use: [
     'underscore',
     'ejson', // LanguageArray and Locale have it, not really required
-    'nemo64:cldr@2.2.1'
+    'nemo64:cldr@2.3.0'
   ],
   sources: [
     'src/Locale.js',
