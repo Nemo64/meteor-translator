@@ -29,7 +29,7 @@ Package._transitional_registerBuildPlugin({
 });
 
 Package.on_use(function(api) {
-  api.versionsFrom("METEOR@0.9.0");
+  api.versionsFrom("METEOR@0.9.1");
   api.use([
     'underscore',
     'ejson', // LanguageArray and Locale are ejson'able
