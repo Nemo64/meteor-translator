@@ -1,4 +1,13 @@
-# v0.6.6
+## v0.6.13 (next)
+- fixed client path for package translations
+
+## v0.6.12
+- working without binary dependency
+
+## v0.6.7 – v0.6.11
+- failed attempts to upload the package
+
+## v0.6.6
 - removed dependency to node-cldr and put it into a seperate package because of arch limitations in meteor 0.9
 
 ## v0.6.4 and v0.6.5
