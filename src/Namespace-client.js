@@ -120,6 +120,7 @@ _.extend(Namespace.prototype, {
     self._loadingDep.changed();
     localeData.status = STATUS_LOADING;
     var filename = self._filenameForLocale(locale);
+    filename = filename.replace(/:/g, '_');
     HTTP.get('/' + filename, function (error, data) {
       self._loading--;
       self._loadingDep.changed();
