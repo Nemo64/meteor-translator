@@ -1,4 +1,5 @@
 ## v0.6.13 (next)
+- switched to meteorhacks:inject-initial to fix a problem with other packages using the same dependency
 - fixed client path for package translations
 
 ## v0.6.12
