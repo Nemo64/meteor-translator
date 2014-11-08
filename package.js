@@ -35,7 +35,7 @@ Package.on_use(function(api) {
     'ejson', // LanguageArray and Locale are ejson'able
     'deps',
     // meteorite
-    'gadicohen:inject-initial@1.0.0',
+    'meteorhacks:inject-initial@1.0.2',
     'mrt:moment@2.8.1'
   ]);
   api.use([
